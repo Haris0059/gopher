@@ -20,7 +20,7 @@ func BenchmarkStartupTime(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		// Note: This is just the setup time, not the full program run
 		// The actual program would block on Run()
-		_ = RunTUIV2(ctx, state, nil, false, "")
+		_ = RunTUIV2(ctx, state, nil, nil)
 	}
 }
 
