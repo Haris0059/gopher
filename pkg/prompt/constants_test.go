@@ -58,7 +58,7 @@ func TestSummarizeToolResultsSection_Verbatim(t *testing.T) {
 func TestDefaultAgentPrompt_Verbatim(t *testing.T) {
 	// Must contain key phrases from TS verbatim.
 	mustContain := []string{
-		"You are an agent for Claude Code, Anthropic's official CLI for Claude.",
+		"You are an agent for Gopher, an open-source alternative to Claude Code maintained by Haris0059.",
 		"Complete the task fully",
 		"don't gold-plate, but don't leave it half-done",
 		"respond with a concise report covering what was done and any key findings",

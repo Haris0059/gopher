@@ -50,21 +50,21 @@ func TestBuildSystemPrompt_CustomBase(t *testing.T) {
 // ── T381: System prompt prefix constants ─────────────────────────
 
 func TestDefaultPrefix_VerbatimMatch(t *testing.T) {
-	const want = "You are Claude Code, Anthropic's official CLI for Claude."
+	const want = "You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059."
 	if DefaultPrefix != want {
 		t.Errorf("DefaultPrefix = %q, want %q", DefaultPrefix, want)
 	}
 }
 
 func TestAgentSDKClaudeCodePresetPrefix_VerbatimMatch(t *testing.T) {
-	const want = "You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK."
+	const want = "You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059, running in non-interactive mode."
 	if AgentSDKClaudeCodePresetPrefix != want {
 		t.Errorf("AgentSDKClaudeCodePresetPrefix = %q, want %q", AgentSDKClaudeCodePresetPrefix, want)
 	}
 }
 
 func TestAgentSDKPrefix_VerbatimMatch(t *testing.T) {
-	const want = "You are a Claude agent, built on Anthropic's Claude Agent SDK."
+	const want = "You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059, operating as a non-interactive agent."
 	if AgentSDKPrefix != want {
 		t.Errorf("AgentSDKPrefix = %q, want %q", AgentSDKPrefix, want)
 	}

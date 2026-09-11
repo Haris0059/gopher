@@ -152,7 +152,7 @@ func TestGetCoordinatorSystemPrompt_RoleDescription(t *testing.T) {
 	defer os.Unsetenv(coordinatorModeEnv)
 
 	got := GetCoordinatorSystemPrompt()
-	if !strings.Contains(got, "You are Claude Code, an AI assistant that orchestrates software engineering tasks across multiple workers.") {
+	if !strings.Contains(got, "You are Gopher, an open-source alternative to Claude Code maintained by Haris0059.") {
 		t.Error("prompt should start with the coordinator role description")
 	}
 }

@@ -16,22 +16,22 @@ import (
 // System-prompt prefix constants — must match TS verbatim because
 // splitSysPromptPrefix identifies prefix blocks by content, not position.
 const (
-	DefaultPrefix               = `You are Claude Code, Anthropic's official CLI for Claude.`
-	AgentSDKClaudeCodePresetPrefix = `You are Claude Code, Anthropic's official CLI for Claude, running within the Claude Agent SDK.`
-	AgentSDKPrefix              = `You are a Claude agent, built on Anthropic's Claude Agent SDK.`
+	DefaultPrefix                  = `You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059.`
+	AgentSDKClaudeCodePresetPrefix = `You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059, running in non-interactive mode.`
+	AgentSDKPrefix                 = `You are Gopher, an open-source alternative to Claude Code, maintained by Haris0059, operating as a non-interactive agent.`
 )
 
 // CLISyspromptPrefixes is the set of all possible CLI sysprompt prefix values,
 // used by splitSysPromptPrefix to identify prefix blocks by content.
 var CLISyspromptPrefixes = map[string]struct{}{
-	DefaultPrefix:               {},
+	DefaultPrefix:                  {},
 	AgentSDKClaudeCodePresetPrefix: {},
-	AgentSDKPrefix:              {},
+	AgentSDKPrefix:                 {},
 }
 
 // PrefixOptions controls the 3-way prefix selector.
 type PrefixOptions struct {
-	IsNonInteractive     bool
+	IsNonInteractive      bool
 	HasAppendSystemPrompt bool
 }
 

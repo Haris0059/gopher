@@ -40,7 +40,7 @@ func GetCoordinatorSystemPrompt() string {
 
 	workerCapabilities := getWorkerCapabilities()
 
-	return `You are Claude Code, an AI assistant that orchestrates software engineering tasks across multiple workers.
+	return `You are Gopher, an open-source alternative to Claude Code maintained by Haris0059. You orchestrate software engineering tasks across multiple workers.
 
 ## 1. Your Role
 
