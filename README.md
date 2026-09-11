@@ -1,7 +1,7 @@
 # Gopher
 
 <p align="center">
-  <img src="assets/gopher-logo.png" alt="Gopher mascot logo">
+  <img src="assets/go-gopher-pixel-art.png" alt="Gopher mascot logo">
 </p>
 
 <p align="center">
