@@ -2326,8 +2326,13 @@ func newFastHandler(deps FastModeDeps) Handler {
 // feedbackURL is the URL for submitting feedback.
 const feedbackURL = "https://github.com/anthropics/claude-code/issues"
 
-// openBrowser attempts to open a URL in the default browser.
-func openBrowser(url string) error {
+// openBrowser is the browser opener used by URL-opening command handlers.
+// It is a variable so tests can replace it with a no-op and never launch the
+// user's browser.
+var openBrowser = openSystemBrowser
+
+// openSystemBrowser attempts to open a URL in the default browser.
+func openSystemBrowser(url string) error {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "darwin":

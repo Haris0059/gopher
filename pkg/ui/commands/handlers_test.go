@@ -18,6 +18,13 @@ import (
 	"github.com/Haris0059/gopher/pkg/session"
 )
 
+// TestMain prevents command-handler tests from launching the user's browser.
+// The handlers are exercised below; only the OS integration is replaced.
+func TestMain(m *testing.M) {
+	openBrowser = func(string) error { return nil }
+	os.Exit(m.Run())
+}
+
 func TestDispatcherCreation(t *testing.T) {
 	d := NewDispatcher()
 	if d == nil {
