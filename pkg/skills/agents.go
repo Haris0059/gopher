@@ -1,9 +1,11 @@
 package skills
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -15,12 +17,13 @@ import (
 type AgentSource string
 
 const (
-	AgentSourceBuiltIn         AgentSource = "built-in"
-	AgentSourceUser            AgentSource = "userSettings"
-	AgentSourceProject         AgentSource = "projectSettings"
-	AgentSourcePolicy          AgentSource = "policySettings"
-	AgentSourcePlugin          AgentSource = "plugin"
-	AgentSourceFlag            AgentSource = "flagSettings"
+	AgentSourceBuiltIn AgentSource = "built-in"
+	AgentSourceUser    AgentSource = "userSettings"
+	AgentSourceProject AgentSource = "projectSettings"
+	AgentSourceLocal   AgentSource = "localSettings"
+	AgentSourcePolicy  AgentSource = "policySettings"
+	AgentSourcePlugin  AgentSource = "plugin"
+	AgentSourceFlag    AgentSource = "flagSettings"
 )
 
 // AgentMemoryScope controls where agent memory is stored.
@@ -45,17 +48,17 @@ type AgentDefinition struct {
 	DisallowedTools []string         `json:"disallowedTools,omitempty"`
 	Skills          []string         `json:"skills,omitempty"`
 	Color           string           `json:"color,omitempty"`
-	Model           string           `json:"model,omitempty"`           // "sonnet", "haiku", "inherit", or full model ID
-	Effort          string           `json:"effort,omitempty"`          // "low", "medium", "high", "max", or integer
-	PermissionMode  string           `json:"permissionMode,omitempty"`  // "auto", "dontAsk", "ask"
+	Model           string           `json:"model,omitempty"`          // "sonnet", "haiku", "inherit", or full model ID
+	Effort          string           `json:"effort,omitempty"`         // "low", "medium", "high", "max", or integer
+	PermissionMode  string           `json:"permissionMode,omitempty"` // "auto", "dontAsk", "ask"
 	MaxTurns        int              `json:"maxTurns,omitempty"`
-	Filename        string           `json:"filename,omitempty"`        // original file without .md
+	Filename        string           `json:"filename,omitempty"` // original file without .md
 	BaseDir         string           `json:"baseDir,omitempty"`
-	Background      bool             `json:"background,omitempty"`      // always run as background task
-	InitialPrompt   string           `json:"initialPrompt,omitempty"`   // prepended to first user turn
-	Memory          AgentMemoryScope `json:"memory,omitempty"`          // persistent memory scope
-	Isolation       string           `json:"isolation,omitempty"`       // "worktree"
-	OmitClaudeMd    bool             `json:"omitClaudeMd,omitempty"`    // skip CLAUDE.md for read-only agents
+	Background      bool             `json:"background,omitempty"`    // always run as background task
+	InitialPrompt   string           `json:"initialPrompt,omitempty"` // prepended to first user turn
+	Memory          AgentMemoryScope `json:"memory,omitempty"`        // persistent memory scope
+	Isolation       string           `json:"isolation,omitempty"`     // "worktree"
+	OmitClaudeMd    bool             `json:"omitClaudeMd,omitempty"`  // skip CLAUDE.md for read-only agents
 	Source          AgentSource      `json:"source"`
 	SystemPrompt    string           `json:"-"` // the prompt content (not serialized)
 
@@ -71,12 +74,12 @@ type AgentDefinition struct {
 // Built-in agent type constants.
 // Source: builtInAgents.ts, built-in/*.ts
 const (
-	AgentTypeGeneralPurpose = "general-purpose"
-	AgentTypeExplore        = "Explore"
-	AgentTypePlan           = "Plan"
+	AgentTypeGeneralPurpose  = "general-purpose"
+	AgentTypeExplore         = "Explore"
+	AgentTypePlan            = "Plan"
 	AgentTypeClaudeCodeGuide = "claude-code-guide"
 	AgentTypeStatuslineSetup = "statusline-setup"
-	AgentTypeVerification   = "verification"
+	AgentTypeVerification    = "verification"
 )
 
 // Agent colors.
@@ -88,7 +91,7 @@ var AgentColors = []string{
 // System prompt constants for built-in agents.
 // Source: built-in/*.ts
 
-const generalPurposeSystemPrompt = `You are an agent for Claude Code, Anthropic's official CLI for Claude. Given the user's message, you should use the tools available to complete the task. Complete the task fully—don't gold-plate, but don't leave it half-done. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.
+const generalPurposeSystemPrompt = `You are an agent for Gopher, an open-source alternative to Claude Code maintained by Haris0059. Given the user's message, you should use the tools available to complete the task. Complete the task fully—don't gold-plate, but don't leave it half-done. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.
 
 Your strengths:
 - Searching for code, configurations, and patterns across large codebases
@@ -410,37 +413,67 @@ func GetBuiltInAgents() []AgentDefinition {
 // LoadAgents discovers and loads agent definitions from standard locations.
 // Source: loadAgentsDir.ts:270-350
 func LoadAgents(cwd string) []AgentDefinition {
-	var agents []AgentDefinition
-
-	// Built-in agents always first
-	agents = append(agents, GetBuiltInAgents()...)
-
-	// User agents: ~/.claude/agents/
-	if home, err := os.UserHomeDir(); err == nil {
-		userDir := filepath.Join(home, ".claude", "agents")
-		agents = append(agents, loadAgentsFromDir(userDir, AgentSourceUser)...)
-	}
-
-	// Project agents: .claude/agents/ in CWD
-	if cwd != "" {
-		projectDir := filepath.Join(cwd, ".claude", "agents")
-		agents = append(agents, loadAgentsFromDir(projectDir, AgentSourceProject)...)
-	}
-
+	agents := GetBuiltInAgents()
+	agents = append(agents, LoadAgentsFromDirs(DefaultAgentDirs(cwd))...)
 	return agents
 }
 
-// GetActiveAgents returns the active agents with later sources overriding earlier ones.
+// DefaultAgentDirs returns the standard agent directories to scan, keyed by
+// source: ~/.claude/agents (user) and <cwd>/.claude/agents (project).
+func DefaultAgentDirs(cwd string) map[AgentSource]string {
+	dirs := make(map[AgentSource]string)
+	if home, err := os.UserHomeDir(); err == nil {
+		dirs[AgentSourceUser] = filepath.Join(home, ".claude", "agents")
+	}
+	if cwd != "" {
+		dirs[AgentSourceProject] = filepath.Join(cwd, ".claude", "agents")
+	}
+	return dirs
+}
+
+// LoadAgentsFromDirs reads agent definitions from each given directory,
+// associating each with its Source. Directories that don't exist are
+// silently skipped. This is the test-injection seam: LoadAgents(cwd) is
+// LoadAgentsFromDirs(DefaultAgentDirs(cwd)) plus the built-ins.
+func LoadAgentsFromDirs(dirs map[AgentSource]string) []AgentDefinition {
+	var agents []AgentDefinition
+	for source, dir := range dirs {
+		agents = append(agents, loadAgentsFromDir(dir, source)...)
+	}
+	return agents
+}
+
+// agentSourcePriority orders sources for GetActiveAgents: later wins.
+// Source: loadAgentsDir.ts:193-221 — agentGroups order is
+// [builtIn, plugin, user, project, flag, managed].
+var agentSourcePriority = map[AgentSource]int{
+	AgentSourceBuiltIn: 0,
+	AgentSourcePlugin:  1,
+	AgentSourceUser:    2,
+	AgentSourceProject: 3,
+	AgentSourceFlag:    4,
+	AgentSourcePolicy:  5,
+}
+
+// GetActiveAgents returns the active agents with later sources overriding earlier
+// ones, per the fixed priority order above (not iteration/insertion order).
+// The result is sorted by AgentType for deterministic output.
 // Source: loadAgentsDir.ts:193-221
 func GetActiveAgents(allAgents []AgentDefinition) []AgentDefinition {
 	agentMap := make(map[string]AgentDefinition)
 	for _, a := range allAgents {
-		agentMap[a.AgentType] = a
+		existing, ok := agentMap[a.AgentType]
+		if !ok || agentSourcePriority[a.Source] >= agentSourcePriority[existing.Source] {
+			agentMap[a.AgentType] = a
+		}
 	}
 	result := make([]AgentDefinition, 0, len(agentMap))
 	for _, a := range agentMap {
 		result = append(result, a)
 	}
+	sort.Slice(result, func(i, j int) bool {
+		return CompareAgentsByName(result[i], result[j]) < 0
+	})
 	return result
 }
 
@@ -476,18 +509,103 @@ func loadAgentsFromDir(dir string, source AgentSource) []AgentDefinition {
 
 	var agents []AgentDefinition
 	for _, e := range entries {
-		if e.IsDir() || !strings.HasSuffix(e.Name(), ".md") {
+		if e.IsDir() {
 			continue
 		}
-		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
-		if err != nil {
+		name := e.Name()
+
+		if strings.HasSuffix(name, ".md") {
+			data, err := os.ReadFile(filepath.Join(dir, name))
+			if err != nil {
+				continue
+			}
+			agent := ParseAgentFromMarkdown(filepath.Join(dir, name), dir, string(data), source)
+			if agent != nil {
+				agents = append(agents, *agent)
+			}
 			continue
 		}
 
-		agent := ParseAgentFromMarkdown(filepath.Join(dir, e.Name()), dir, string(data), source)
-		if agent != nil {
-			agents = append(agents, *agent)
+		// agents.json: not part of the TS reference (which only uses
+		// ParseAgentsFromJSON for the --agents CLI flag / SDK stdin, always
+		// with source flagSettings), but a Gopher-only extension so an
+		// agents directory can also declare agents via JSON.
+		if name == "agents.json" {
+			data, err := os.ReadFile(filepath.Join(dir, name))
+			if err != nil {
+				continue
+			}
+			agents = append(agents, ParseAgentsFromJSON(data, source)...)
 		}
+	}
+	return agents
+}
+
+// agentJSONEntry is the on-disk JSON schema for one agent, matching
+// AgentJsonSchema. description and prompt are required; everything else is
+// optional.
+// Source: loadAgentsDir.ts:73-99
+type agentJSONEntry struct {
+	Description     string   `json:"description"`
+	Tools           []string `json:"tools,omitempty"`
+	DisallowedTools []string `json:"disallowedTools,omitempty"`
+	Prompt          string   `json:"prompt"`
+	Model           string   `json:"model,omitempty"`
+	Effort          string   `json:"effort,omitempty"`
+	PermissionMode  string   `json:"permissionMode,omitempty"`
+	MaxTurns        int      `json:"maxTurns,omitempty"`
+	Skills          []string `json:"skills,omitempty"`
+	InitialPrompt   string   `json:"initialPrompt,omitempty"`
+	Memory          string   `json:"memory,omitempty"`
+	Background      bool     `json:"background,omitempty"`
+	Isolation       string   `json:"isolation,omitempty"`
+}
+
+// ParseAgentsFromJSON parses agent definitions from a JSON object mapping
+// agent type -> definition. Malformed entries (missing description/prompt,
+// or invalid JSON) are skipped rather than failing the whole batch — the
+// reference logs and returns an empty slice on a top-level parse failure,
+// and drops individual entries that fail their own schema check.
+// Source: loadAgentsDir.ts:445-527
+func ParseAgentsFromJSON(data []byte, source AgentSource) []AgentDefinition {
+	var raw map[string]agentJSONEntry
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil
+	}
+
+	var agents []AgentDefinition
+	for agentType, entry := range raw {
+		if strings.TrimSpace(entry.Description) == "" || strings.TrimSpace(entry.Prompt) == "" {
+			continue
+		}
+
+		agent := AgentDefinition{
+			AgentType:       agentType,
+			WhenToUse:       entry.Description,
+			Tools:           entry.Tools,
+			DisallowedTools: entry.DisallowedTools,
+			SystemPrompt:    entry.Prompt,
+			Source:          source,
+			Effort:          entry.Effort,
+			PermissionMode:  entry.PermissionMode,
+			MaxTurns:        entry.MaxTurns,
+			Skills:          entry.Skills,
+			InitialPrompt:   entry.InitialPrompt,
+			Background:      entry.Background,
+			Isolation:       entry.Isolation,
+		}
+		if model := strings.TrimSpace(entry.Model); model != "" {
+			if strings.EqualFold(model, "inherit") {
+				agent.Model = "inherit"
+			} else {
+				agent.Model = model
+			}
+		}
+		if memory := AgentMemoryScope(entry.Memory); memory == AgentMemoryUser || memory == AgentMemoryProject || memory == AgentMemoryLocal {
+			agent.Memory = memory
+		}
+
+		agents = append(agents, agent)
 	}
 	return agents
 }
@@ -831,16 +949,16 @@ const (
 // BuiltInSkillName constants for bundled skills.
 // Source: skills/bundled/index.ts
 const (
-	SkillUpdateConfig     = "update-config"
-	SkillKeybindingsHelp  = "keybindings-help"
-	SkillVerify           = "verify"
-	SkillDebug            = "debug"
-	SkillRemember         = "remember"
-	SkillSimplify         = "simplify"
-	SkillBatch            = "batch"
-	SkillStuck            = "stuck"
-	SkillLoop             = "loop"
-	SkillSkillify         = "skillify"
+	SkillUpdateConfig    = "update-config"
+	SkillKeybindingsHelp = "keybindings-help"
+	SkillVerify          = "verify"
+	SkillDebug           = "debug"
+	SkillRemember        = "remember"
+	SkillSimplify        = "simplify"
+	SkillBatch           = "batch"
+	SkillStuck           = "stuck"
+	SkillLoop            = "loop"
+	SkillSkillify        = "skillify"
 )
 
 // AllBuiltInSkillNames returns the names of all built-in skills.
@@ -880,12 +998,14 @@ type AgentSourceGroup struct {
 }
 
 // AgentSourceGroups is the ordered list for display (consistent CLI + TUI ordering).
+// Source: agentDisplay.ts:24-32
 var AgentSourceGroups = []AgentSourceGroup{
 	{Label: "User agents", Source: AgentSourceUser},
 	{Label: "Project agents", Source: AgentSourceProject},
-	{Label: "Local agents", Source: AgentSourceFlag},
+	{Label: "Local agents", Source: AgentSourceLocal},
 	{Label: "Managed agents", Source: AgentSourcePolicy},
 	{Label: "Plugin agents", Source: AgentSourcePlugin},
+	{Label: "CLI arg agents", Source: AgentSourceFlag},
 	{Label: "Built-in agents", Source: AgentSourceBuiltIn},
 }
 
@@ -893,6 +1013,60 @@ var AgentSourceGroups = []AgentSourceGroup{
 type ResolvedAgent struct {
 	AgentDefinition
 	OverriddenBy AgentSource // non-empty if this agent is shadowed
+}
+
+// agentSourceDisplayNames maps AgentSource to a human-readable, title-case label.
+// Source: settings/constants.ts:getSourceDisplayName
+var agentSourceDisplayNames = map[AgentSource]string{
+	AgentSourceUser:    "User",
+	AgentSourceProject: "Project",
+	AgentSourceLocal:   "Local",
+	AgentSourceFlag:    "Flag",
+	AgentSourcePolicy:  "Managed",
+	AgentSourcePlugin:  "Plugin",
+	AgentSourceBuiltIn: "Built-in",
+}
+
+// OverrideSourceLabel returns a lowercase display label for the given source,
+// e.g. "user", "project" — used to describe what shadowed an overridden agent.
+// Source: agentDisplay.ts:90-92
+func OverrideSourceLabel(source AgentSource) string {
+	if name, ok := agentSourceDisplayNames[source]; ok {
+		return strings.ToLower(name)
+	}
+	return string(source)
+}
+
+// CompareAgentsByName compares two agents case-insensitively by AgentType,
+// for use with sort.Slice. Returns <0, 0, or >0 like strings.Compare.
+// Source: agentDisplay.ts:97-102
+func CompareAgentsByName(a, b AgentDefinition) int {
+	return strings.Compare(strings.ToLower(a.AgentType), strings.ToLower(b.AgentType))
+}
+
+// ResolveAgentModelDisplay returns the model string to display for an agent,
+// or "" if none is set. "inherit" passes through unchanged. The reference
+// falls back to the process-wide default subagent model when unset; that
+// lookup lives in pkg/tools (which imports pkg/skills) and can't be called
+// from here without a cycle, so callers that need the fallback apply it
+// themselves on top of this.
+// Source: agentDisplay.ts:78-84
+func ResolveAgentModelDisplay(agent AgentDefinition) string {
+	return agent.Model
+}
+
+// FormatAgentListing builds the "type · model · X memory" display string used
+// by the `gopher agents` CLI subcommand and the interactive /agents command.
+// Source: agentDisplay.ts (display convention shared across both surfaces)
+func FormatAgentListing(a ResolvedAgent) string {
+	parts := []string{a.AgentType}
+	if model := ResolveAgentModelDisplay(a.AgentDefinition); model != "" {
+		parts = append(parts, model)
+	}
+	if a.Memory != "" {
+		parts = append(parts, string(a.Memory)+" memory")
+	}
+	return strings.Join(parts, " · ")
 }
 
 // ResolveAgentOverrides annotates agents with override info. An agent is

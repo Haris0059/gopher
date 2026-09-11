@@ -90,14 +90,108 @@ func TestAgentColorManager(t *testing.T) {
 }
 
 func TestAgentSourceGroups(t *testing.T) {
-	if len(AgentSourceGroups) == 0 {
-		t.Error("AgentSourceGroups should not be empty")
+	// Source: agentDisplay.ts:24-32 — exact order and membership.
+	want := []AgentSourceGroup{
+		{Label: "User agents", Source: AgentSourceUser},
+		{Label: "Project agents", Source: AgentSourceProject},
+		{Label: "Local agents", Source: AgentSourceLocal},
+		{Label: "Managed agents", Source: AgentSourcePolicy},
+		{Label: "Plugin agents", Source: AgentSourcePlugin},
+		{Label: "CLI arg agents", Source: AgentSourceFlag},
+		{Label: "Built-in agents", Source: AgentSourceBuiltIn},
 	}
-	// First should be user, last should be built-in
-	if AgentSourceGroups[0].Source != AgentSourceUser {
-		t.Errorf("first group should be user, got %q", AgentSourceGroups[0].Source)
+	if len(AgentSourceGroups) != len(want) {
+		t.Fatalf("expected %d groups, got %d", len(want), len(AgentSourceGroups))
 	}
-	if AgentSourceGroups[len(AgentSourceGroups)-1].Source != AgentSourceBuiltIn {
-		t.Errorf("last group should be built-in, got %q", AgentSourceGroups[len(AgentSourceGroups)-1].Source)
+	for i, g := range want {
+		if AgentSourceGroups[i] != g {
+			t.Errorf("group %d = %+v, want %+v", i, AgentSourceGroups[i], g)
+		}
+	}
+}
+
+func TestOverrideSourceLabel(t *testing.T) {
+	cases := []struct {
+		source AgentSource
+		want   string
+	}{
+		{AgentSourceUser, "user"},
+		{AgentSourceProject, "project"},
+		{AgentSourceLocal, "local"},
+		{AgentSourcePolicy, "managed"},
+		{AgentSourcePlugin, "plugin"},
+		{AgentSourceFlag, "flag"},
+		{AgentSourceBuiltIn, "built-in"},
+		{AgentSource("unknown-source"), "unknown-source"},
+	}
+	for _, c := range cases {
+		if got := OverrideSourceLabel(c.source); got != c.want {
+			t.Errorf("OverrideSourceLabel(%q) = %q, want %q", c.source, got, c.want)
+		}
+	}
+}
+
+func TestCompareAgentsByName(t *testing.T) {
+	a := AgentDefinition{AgentType: "Explore"}
+	b := AgentDefinition{AgentType: "explore"}
+	if got := CompareAgentsByName(a, b); got != 0 {
+		t.Errorf("case-insensitive equal expected 0, got %d", got)
+	}
+
+	c := AgentDefinition{AgentType: "alpha"}
+	d := AgentDefinition{AgentType: "Beta"}
+	if got := CompareAgentsByName(c, d); got >= 0 {
+		t.Errorf("alpha should sort before Beta, got %d", got)
+	}
+	if got := CompareAgentsByName(d, c); got <= 0 {
+		t.Errorf("Beta should sort after alpha, got %d", got)
+	}
+}
+
+func TestResolveAgentModelDisplay(t *testing.T) {
+	if got := ResolveAgentModelDisplay(AgentDefinition{Model: "sonnet"}); got != "sonnet" {
+		t.Errorf("explicit model should pass through, got %q", got)
+	}
+	if got := ResolveAgentModelDisplay(AgentDefinition{Model: "inherit"}); got != "inherit" {
+		t.Errorf("inherit should pass through, got %q", got)
+	}
+	if got := ResolveAgentModelDisplay(AgentDefinition{}); got != "" {
+		t.Errorf("unset model should return empty, got %q", got)
+	}
+}
+
+func TestFormatAgentListing(t *testing.T) {
+	cases := []struct {
+		name  string
+		agent ResolvedAgent
+		want  string
+	}{
+		{
+			name:  "name only",
+			agent: ResolvedAgent{AgentDefinition: AgentDefinition{AgentType: "reviewer"}},
+			want:  "reviewer",
+		},
+		{
+			name:  "name and model",
+			agent: ResolvedAgent{AgentDefinition: AgentDefinition{AgentType: "reviewer", Model: "sonnet"}},
+			want:  "reviewer · sonnet",
+		},
+		{
+			name:  "name and memory",
+			agent: ResolvedAgent{AgentDefinition: AgentDefinition{AgentType: "reviewer", Memory: AgentMemoryUser}},
+			want:  "reviewer · user memory",
+		},
+		{
+			name:  "name, model, and memory",
+			agent: ResolvedAgent{AgentDefinition: AgentDefinition{AgentType: "reviewer", Model: "sonnet", Memory: AgentMemoryProject}},
+			want:  "reviewer · sonnet · project memory",
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if got := FormatAgentListing(c.agent); got != c.want {
+				t.Errorf("FormatAgentListing() = %q, want %q", got, c.want)
+			}
+		})
 	}
 }

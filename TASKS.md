@@ -21,7 +21,7 @@ repo; it's now fixed.
 | ID | Task | Est | Depends on |
 |---|---|---|---|
 | ~~TEST-01~~ | ~~Fix `internal/cli/startup_bench_test.go:23` — it calls `RunTUIV2` with a stale 5-arg signature; current signature is `(ctx, *session.SessionState, provider.ModelProvider, *tools.ToolRegistry)` at `internal/cli/tui_v2.go:18`~~ Done | 0.25 | — |
-| TEST-02 | Resolve `pkg/agents` (236 LOC, 0 tests) vs `pkg/skills/agents.go` — two independent agent-loading paths (`agents.Agent` vs `skills.AgentDefinition`); determine which is live, delete or merge the other | 2 | — |
+| ~~TEST-02~~ | ~~Resolve `pkg/agents` (236 LOC, 0 tests) vs `pkg/skills/agents.go` — two independent agent-loading paths (`agents.Agent` vs `skills.AgentDefinition`); determine which is live, delete or merge the other~~ Done — `pkg/skills` kept (it had zero consumers before this), `pkg/agents` deleted, `gopher agents` repointed | 2 | — |
 | TEST-03 | Add tests for `pkg/stats` (`store.go`, 142 LOC, 0 tests) | 1 | — |
 | TEST-04 | Add tests for `pkg/async` (63 LOC, 0 tests) | 0.5 | — |
 | TEST-05 | Add tests for `pkg/installer` (45 LOC, 0 tests) | 0.5 | INST-01 |
@@ -94,7 +94,8 @@ are TODO no-ops. `pkg/plugins/builtin.go` and `types.go` are real.
 | TOOL-01 | `pkg/tools/brief.go` (39 LOC) — replace echo-only `send`/`receive` with real cross-session storage | 3 | — |
 | TOOL-02 | `pkg/tools/repltool.go` (73 LOC) — replace one-shot `<lang> -c <cmd>` with a persistent REPL session (process kept alive, stdin/stdout piped across calls) | 4 | — |
 | TOOL-03 | Gate `TestingPermission` tool registration on test mode (it's currently registered unconditionally in `RegisterDefaults`, unlike the TS reference) | 0.5 | — |
-| TOOL-04 | `pkg/tools/agent.go:61` — build `agentListSection` from loaded agent definitions instead of the static placeholder string | 1 | TEST-02 |
+| TOOL-04 | `pkg/tools/agent.go:61` — build `agentListSection` from loaded agent definitions instead of the static placeholder string | 1 | ~~TEST-02~~ unblocked |
+| TOOL-08 | `pkg/ui/commands/handlers.go:1129` — the `/agents` slash command hardcodes two fake agents (incl. a `bash` agent that exists in neither loader); repoint at `skills.LoadAgents` so it agrees with `gopher agents` | 1 | — |
 | TOOL-05 | `pkg/tools/powershell_prompt.go:122,129` — check `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS` env var | 0.5 | — |
 | TOOL-06 | `pkg/cli/structured_io.go:402` — implement `update_environment_variables` (currently a no-op stub) | 1 | — |
 | TOOL-07 | `pkg/ui/components/input.go:432` — implement undo (`'u'` key is currently a no-op) | 2 | — |

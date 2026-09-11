@@ -2,25 +2,46 @@ package handlers_test
 
 import (
 	"bytes"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/Haris0059/gopher/cmd/gopher/handlers"
-	"github.com/Haris0059/gopher/pkg/agents"
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
-func TestAgentsHandler_NoDirs(t *testing.T) {
+func TestAgentsHandler_BuiltInsAlwaysListed(t *testing.T) {
 	t.Parallel()
-	// Use a temp dir that has no .claude/agents anywhere.
+	// Use a temp dir that has no .claude/agents anywhere (project side; the
+	// real ~/.claude/agents may still contribute on the developer's machine,
+	// so this test only asserts on the built-ins, not an exact count).
 	tmp := t.TempDir()
 	var buf bytes.Buffer
 	handlers.AgentsHandler(&buf, tmp)
 	got := buf.String()
-	if !strings.Contains(got, "No agents found.") {
-		t.Fatalf("expected 'No agents found.' for empty dirs, got:\n%s", got)
+
+	if !strings.Contains(got, "Built-in agents:") {
+		t.Errorf("expected 'Built-in agents:' group, got:\n%s", got)
+	}
+	if !strings.Contains(got, "Explore") || !strings.Contains(got, "general-purpose") {
+		t.Errorf("expected built-in agent names present, got:\n%s", got)
+	}
+}
+
+func TestAgentsHandlerWithDirs_NoAgents(t *testing.T) {
+	t.Parallel()
+	var buf bytes.Buffer
+	handlers.AgentsHandlerWithDirs(&buf, map[skills.AgentSource]string{})
+	got := buf.String()
+
+	// Built-ins are always present via AgentsHandlerWithDirs too, so this
+	// exercises the "no custom agents" path, not a truly empty listing.
+	if !strings.Contains(got, "Built-in agents:") {
+		t.Errorf("expected 'Built-in agents:' group, got:\n%s", got)
+	}
+	if strings.Contains(got, "Project agents:") || strings.Contains(got, "User agents:") {
+		t.Errorf("expected no custom agent groups, got:\n%s", got)
 	}
 }
 
@@ -28,26 +49,17 @@ func TestAgentsHandler_MarkdownAgents(t *testing.T) {
 	t.Parallel()
 	tmp := t.TempDir()
 
-	// Create project-level agents dir with two .md files.
+	// Create project-level agents dir with two agents defined via frontmatter.
 	agentsDir := filepath.Join(tmp, ".claude", "agents")
 	if err := os.MkdirAll(agentsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(agentsDir, "code-review.md"), []byte("# Code Review\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(agentsDir, "deploy.md"), []byte("# Deploy\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
+	writeAgentMd(t, agentsDir, "code-review.md", "code-review", "Reviews code for issues")
+	writeAgentMd(t, agentsDir, "deploy.md", "deploy", "Deploys the project")
 
 	var buf bytes.Buffer
 	handlers.AgentsHandler(&buf, tmp)
 	got := buf.String()
-
-	// Verify header format.
-	if !strings.HasPrefix(got, "2 active agents\n") {
-		t.Errorf("expected '2 active agents' header, got:\n%s", got)
-	}
 
 	// Verify group label.
 	if !strings.Contains(got, "Project agents:") {
@@ -80,15 +92,10 @@ func TestAgentsHandler_JSONAgents(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defs := map[string]map[string]string{
-		"tester": {
-			"description": "Runs tests",
-			"model":       "claude-sonnet-4-6",
-			"memory":      "user",
-		},
-	}
-	data, _ := json.Marshal(defs)
-	if err := os.WriteFile(filepath.Join(agentsDir, "agents.json"), data, 0644); err != nil {
+	// prompt is required by the schema (loadAgentsDir.ts AgentJsonSchema);
+	// entries without one are silently skipped.
+	data := `{"tester":{"description":"Runs tests","prompt":"Run the test suite.","model":"claude-sonnet-4-6","memory":"user"}}`
+	if err := os.WriteFile(filepath.Join(agentsDir, "agents.json"), []byte(data), 0644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -97,12 +104,32 @@ func TestAgentsHandler_JSONAgents(t *testing.T) {
 	got := buf.String()
 
 	// Verify middle-dot format: "tester · claude-sonnet-4-6 · user memory"
-	if !strings.Contains(got, "tester \u00b7 claude-sonnet-4-6 \u00b7 user memory") {
+	if !strings.Contains(got, "tester · claude-sonnet-4-6 · user memory") {
 		t.Errorf("expected formatted agent line with middle dots, got:\n%s", got)
 	}
+}
 
-	if !strings.HasPrefix(got, "1 active agents\n") {
-		t.Errorf("expected '1 active agents' header, got:\n%s", got)
+func TestAgentsHandler_JSONAgents_MissingPromptSkipped(t *testing.T) {
+	t.Parallel()
+	tmp := t.TempDir()
+
+	agentsDir := filepath.Join(tmp, ".claude", "agents")
+	if err := os.MkdirAll(agentsDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// No "prompt" field: this entry must be rejected.
+	data := `{"tester":{"description":"Runs tests","model":"claude-sonnet-4-6"}}`
+	if err := os.WriteFile(filepath.Join(agentsDir, "agents.json"), []byte(data), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	var buf bytes.Buffer
+	handlers.AgentsHandler(&buf, tmp)
+	got := buf.String()
+
+	if strings.Contains(got, "tester") {
+		t.Errorf("expected agent missing 'prompt' to be skipped, got:\n%s", got)
 	}
 }
 
@@ -113,16 +140,12 @@ func TestAgentsHandler_ShadowedAgent(t *testing.T) {
 	projectDir := t.TempDir()
 
 	// Create the same agent in both user and project dirs.
-	if err := os.WriteFile(filepath.Join(userDir, "reviewer.md"), []byte("# Reviewer\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(projectDir, "reviewer.md"), []byte("# Reviewer\n"), 0644); err != nil {
-		t.Fatal(err)
-	}
+	writeAgentMd(t, userDir, "reviewer.md", "reviewer", "Reviews code")
+	writeAgentMd(t, projectDir, "reviewer.md", "reviewer", "Reviews code")
 
-	dirs := map[agents.Source]string{
-		agents.SourceUser:    userDir,
-		agents.SourceProject: projectDir,
+	dirs := map[skills.AgentSource]string{
+		skills.AgentSourceUser:    userDir,
+		skills.AgentSourceProject: projectDir,
 	}
 
 	var buf bytes.Buffer
@@ -132,11 +155,6 @@ func TestAgentsHandler_ShadowedAgent(t *testing.T) {
 	// Project overrides user, so user should be shadowed.
 	if !strings.Contains(got, "(shadowed by project) reviewer") {
 		t.Errorf("expected user agent to be shadowed by project, got:\n%s", got)
-	}
-
-	// Only 1 active (the project one).
-	if !strings.HasPrefix(got, "1 active agents\n") {
-		t.Errorf("expected '1 active agents' header, got:\n%s", got)
 	}
 }
 
@@ -148,9 +166,7 @@ func TestAgentsHandler_OutputEndsClean(t *testing.T) {
 	if err := os.MkdirAll(agentsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(agentsDir, "alpha.md"), []byte(""), 0644); err != nil {
-		t.Fatal(err)
-	}
+	writeAgentMd(t, agentsDir, "alpha.md", "alpha", "An agent")
 
 	var buf bytes.Buffer
 	handlers.AgentsHandler(&buf, tmp)
@@ -161,5 +177,15 @@ func TestAgentsHandler_OutputEndsClean(t *testing.T) {
 	trailing := got[len(trimmed):]
 	if trailing != "\n" {
 		t.Errorf("expected output to end with exactly one newline, got %d trailing newlines", len(trailing))
+	}
+}
+
+// writeAgentMd writes a minimal valid agent markdown file with frontmatter
+// (name + description are required by skills.ParseAgentFromMarkdown).
+func writeAgentMd(t *testing.T, dir, filename, name, description string) {
+	t.Helper()
+	content := "---\nname: " + name + "\ndescription: " + description + "\n---\nBody.\n"
+	if err := os.WriteFile(filepath.Join(dir, filename), []byte(content), 0644); err != nil {
+		t.Fatal(err)
 	}
 }

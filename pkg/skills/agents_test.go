@@ -35,12 +35,12 @@ func TestBuiltInAgentTypes(t *testing.T) {
 	// Source: builtInAgents.ts — verify all expected types exist
 	agents := GetBuiltInAgents()
 	expected := map[string]bool{
-		"general-purpose":  false,
-		"statusline-setup": false,
-		"Explore":          false,
-		"Plan":             false,
+		"general-purpose":   false,
+		"statusline-setup":  false,
+		"Explore":           false,
+		"Plan":              false,
 		"claude-code-guide": false,
-		"verification":     false,
+		"verification":      false,
 	}
 
 	for _, a := range agents {
@@ -171,7 +171,7 @@ func TestBuiltInAgentSystemPrompts(t *testing.T) {
 
 	// Spot-check key content in specific prompts
 	gp := FindAgent(agents, AgentTypeGeneralPurpose)
-	if gp == nil || !containsAll(gp.SystemPrompt, "agent for Claude Code", "NEVER create files") {
+	if gp == nil || !containsAll(gp.SystemPrompt, "agent for Gopher", "NEVER create files") {
 		t.Error("general-purpose prompt missing key content")
 	}
 
@@ -675,10 +675,226 @@ func TestAgentSourceConstants(t *testing.T) {
 	if AgentSourceProject != "projectSettings" {
 		t.Error("wrong")
 	}
+	if AgentSourceLocal != "localSettings" {
+		t.Error("wrong")
+	}
 	if AgentSourcePolicy != "policySettings" {
 		t.Error("wrong")
 	}
 	if AgentSourcePlugin != "plugin" {
 		t.Error("wrong")
+	}
+	if AgentSourceFlag != "flagSettings" {
+		t.Error("wrong")
+	}
+}
+
+func TestGetActiveAgents_ReversedOrder(t *testing.T) {
+	// Source: loadAgentsDir.ts:193-221 — priority is fixed, not insertion order.
+	// Project appears BEFORE built-in here; project must still win.
+	all := []AgentDefinition{
+		{AgentType: "agent-a", Source: AgentSourceProject, WhenToUse: "project override"},
+		{AgentType: "agent-a", Source: AgentSourceBuiltIn, WhenToUse: "built-in version"},
+	}
+	active := GetActiveAgents(all)
+	agentA := FindAgent(active, "agent-a")
+	if agentA == nil {
+		t.Fatal("agent-a not found")
+	}
+	if agentA.Source != AgentSourceProject {
+		t.Errorf("agent-a should be project version regardless of input order, got source=%q", agentA.Source)
+	}
+}
+
+func TestGetActiveAgents_SourcePriority(t *testing.T) {
+	// Source: loadAgentsDir.ts:193-221 — built-in < plugin < user < project < flag < managed.
+	ladder := []AgentSource{
+		AgentSourceBuiltIn, AgentSourcePlugin, AgentSourceUser,
+		AgentSourceProject, AgentSourceFlag, AgentSourcePolicy,
+	}
+	for i := 0; i < len(ladder)-1; i++ {
+		lower, higher := ladder[i], ladder[i+1]
+		for _, order := range [][2]AgentSource{{lower, higher}, {higher, lower}} {
+			all := []AgentDefinition{
+				{AgentType: "x", Source: order[0]},
+				{AgentType: "x", Source: order[1]},
+			}
+			active := GetActiveAgents(all)
+			got := FindAgent(active, "x")
+			if got == nil || got.Source != higher {
+				t.Errorf("%v vs %v: winner should be %q, got %v", order[0], order[1], higher, got)
+			}
+		}
+	}
+}
+
+func TestGetActiveAgents_Deterministic(t *testing.T) {
+	all := []AgentDefinition{
+		{AgentType: "zeta", Source: AgentSourceProject},
+		{AgentType: "alpha", Source: AgentSourceUser},
+		{AgentType: "mu", Source: AgentSourceBuiltIn},
+	}
+	first := GetActiveAgents(all)
+	for i := 0; i < 20; i++ {
+		got := GetActiveAgents(all)
+		if len(got) != len(first) {
+			t.Fatalf("length changed across calls: %d vs %d", len(got), len(first))
+		}
+		for j := range got {
+			if got[j].AgentType != first[j].AgentType {
+				t.Fatalf("order not deterministic at call %d, index %d: %q vs %q", i, j, got[j].AgentType, first[j].AgentType)
+			}
+		}
+	}
+}
+
+func TestParseAgentsFromJSON(t *testing.T) {
+	t.Run("valid entry", func(t *testing.T) {
+		data := `{"tester":{"description":"Runs tests","prompt":"Run the tests."}}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 1 {
+			t.Fatalf("expected 1 agent, got %d", len(agents))
+		}
+		a := agents[0]
+		if a.AgentType != "tester" || a.WhenToUse != "Runs tests" || a.SystemPrompt != "Run the tests." || a.Source != AgentSourceFlag {
+			t.Errorf("unexpected agent: %+v", a)
+		}
+	})
+
+	t.Run("missing prompt is skipped", func(t *testing.T) {
+		data := `{"tester":{"description":"Runs tests"}}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 0 {
+			t.Errorf("expected agent missing prompt to be skipped, got %d", len(agents))
+		}
+	})
+
+	t.Run("missing description is skipped", func(t *testing.T) {
+		data := `{"tester":{"prompt":"Run the tests."}}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 0 {
+			t.Errorf("expected agent missing description to be skipped, got %d", len(agents))
+		}
+	})
+
+	t.Run("mixed valid and invalid", func(t *testing.T) {
+		data := `{
+			"good": {"description": "Good agent", "prompt": "Do good things."},
+			"bad": {"description": "Missing prompt"}
+		}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 1 {
+			t.Fatalf("expected 1 valid agent, got %d", len(agents))
+		}
+		if agents[0].AgentType != "good" {
+			t.Errorf("expected 'good' agent to survive, got %q", agents[0].AgentType)
+		}
+	})
+
+	t.Run("inherit model normalized", func(t *testing.T) {
+		data := `{"tester":{"description":"d","prompt":"p","model":"INHERIT"}}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 1 || agents[0].Model != "inherit" {
+			t.Errorf("expected model normalized to 'inherit', got %+v", agents)
+		}
+	})
+
+	t.Run("invalid memory scope dropped", func(t *testing.T) {
+		data := `{"tester":{"description":"d","prompt":"p","memory":"bogus"}}`
+		agents := ParseAgentsFromJSON([]byte(data), AgentSourceFlag)
+		if len(agents) != 1 || agents[0].Memory != "" {
+			t.Errorf("expected invalid memory scope dropped, got %+v", agents)
+		}
+	})
+
+	t.Run("malformed json returns nil", func(t *testing.T) {
+		agents := ParseAgentsFromJSON([]byte("not json"), AgentSourceFlag)
+		if agents != nil {
+			t.Errorf("expected nil for malformed JSON, got %v", agents)
+		}
+	})
+}
+
+func TestLoadAgentsFromDirs(t *testing.T) {
+	userDir := t.TempDir()
+	projectDir := t.TempDir()
+
+	if err := os.WriteFile(filepath.Join(userDir, "u.md"), []byte("---\nname: u\ndescription: user agent\n---\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(projectDir, "p.md"), []byte("---\nname: p\ndescription: project agent\n---\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	dirs := map[AgentSource]string{
+		AgentSourceUser:    userDir,
+		AgentSourceProject: projectDir,
+	}
+	agents := LoadAgentsFromDirs(dirs)
+	if len(agents) != 2 {
+		t.Fatalf("expected 2 agents, got %d", len(agents))
+	}
+	u := FindAgent(agents, "u")
+	p := FindAgent(agents, "p")
+	if u == nil || u.Source != AgentSourceUser {
+		t.Errorf("expected 'u' from user source, got %+v", u)
+	}
+	if p == nil || p.Source != AgentSourceProject {
+		t.Errorf("expected 'p' from project source, got %+v", p)
+	}
+}
+
+func TestLoadAgentsFromDir_AgentsJSON(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "agents.json"),
+		[]byte(`{"jsonagent":{"description":"from json","prompt":"do the thing"}}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "mdagent.md"),
+		[]byte("---\nname: mdagent\ndescription: from markdown\n---\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	agents := LoadAgentsFromDirs(map[AgentSource]string{AgentSourceProject: dir})
+	if len(agents) != 2 {
+		t.Fatalf("expected 2 agents (1 json + 1 md), got %d", len(agents))
+	}
+	if FindAgent(agents, "jsonagent") == nil {
+		t.Error("expected jsonagent from agents.json to be loaded")
+	}
+	if FindAgent(agents, "mdagent") == nil {
+		t.Error("expected mdagent from markdown to be loaded")
+	}
+}
+
+func TestDefaultAgentDirs(t *testing.T) {
+	dirs := DefaultAgentDirs("/some/project")
+	proj, ok := dirs[AgentSourceProject]
+	if !ok || !strings.HasSuffix(proj, filepath.Join(".claude", "agents")) {
+		t.Errorf("expected project dir under .claude/agents, got %q", proj)
+	}
+	if !strings.HasPrefix(proj, "/some/project") {
+		t.Errorf("expected project dir under cwd, got %q", proj)
+	}
+
+	dirsEmpty := DefaultAgentDirs("")
+	if _, ok := dirsEmpty[AgentSourceProject]; ok {
+		t.Error("expected no project dir entry when cwd is empty")
+	}
+
+	if _, ok := dirs[AgentSourceUser]; !ok {
+		t.Error("expected a user dir entry")
+	}
+}
+
+func TestLoadAgents_IncludesBuiltInsFirst(t *testing.T) {
+	agents := LoadAgents(t.TempDir())
+	if len(agents) < len(GetBuiltInAgents()) {
+		t.Fatal("expected at least the built-in agents")
+	}
+	for i, want := range GetBuiltInAgents() {
+		if agents[i].AgentType != want.AgentType {
+			t.Errorf("built-in agents should come first; index %d = %q, want %q", i, agents[i].AgentType, want.AgentType)
+		}
 	}
 }

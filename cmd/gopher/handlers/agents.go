@@ -4,31 +4,39 @@ package handlers
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 
-	"github.com/Haris0059/gopher/pkg/agents"
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
 // AgentsHandler prints the list of configured agents grouped by source.
 // Output goes to w. cwd is the project working directory used to locate
 // project-local agent definitions.
 func AgentsHandler(w io.Writer, cwd string) {
-	AgentsHandlerWithDirs(w, agents.DefaultAgentDirs(cwd))
+	all := skills.LoadAgents(cwd)
+	printAgents(w, all)
 }
 
 // AgentsHandlerWithDirs is like AgentsHandler but accepts explicit directory
-// mappings. Useful for testing without touching the real filesystem.
-func AgentsHandlerWithDirs(w io.Writer, dirs map[agents.Source]string) {
-	all := agents.LoadAgents(dirs)
-	active := agents.GetActiveAgents(all)
-	resolved := agents.ResolveOverrides(all, active)
+// mappings (plus the built-in agents). Useful for testing without touching
+// the real filesystem.
+func AgentsHandlerWithDirs(w io.Writer, dirs map[skills.AgentSource]string) {
+	all := skills.GetBuiltInAgents()
+	all = append(all, skills.LoadAgentsFromDirs(dirs)...)
+	printAgents(w, all)
+}
+
+func printAgents(w io.Writer, all []skills.AgentDefinition) {
+	active := skills.GetActiveAgents(all)
+	resolved := skills.ResolveAgentOverrides(all, active)
 
 	var lines []string
 	totalActive := 0
 
-	for _, sg := range agents.SourceGroups {
+	for _, sg := range skills.AgentSourceGroups {
 		// Filter to this source group.
-		var group []agents.ResolvedAgent
+		var group []skills.ResolvedAgent
 		for _, r := range resolved {
 			if r.Source == sg.Source {
 				group = append(group, r)
@@ -37,15 +45,17 @@ func AgentsHandlerWithDirs(w io.Writer, dirs map[agents.Source]string) {
 		if len(group) == 0 {
 			continue
 		}
-		agents.SortByName(group)
+		sort.Slice(group, func(i, j int) bool {
+			return skills.CompareAgentsByName(group[i].AgentDefinition, group[j].AgentDefinition) < 0
+		})
 
 		lines = append(lines, sg.Label+":")
 		for _, a := range group {
 			if a.OverriddenBy != "" {
-				label := agents.OverrideSourceLabel(a.OverriddenBy)
-				lines = append(lines, fmt.Sprintf("  (shadowed by %s) %s", label, agents.FormatAgent(a)))
+				label := skills.OverrideSourceLabel(a.OverriddenBy)
+				lines = append(lines, fmt.Sprintf("  (shadowed by %s) %s", label, skills.FormatAgentListing(a)))
 			} else {
-				lines = append(lines, "  "+agents.FormatAgent(a))
+				lines = append(lines, "  "+skills.FormatAgentListing(a))
 				totalActive++
 			}
 		}

@@ -35,9 +35,14 @@ func TestAgentsSubcommand_Integration(t *testing.T) {
 		t.Fatalf("gopher agents failed: %v\n%s", err, out)
 	}
 
+	// Built-in agents are always listed, so an empty project directory no
+	// longer produces "No agents found." — it lists just the built-ins.
 	got := string(out)
-	if !strings.Contains(got, "No agents found.") {
-		t.Errorf("expected 'No agents found.' in output, got:\n%s", got)
+	if !strings.Contains(got, "Built-in agents:") {
+		t.Errorf("expected 'Built-in agents:' in output, got:\n%s", got)
+	}
+	if strings.Contains(got, "Project agents:") {
+		t.Errorf("expected no 'Project agents:' group in an empty project dir, got:\n%s", got)
 	}
 }
 
@@ -64,7 +69,10 @@ func TestAgentsSubcommand_WithAgents(t *testing.T) {
 	if err := os.MkdirAll(agentsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(agentsDir, "helper.md"), []byte("# Helper\n"), 0644); err != nil {
+	// name + description frontmatter are required for the agent to be
+	// discovered (skills.ParseAgentFromMarkdown rejects files without both).
+	agentMd := "---\nname: helper\ndescription: Helps with things\n---\nBody.\n"
+	if err := os.WriteFile(filepath.Join(agentsDir, "helper.md"), []byte(agentMd), 0644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -79,8 +87,8 @@ func TestAgentsSubcommand_WithAgents(t *testing.T) {
 	if !strings.Contains(got, "helper") {
 		t.Errorf("expected 'helper' in output, got:\n%s", got)
 	}
-	if !strings.Contains(got, "1 active agents") {
-		t.Errorf("expected '1 active agents' header, got:\n%s", got)
+	if !strings.Contains(got, "Project agents:") {
+		t.Errorf("expected 'Project agents:' group, got:\n%s", got)
 	}
 }
 

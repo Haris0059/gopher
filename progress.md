@@ -54,7 +54,7 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 | MCP: OAuth | — | `src/services/mcp/auth.ts` (2,466 LOC) | **Missing** | Config fields only, no PKCE/token exchange. See `TASKS.md` → `MCP-04` |
 | MCP: prompts | — | `prompts/list`, `prompts/get` | **Missing** | Not implemented at all, also no sampling/elicitation/subscriptions. See `TASKS.md` → `MCP-05..08` |
 | Skills | `pkg/skills` (1,256 LOC) | `src/skills/` + `src/utils/skills/` | **Done** | Frontmatter parsing, built-in agents, overrides, agent memory dirs |
-| Agents & subagents | `pkg/agents` (236 LOC, 0 tests) | `src/utils/{standaloneAgent,forkedAgent,agentContext}.ts` | **Partial** | Duplicates logic in `pkg/skills/agents.go` — likely one is dead code; untested. See `TASKS.md` → `TEST-02` |
+| Agents & subagents | `pkg/skills/agents.go` (~1,000 LOC, tested) | `src/tools/AgentTool/loadAgentsDir.ts`, `agentDisplay.ts` | **Done** | `pkg/agents` (the weaker of two duplicate loaders) deleted; `gopher agents` now runs on `pkg/skills`, gaining frontmatter parsing and built-in agents. `TEST-02` done |
 | Teams / multi-agent | `pkg/session` (team/teammate), `pkg/tools/teamtools.go` | `src/utils/swarm/`, `src/coordinator/` | **Done** | `TeamCreate`/`TeamDelete` tools, coordinator mode, teammate memory sync |
 | Plugins | `pkg/plugins` (341 LOC) + `bundled` | `src/plugins/`, `src/utils/plugins/` (43 files) | **Stub** | `builtin.go`/`types.go` are real; `operations.go` — install/uninstall/list are all TODO no-ops. See `TASKS.md` → `PLUG-01..05` |
 | Output styles | `pkg/output_styles` (376 LOC) | `src/outputStyles/` | **Done** | Built-ins + markdown dir loader + frontmatter |
@@ -119,8 +119,8 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
 | 16 | `pkg/lsp` has no diagnostics/document-sync | `LSP-01`, `LSP-02` |
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
-| 18 | Untested packages (`pkg/agents`, `pkg/stats`, `pkg/async`, `pkg/installer`, `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}`) | `TEST-02`–`TEST-07` |
-| 19 | `pkg/agents` duplicates `pkg/skills/agents.go` | `TEST-02` |
+| 18 | Untested packages (`pkg/stats`, `pkg/async`, `pkg/installer`, `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}`) | `TEST-03`–`TEST-07` |
+| ~~19~~ | ~~`pkg/agents` duplicates `pkg/skills/agents.go`~~ Fixed — `pkg/agents` deleted | `TEST-02` |
 | 20 | Stale rebrand references (4 scenario fixtures, self-referential comments) | `CLEAN-01`, `CLEAN-02` |
 | ~~21~~ | ~~`internal/cli/startup_bench_test.go` fails to compile~~ Fixed | `TEST-01` |
 | 22 | Sandbox has no Go equivalent | not yet in `TASKS.md` |
