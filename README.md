@@ -14,8 +14,8 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-    <img src="https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.25+">
+    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Go-1.27+-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+    <img src="https://img.shields.io/badge/Go-1.27+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.27+">
   </picture>
   <img src="https://img.shields.io/badge/Tools-41_Built--In-orange?style=for-the-badge" alt="41 Tools">
   <img src="https://img.shields.io/badge/Binary-Single_Static-success?style=for-the-badge" alt="Single Binary">
