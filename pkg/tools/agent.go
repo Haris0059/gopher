@@ -3,13 +3,16 @@ package tools
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"strings"
+	"sync"
 
 	"github.com/Haris0059/gopher/pkg/compact"
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/permissions"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
 // QueryFunc is the function signature for running a query loop.
@@ -29,12 +32,61 @@ type AgentTool struct {
 	provider provider.ModelProvider
 	registry *ToolRegistry
 	queryFn  QueryFunc
+
+	cwd        string
+	loadAgents func(cwd string) []skills.AgentDefinition
+
+	agentsOnce   sync.Once
+	agentsCached []skills.AgentDefinition
 }
 
 // NewAgentTool creates an AgentTool with the dependencies it needs.
 // The queryFn parameter breaks the import cycle between tools and query.
 func NewAgentTool(prov provider.ModelProvider, reg *ToolRegistry, queryFn QueryFunc) *AgentTool {
-	return &AgentTool{provider: prov, registry: reg, queryFn: queryFn}
+	return &AgentTool{
+		provider:   prov,
+		registry:   reg,
+		queryFn:    queryFn,
+		loadAgents: defaultLoadAgents,
+	}
+}
+
+// defaultLoadAgents loads active agent definitions from the standard
+// locations (built-ins plus ~/.claude/agents and <cwd>/.claude/agents).
+// Source: loadAgentsDir.ts:270-350, agentToolUtils.ts — activeAgents
+func defaultLoadAgents(cwd string) []skills.AgentDefinition {
+	return skills.LoadAllAgents(cwd).ActiveAgents
+}
+
+// SetAgentLoader overrides how agent definitions are loaded. Exposed for
+// tests; production code uses defaultLoadAgents.
+func (t *AgentTool) SetAgentLoader(fn func(cwd string) []skills.AgentDefinition) {
+	t.loadAgents = fn
+	t.agentsOnce = sync.Once{}
+}
+
+// SetCWD overrides the working directory used to discover project-level
+// agent definitions. Defaults to os.Getwd() when unset.
+func (t *AgentTool) SetCWD(dir string) {
+	t.cwd = dir
+	t.agentsOnce = sync.Once{}
+}
+
+// activeAgents returns the cached set of active agent definitions,
+// discovering them on first use.
+func (t *AgentTool) activeAgents() []skills.AgentDefinition {
+	t.agentsOnce.Do(func() {
+		cwd := t.cwd
+		if cwd == "" {
+			cwd, _ = os.Getwd()
+		}
+		loader := t.loadAgents
+		if loader == nil {
+			loader = defaultLoadAgents
+		}
+		t.agentsCached = loader(cwd)
+	})
+	return t.agentsCached
 }
 
 func (t *AgentTool) Name() string { return AgentToolName }
@@ -58,9 +110,7 @@ func (t *AgentTool) MaxResultSizeChars() int { return 100_000 }
 // Prompt returns the system-prompt section for the Agent tool.
 // Source: AgentTool/prompt.ts:66-286
 func (t *AgentTool) Prompt() string {
-	// TODO(T502): build agentListSection from loaded agent definitions
-	agentListSection := "Available agent types are listed in <system-reminder> messages in the conversation."
-	return AgentToolPrompt(agentListSection)
+	return AgentToolPrompt(BuildAgentListSection(t.activeAgents()))
 }
 
 // Source: AgentTool/AgentTool.tsx:82-102 inputSchema
@@ -138,32 +188,80 @@ func (t *AgentTool) Execute(ctx context.Context, tc *ToolContext, input json.Raw
 		return ErrorOutput(err.Error()), nil
 	}
 
-	// Resolve model: explicit override > parent session model > default
-	// Source: utils/model/agent.ts — getAgentModel()
-	model := "claude-sonnet-4-6"
-	if params.Model != "" {
-		if resolved, ok := agentModelAliases[params.Model]; ok {
-			model = resolved
-		} else {
-			model = params.Model
+	// Resolve subagent_type against the active agent definitions, defaulting
+	// to general-purpose when omitted (Gopher has no fork-subagent gate).
+	// Source: AgentTool.tsx:319-353
+	agentType := params.SubagentType
+	if agentType == "" {
+		agentType = skills.AgentTypeGeneralPurpose
+	}
+	agents := t.activeAgents()
+	def := skills.FindAgent(agents, agentType)
+	if def == nil {
+		names := make([]string, 0, len(agents))
+		for _, a := range agents {
+			names = append(names, a.AgentType)
 		}
+		return ErrorOutput("Agent type '" + agentType + "' not found. Available agents: " + strings.Join(names, ", ")), nil
+	}
+
+	// Resolve model: env override > tool-specified > agent definition > inherit.
+	// Source: utils/model/agent.ts — getAgentModel()
+	toolSpecifiedModel := resolveModelAlias(params.Model)
+	agentDefModel := resolveModelAlias(def.Model)
+	model := resolveModelAlias(GetAgentModel(agentDefModel, "", toolSpecifiedModel))
+	if model == "" {
+		model = "claude-sonnet-4-6"
+	}
+
+	// System prompt: the selected agent's, falling back to the generic
+	// sub-agent prompt when the definition carries none; append the
+	// critical system reminder (verification agents) when present.
+	// Source: runAgent.ts:135-160,782
+	systemPrompt := def.SystemPrompt
+	if systemPrompt == "" {
+		systemPrompt = "You are a helpful sub-agent. Complete the task and report your findings concisely."
+	}
+	if def.CriticalSystemReminder != "" {
+		systemPrompt += "\n\n" + def.CriticalSystemReminder
+	}
+
+	maxTurns := AgentMaxTurns
+	if def.MaxTurns > 0 {
+		maxTurns = def.MaxTurns
+	}
+
+	permissionMode := permissions.PermissionMode(permissions.AutoApprove)
+	if def.PermissionMode != "" && ValidPermissionModes[def.PermissionMode] {
+		permissionMode = permissions.PermissionMode(def.PermissionMode)
 	}
 
 	// Create child session with agent-appropriate config.
 	// Source: AgentTool/runAgent.ts:135-160
 	childCfg := session.SessionConfig{
 		Model:          model,
-		SystemPrompt:   "You are a helpful sub-agent. Complete the task and report your findings concisely.",
-		MaxTurns:       AgentMaxTurns,
+		SystemPrompt:   systemPrompt,
+		MaxTurns:       maxTurns,
 		TokenBudget:    compact.DefaultBudget(),
-		PermissionMode: permissions.AutoApprove,
+		PermissionMode: permissionMode,
 	}
 	childSess := session.New(childCfg, tc.CWD)
 	childSess.ParentSessionID = tc.SessionID
 	childSess.PushMessage(message.UserMessage(params.Prompt))
 
+	// Scope the child registry to the agent definition's allowed tools.
+	// ResolveAgentTools already filters ResolvedTools by disallowedTools in
+	// both the wildcard and explicit-allowlist cases, so always rebuild from
+	// it rather than reusing the parent registry unfiltered.
+	// Source: agentToolUtils.ts:122-225
+	resolved := ResolveAgentTools(def.Tools, def.DisallowedTools, string(def.Source), string(permissionMode), t.registry.All(), false, false)
+	childRegistry := NewRegistry()
+	for _, tool := range resolved.ResolvedTools {
+		childRegistry.Register(tool)
+	}
+
 	// Create a child orchestrator sharing the registry but not state.
-	childOrch := NewOrchestrator(t.registry)
+	childOrch := NewOrchestrator(childRegistry)
 
 	// Collect text output from the sub-agent.
 	var resultText strings.Builder
@@ -172,7 +270,7 @@ func (t *AgentTool) Execute(ctx context.Context, tc *ToolContext, input json.Raw
 	}
 
 	// Run the child query loop.
-	err := t.queryFn(ctx, childSess, t.provider, t.registry, childOrch, onText)
+	err := t.queryFn(ctx, childSess, t.provider, childRegistry, childOrch, onText)
 	if err != nil {
 		return ErrorOutput("agent error: " + err.Error()), nil
 	}
@@ -182,4 +280,14 @@ func (t *AgentTool) Execute(ctx context.Context, tc *ToolContext, input json.Raw
 		result = "(agent completed with no text output)"
 	}
 	return SuccessOutput(result), nil
+}
+
+// resolveModelAlias expands a short model name ("sonnet", "opus", "haiku")
+// to its full model ID; other values (including "inherit" and "") pass
+// through unchanged.
+func resolveModelAlias(model string) string {
+	if resolved, ok := agentModelAliases[model]; ok {
+		return resolved
+	}
+	return model
 }

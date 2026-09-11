@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
 // Source: tools/AgentTool/agentToolUtils.ts, constants/tools.ts
@@ -15,10 +17,10 @@ type mockTool struct {
 	readOnly bool
 }
 
-func (m *mockTool) Name() string                  { return m.name }
-func (m *mockTool) Description() string            { return "mock tool " + m.name }
-func (m *mockTool) InputSchema() json.RawMessage   { return json.RawMessage(`{"type":"object"}`) }
-func (m *mockTool) IsReadOnly() bool               { return m.readOnly }
+func (m *mockTool) Name() string                 { return m.name }
+func (m *mockTool) Description() string          { return "mock tool " + m.name }
+func (m *mockTool) InputSchema() json.RawMessage { return json.RawMessage(`{"type":"object"}`) }
+func (m *mockTool) IsReadOnly() bool             { return m.readOnly }
 func (m *mockTool) Execute(ctx context.Context, tc *ToolContext, input json.RawMessage) (*ToolOutput, error) {
 	return SuccessOutput("ok"), nil
 }
@@ -576,19 +578,19 @@ func TestValidateAgentName(t *testing.T) {
 		name    string
 		wantErr bool
 	}{
-		{"", false},                  // optional, empty is fine
-		{"my-agent", false},          // valid
-		{"agent123", false},          // valid
-		{"a", false},                 // single char
-		{"ship-audit", false},        // from TS example
-		{"migration-review", false},  // from TS example
-		{"-leading", true},           // starts with hyphen
-		{"trailing-", true},          // ends with hyphen
-		{"My-Agent", true},           // uppercase
-		{"agent name", true},         // space
-		{"agent_name", true},         // underscore
-		{"agent.name", true},         // dot
-		{strings.Repeat("a", 65), true}, // too long
+		{"", false},                      // optional, empty is fine
+		{"my-agent", false},              // valid
+		{"agent123", false},              // valid
+		{"a", false},                     // single char
+		{"ship-audit", false},            // from TS example
+		{"migration-review", false},      // from TS example
+		{"-leading", true},               // starts with hyphen
+		{"trailing-", true},              // ends with hyphen
+		{"My-Agent", true},               // uppercase
+		{"agent name", true},             // space
+		{"agent_name", true},             // underscore
+		{"agent.name", true},             // dot
+		{strings.Repeat("a", 65), true},  // too long
 		{strings.Repeat("a", 64), false}, // exactly at limit
 	}
 	for _, tc := range tests {
@@ -735,6 +737,28 @@ func TestAgentToolPromptMethod(t *testing.T) {
 	var itool Tool = tool
 	if GetToolPrompt(itool) == "" {
 		t.Error("GetToolPrompt via interface should not be empty")
+	}
+}
+
+func TestAgentToolPromptListsLoadedAgents(t *testing.T) {
+	// Prompt() should render the real agent list, not the static
+	// system-reminder fallback, once agents are loaded (TOOL-04).
+	tool := NewAgentTool(nil, nil, nil)
+	tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+		return []skills.AgentDefinition{
+			{AgentType: "general-purpose", WhenToUse: "General-purpose agent.", Tools: nil},
+			{AgentType: "Explore", WhenToUse: "Fast codebase search.", Model: "haiku"},
+		}
+	})
+	p := tool.Prompt()
+	if !strings.Contains(p, "general-purpose") || !strings.Contains(p, "Explore") {
+		t.Errorf("Prompt() should list loaded agent types, got %q", p)
+	}
+	if !strings.Contains(p, "Fast codebase search.") {
+		t.Error("Prompt() should include agent descriptions")
+	}
+	if strings.Contains(p, "Available agent types are listed in <system-reminder>") {
+		t.Error("Prompt() should not fall back to the static sentence when agents are loaded")
 	}
 }
 

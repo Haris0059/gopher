@@ -94,7 +94,7 @@ are TODO no-ops. `pkg/plugins/builtin.go` and `types.go` are real.
 | TOOL-01 | `pkg/tools/brief.go` (39 LOC) — replace echo-only `send`/`receive` with real cross-session storage | 3 | — |
 | TOOL-02 | `pkg/tools/repltool.go` (73 LOC) — replace one-shot `<lang> -c <cmd>` with a persistent REPL session (process kept alive, stdin/stdout piped across calls) | 4 | — |
 | TOOL-03 | Gate `TestingPermission` tool registration on test mode (it's currently registered unconditionally in `RegisterDefaults`, unlike the TS reference) | 0.5 | — |
-| TOOL-04 | `pkg/tools/agent.go:61` — build `agentListSection` from loaded agent definitions instead of the static placeholder string | 1 | ~~TEST-02~~ unblocked |
+| ~~TOOL-04~~ | ~~`pkg/tools/agent.go:61` — build `agentListSection` from loaded agent definitions instead of the static placeholder string~~ Done — `Prompt()` now renders the real agent list via `BuildAgentListSection`/`skills.LoadAllAgents`, and `Execute` resolves `subagent_type` against agent definitions (system prompt, model, maxTurns, tool scoping) instead of hardcoding a generic sub-agent | 1 | ~~TEST-02~~ unblocked |
 | TOOL-08 | `pkg/ui/commands/handlers.go:1129` — the `/agents` slash command hardcodes two fake agents (incl. a `bash` agent that exists in neither loader); repoint at `skills.LoadAgents` so it agrees with `gopher agents` | 1 | — |
 | TOOL-05 | `pkg/tools/powershell_prompt.go:122,129` — check `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS` env var | 0.5 | — |
 | TOOL-06 | `pkg/cli/structured_io.go:402` — implement `update_environment_variables` (currently a no-op stub) | 1 | — |

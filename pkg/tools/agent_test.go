@@ -9,6 +9,8 @@ import (
 	"github.com/Haris0059/gopher/internal/testharness"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/skills"
 	"github.com/Haris0059/gopher/pkg/tools"
 )
 
@@ -200,4 +202,108 @@ func TestAgentTool(t *testing.T) {
 			t.Log("note: sub-agent completed despite cancellation (race condition is acceptable)")
 		}
 	})
+
+	t.Run("unknown_subagent_type_returns_error", func(t *testing.T) {
+		tool := tools.NewAgentTool(nil, nil, nil)
+		tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+			return []skills.AgentDefinition{
+				{AgentType: "general-purpose", WhenToUse: "General."},
+				{AgentType: "Explore", WhenToUse: "Search."},
+			}
+		})
+		tc := &tools.ToolContext{CWD: t.TempDir()}
+		input := json.RawMessage(`{"prompt": "do it", "description": "test", "subagent_type": "bogus"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !out.IsError {
+			t.Fatal("expected error output for unknown subagent_type")
+		}
+		if !strings.Contains(out.Content, "Agent type 'bogus' not found") {
+			t.Errorf("error should name the unknown type, got %q", out.Content)
+		}
+		if !strings.Contains(out.Content, "general-purpose") || !strings.Contains(out.Content, "Explore") {
+			t.Errorf("error should list available agents, got %q", out.Content)
+		}
+	})
+
+	t.Run("subagent_type_selects_agent_definition", func(t *testing.T) {
+		prov := testharness.NewScriptedProvider(
+			testharness.MakeTextTurn("done", provider.StopReasonEndTurn),
+		)
+
+		var capturedSystemPrompt, capturedModel string
+		var capturedMaxTurns int
+		var capturedRegistry *tools.ToolRegistry
+		queryFn := func(ctx context.Context, sess *session.SessionState, p provider.ModelProvider, reg *tools.ToolRegistry, orch *tools.ToolOrchestrator, onEvent func(string)) error {
+			capturedSystemPrompt = sess.Config.SystemPrompt
+			capturedModel = sess.Config.Model
+			capturedMaxTurns = sess.Config.MaxTurns
+			capturedRegistry = reg
+			onEvent("done")
+			return nil
+		}
+
+		registry := tools.NewRegistry()
+		registry.Register(&testStubTool{name: "Read"})
+		registry.Register(&testStubTool{name: "Edit"})
+		registry.Register(&testStubTool{name: "Agent"})
+
+		tool := tools.NewAgentTool(prov, registry, queryFn)
+		tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+			return []skills.AgentDefinition{
+				{
+					AgentType:       "reviewer",
+					WhenToUse:       "Reviews code.",
+					SystemPrompt:    "You are a code reviewer.",
+					Model:           "haiku",
+					MaxTurns:        7,
+					DisallowedTools: []string{"Agent", "Edit"},
+				},
+			}
+		})
+
+		tc := &tools.ToolContext{CWD: t.TempDir()}
+		input := json.RawMessage(`{"prompt": "review this", "description": "review", "subagent_type": "reviewer"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if out.IsError {
+			t.Fatalf("unexpected tool error: %s", out.Content)
+		}
+		if capturedSystemPrompt != "You are a code reviewer." {
+			t.Errorf("system prompt = %q, want agent definition's prompt", capturedSystemPrompt)
+		}
+		if capturedModel != "claude-haiku-4-5-20251001" {
+			t.Errorf("model = %q, want resolved haiku alias", capturedModel)
+		}
+		if capturedMaxTurns != 7 {
+			t.Errorf("maxTurns = %d, want 7", capturedMaxTurns)
+		}
+		if capturedRegistry == nil {
+			t.Fatal("expected a child registry to be captured")
+		}
+		if capturedRegistry.Get("Edit") != nil {
+			t.Error("Edit should be excluded from the child registry (disallowedTools)")
+		}
+		if capturedRegistry.Get("Agent") != nil {
+			t.Error("Agent should be excluded from the child registry (disallowedTools)")
+		}
+		if capturedRegistry.Get("Read") == nil {
+			t.Error("Read should remain in the child registry")
+		}
+	})
+}
+
+// testStubTool is a minimal Tool implementation for registry-scoping tests.
+type testStubTool struct{ name string }
+
+func (s *testStubTool) Name() string                 { return s.name }
+func (s *testStubTool) Description() string          { return "" }
+func (s *testStubTool) IsReadOnly() bool             { return true }
+func (s *testStubTool) InputSchema() json.RawMessage { return json.RawMessage(`{}`) }
+func (s *testStubTool) Execute(ctx context.Context, tc *tools.ToolContext, input json.RawMessage) (*tools.ToolOutput, error) {
+	return tools.SuccessOutput("ok"), nil
 }
