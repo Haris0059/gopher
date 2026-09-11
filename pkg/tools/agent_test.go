@@ -7,12 +7,24 @@ import (
 	"testing"
 
 	"github.com/Haris0059/gopher/internal/testharness"
+	"github.com/Haris0059/gopher/pkg/permissions"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/query"
 	"github.com/Haris0059/gopher/pkg/session"
 	"github.com/Haris0059/gopher/pkg/skills"
 	"github.com/Haris0059/gopher/pkg/tools"
 )
+
+// denyAgentPolicy denies the Agent tool for the given subagent_type and
+// allows everything else.
+type denyAgentPolicy struct{ deniedAgentType string }
+
+func (p denyAgentPolicy) Check(ctx context.Context, toolName, toolID string) permissions.PermissionDecision {
+	if toolName == tools.AgentToolName && toolID == p.deniedAgentType {
+		return permissions.DenyDecision{Reason: "denied by test policy"}
+	}
+	return permissions.AllowDecision{}
+}
 
 func TestAgentTool(t *testing.T) {
 
@@ -293,6 +305,90 @@ func TestAgentTool(t *testing.T) {
 		}
 		if capturedRegistry.Get("Read") == nil {
 			t.Error("Read should remain in the child registry")
+		}
+	})
+
+	t.Run("denied_subagent_type_returns_error", func(t *testing.T) {
+		tool := tools.NewAgentTool(nil, nil, nil)
+		tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+			return []skills.AgentDefinition{
+				{AgentType: "reviewer", WhenToUse: "Reviews code."},
+			}
+		})
+		tc := &tools.ToolContext{
+			CWD:         t.TempDir(),
+			Permissions: denyAgentPolicy{deniedAgentType: "reviewer"},
+		}
+		input := json.RawMessage(`{"prompt": "review this", "description": "review", "subagent_type": "reviewer"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !out.IsError {
+			t.Fatal("expected error output for denied subagent_type")
+		}
+		if !strings.Contains(out.Content, "has been denied by permission rule 'Agent(reviewer)'") {
+			t.Errorf("error should mention the deny rule, got %q", out.Content)
+		}
+	})
+
+	t.Run("missing_required_mcp_server_returns_error", func(t *testing.T) {
+		tool := tools.NewAgentTool(nil, tools.NewRegistry(), nil)
+		tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+			return []skills.AgentDefinition{
+				{
+					AgentType:          "db-agent",
+					WhenToUse:          "Uses a database.",
+					RequiredMcpServers: []string{"postgres"},
+				},
+			}
+		})
+		tc := &tools.ToolContext{CWD: t.TempDir()}
+		input := json.RawMessage(`{"prompt": "query the db", "description": "db work", "subagent_type": "db-agent"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !out.IsError {
+			t.Fatal("expected error output for missing required MCP server")
+		}
+		if !strings.Contains(out.Content, "requires MCP servers matching: postgres") {
+			t.Errorf("error should name the missing server, got %q", out.Content)
+		}
+		if !strings.Contains(out.Content, "MCP servers with tools: none") {
+			t.Errorf("error should report no connected servers, got %q", out.Content)
+		}
+	})
+
+	t.Run("satisfied_required_mcp_server_runs", func(t *testing.T) {
+		prov := testharness.NewScriptedProvider(
+			testharness.MakeTextTurn("queried", provider.StopReasonEndTurn),
+		)
+		registry := tools.NewRegistry()
+		registry.Register(&testStubTool{name: "mcp__postgres__query"})
+		queryFn := query.AsQueryFunc()
+
+		tool := tools.NewAgentTool(prov, registry, queryFn)
+		tool.SetAgentLoader(func(cwd string) []skills.AgentDefinition {
+			return []skills.AgentDefinition{
+				{
+					AgentType:          "db-agent",
+					WhenToUse:          "Uses a database.",
+					RequiredMcpServers: []string{"postgres"},
+				},
+			}
+		})
+		tc := &tools.ToolContext{CWD: t.TempDir()}
+		input := json.RawMessage(`{"prompt": "query the db", "description": "db work", "subagent_type": "db-agent"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if out.IsError {
+			t.Fatalf("unexpected tool error: %s", out.Content)
+		}
+		if !strings.Contains(out.Content, "queried") {
+			t.Errorf("expected sub-agent output, got %q", out.Content)
 		}
 	})
 }

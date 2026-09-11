@@ -205,6 +205,45 @@ func (t *AgentTool) Execute(ctx context.Context, tc *ToolContext, input json.Raw
 		return ErrorOutput("Agent type '" + agentType + "' not found. Available agents: " + strings.Join(names, ", ")), nil
 	}
 
+	// Reject agent types denied via an Agent(<type>) permission rule.
+	// Source: AgentTool.tsx:347-351 — agentExistsButDenied / getDenyRuleForAgent
+	if tc.Permissions != nil {
+		if _, denied := tc.Permissions.Check(ctx, AgentToolName, agentType).(permissions.DenyDecision); denied {
+			return ErrorOutput("Agent type '" + agentType + "' has been denied by permission rule 'Agent(" + agentType + ")'."), nil
+		}
+	}
+
+	// Reject agent types that require MCP servers not currently connected
+	// with tools. Server names are derived from registered mcp__ prefixed
+	// tool names, matching how the reference scans serversWithTools.
+	// Source: AgentTool.tsx:391-410
+	if len(def.RequiredMcpServers) > 0 {
+		serversWithTools := mcpServersWithTools(t.registry.All())
+		if !skills.HasRequiredMcpServers(*def, serversWithTools) {
+			var missing []string
+			for _, pattern := range def.RequiredMcpServers {
+				found := false
+				lowerPattern := strings.ToLower(pattern)
+				for _, server := range serversWithTools {
+					if strings.Contains(strings.ToLower(server), lowerPattern) {
+						found = true
+						break
+					}
+				}
+				if !found {
+					missing = append(missing, pattern)
+				}
+			}
+			serverList := "none"
+			if len(serversWithTools) > 0 {
+				serverList = strings.Join(serversWithTools, ", ")
+			}
+			return ErrorOutput("Agent '" + agentType + "' requires MCP servers matching: " + strings.Join(missing, ", ") +
+				". MCP servers with tools: " + serverList +
+				". Use /mcp to configure and authenticate the required MCP servers."), nil
+		}
+	}
+
 	// Resolve model: env override > tool-specified > agent definition > inherit.
 	// Source: utils/model/agent.ts — getAgentModel()
 	toolSpecifiedModel := resolveModelAlias(params.Model)
@@ -280,6 +319,33 @@ func (t *AgentTool) Execute(ctx context.Context, tc *ToolContext, input json.Raw
 		result = "(agent completed with no text output)"
 	}
 	return SuccessOutput(result), nil
+}
+
+// mcpServersWithTools returns the distinct MCP server names that have at
+// least one registered tool, parsed from "mcp__<server>__<tool>" names.
+// Duplicated from mcp.ParseMCPToolName rather than imported: pkg/mcp already
+// imports pkg/tools, so importing pkg/mcp here would create a cycle.
+// Source: AgentTool.tsx:391-401 — serversWithTools
+func mcpServersWithTools(tools []Tool) []string {
+	seen := make(map[string]bool)
+	var servers []string
+	for _, tool := range tools {
+		name := tool.Name()
+		if !strings.HasPrefix(name, "mcp__") {
+			continue
+		}
+		rest := name[len("mcp__"):]
+		idx := strings.Index(rest, "__")
+		if idx < 0 {
+			continue
+		}
+		server := rest[:idx]
+		if !seen[server] {
+			seen[server] = true
+			servers = append(servers, server)
+		}
+	}
+	return servers
 }
 
 // resolveModelAlias expands a short model name ("sonnet", "opus", "haiku")

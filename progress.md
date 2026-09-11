@@ -115,7 +115,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 11 | `Brief` tool is echo-only | `TOOL-01` |
 | 12 | `REPL` tool is one-shot, not persistent | `TOOL-02` |
 | 13 | `TestingPermission` tool registered unconditionally | `TOOL-03` |
-| ~~14~~ | ~~Agent tool's agent-list section is a static placeholder~~ Fixed — `Prompt()` renders the loaded agent list and `subagent_type` now resolves a real agent definition | `TOOL-04` |
+| ~~14~~ | ~~Agent tool's agent-list section is a static placeholder~~ Fixed — `Prompt()` renders the loaded agent list, `subagent_type` resolves a real agent definition, and `Execute` now enforces `Agent(<type>)` deny rules and `requiredMcpServers` gating (fork-subagent routing remains unported — no such feature exists in Gopher) | `TOOL-04` |
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
 | 16 | `pkg/lsp` has no diagnostics/document-sync | `LSP-01`, `LSP-02` |
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
