@@ -186,9 +186,7 @@ func (l *lightTheme) ToolResultError() lipgloss.Style {
 func (l *lightTheme) StatusBar() lipgloss.Style {
 	c := l.Colors()
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(c.StatusBarFg)).
-		Background(lipgloss.Color(c.StatusBarBg)).
-		Padding(0, CompactSpacing.PadH)
+		Foreground(lipgloss.Color(c.StatusBarFg))
 }
 
 func (l *lightTheme) PromptChar() lipgloss.Style {

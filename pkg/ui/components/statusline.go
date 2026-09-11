@@ -105,6 +105,9 @@ func (sl *StatusLine) View() tea.View {
 		}
 	}
 
+	// Left margin applied uniformly to everything the status line shows.
+	content = "  " + content
+
 	// Pad to fill width — use lipgloss.Width to count VISUAL chars (not bytes)
 	// because content includes ANSI escape sequences from styling.
 	if sl.width > 0 {

@@ -23,20 +23,20 @@ func (d *darkTheme) Colors() ColorScheme {
 	return ColorScheme{
 		// Surfaces
 		Background:      Blue900,
-		Surface:         Blue800,
-		SurfaceElevated: Blue700,
-		SurfaceOverlay:  Blue700,
+		Surface:         Gray800,
+		SurfaceElevated: Gray700,
+		SurfaceOverlay:  Gray700,
 
 		// Text
 		TextPrimary:   Gray100,
 		TextSecondary: Gray400,
-		TextMuted:     Gray600,
+		TextMuted:     Gray500,
 		TextInverse:   Blue900,
 
 		// Borders
-		Border:        Blue600,
+		Border:        Gray600,
 		BorderFocused: Cyan300,
-		BorderSubtle:  Blue700,
+		BorderSubtle:  Gray500,
 
 		// Primary action
 		Primary:      AccentBlue,
@@ -71,9 +71,9 @@ func (d *darkTheme) Colors() ColorScheme {
 
 		// Components
 		ToolName:    Cyan300,
-		ToolBorder:  Blue600,
+		ToolBorder:  Gray600,
 		Prompt:      Cyan300,
-		StatusBarBg: Blue800,
+		StatusBarBg: Gray800,
 		StatusBarFg: Gray300,
 		TabActive:   Cyan300,
 		TabInactive: Gray600,
@@ -186,9 +186,7 @@ func (d *darkTheme) ToolResultError() lipgloss.Style {
 func (d *darkTheme) StatusBar() lipgloss.Style {
 	c := d.Colors()
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(c.StatusBarFg)).
-		Background(lipgloss.Color(c.StatusBarBg)).
-		Padding(0, CompactSpacing.PadH)
+		Foreground(lipgloss.Color(c.StatusBarFg))
 }
 
 func (d *darkTheme) PromptChar() lipgloss.Style {
