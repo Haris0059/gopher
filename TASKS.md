@@ -99,6 +99,7 @@ are TODO no-ops. `pkg/plugins/builtin.go` and `types.go` are real.
 | TOOL-05 | `pkg/tools/powershell_prompt.go:122,129` — check `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS` env var | 0.5 | — |
 | TOOL-06 | `pkg/cli/structured_io.go:402` — implement `update_environment_variables` (currently a no-op stub) | 1 | — |
 | TOOL-07 | `pkg/ui/components/input.go:432` — implement undo (`'u'` key is currently a no-op) | 2 | — |
+| TOOL-09 | Fork-subagent routing: omitting `subagent_type` forks the caller (shares conversation context + prompt cache) instead of defaulting to `general-purpose`. Gate on an `isForkSubagentEnabled()`-equivalent; add the fork branch in `pkg/tools/agent.go` `Execute` (recursion guard — a fork must reject nested forks), the "When to fork" prompt section and fork-aware examples (`prompt.ts:114-196`), and reuse `SendMessage`-to-continue for fork results. Reference: `AgentTool.tsx:319-329`, `forkSubagent.ts`, `prompt.ts` | 4 | — |
 
 ## PERM — Permissions
 
