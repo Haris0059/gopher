@@ -95,15 +95,20 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 	cs := mb.theme.Colors()
 	var parts []string
 
-	// User messages: bold primary text on subtle background (matching Gopher)
+	// User messages: bold primary text on subtle background (matching Gopher).
+	// The background is set directly on each fragment's style (rather than
+	// wrapped around the already-rendered line afterward) so the SGR reset
+	// each nested Render emits doesn't strip color from the text itself —
+	// only the padding used to be tinted before.
 	userStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(cs.TextPrimary)).
+		Background(lipgloss.Color(cs.Surface)).
 		Bold(true)
 	promptStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(cs.Accent)).
+		Background(lipgloss.Color(cs.Surface)).
 		Bold(true)
-	// Full-width background row
-	rowStyle := lipgloss.NewStyle().
+	padStyle := lipgloss.NewStyle().
 		Background(lipgloss.Color(cs.Surface))
 
 	for _, block := range msg.Content {
@@ -122,12 +127,15 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 				} else {
 					styledLine = promptStyle.Render("  ") + userStyle.Render(line)
 				}
-				// Apply background to full width
+				// Pad the row to full width with background-colored
+				// spaces so the tint extends behind the whole row, not
+				// just behind the text glyphs.
 				if mb.width > 0 {
-					lines[i] = rowStyle.Width(mb.width).Render(styledLine)
-				} else {
-					lines[i] = styledLine
+					if pad := mb.width - lipgloss.Width(styledLine); pad > 0 {
+						styledLine += padStyle.Render(strings.Repeat(" ", pad))
+					}
 				}
+				lines[i] = styledLine
 			}
 			parts = append(parts, strings.Join(lines, "\n"))
 

@@ -86,14 +86,21 @@ func (cp *ConversationPane) View() tea.View {
 		return tea.NewView("")
 	}
 
-	// Collect all rendered lines
+	// Collect all rendered lines, with exactly one blank line separating
+	// each message (and the in-progress streaming reply) from the next.
 	var allLines []string
-	for _, r := range cp.rendered {
+	for i, r := range cp.rendered {
+		if i > 0 {
+			allLines = append(allLines, "")
+		}
 		allLines = append(allLines, strings.Split(r, "\n")...)
 	}
 
 	// Add streaming text if present
 	if cp.streamingText != "" {
+		if len(cp.rendered) > 0 {
+			allLines = append(allLines, "")
+		}
 		allLines = append(allLines, strings.Split(cp.streamingText, "\n")...)
 	}
 
