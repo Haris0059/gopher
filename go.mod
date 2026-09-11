@@ -1,6 +1,6 @@
 module github.com/Haris0059/gopher
 
-go 1.25.8
+go 1.27.0
 
 require (
 	charm.land/bubbles/v2 v2.1.0
