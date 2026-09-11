@@ -13,8 +13,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // ModelOption describes a selectable model.

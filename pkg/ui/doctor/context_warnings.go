@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // ContextWarning represents a single context usage warning with details.

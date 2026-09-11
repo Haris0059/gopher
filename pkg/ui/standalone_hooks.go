@@ -11,8 +11,8 @@
 package ui
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/ui/hooks"
 )
 
 // initStandaloneHooks wires the remaining standalone hook structs into the

@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime"
 
-	uidoctor "github.com/projectbarks/gopher-code/pkg/ui/doctor"
+	uidoctor "github.com/Haris0059/gopher/pkg/ui/doctor"
 )
 
 // Version is injected at build time or set by caller.

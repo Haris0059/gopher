@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // DistTags holds version information fetched from a registry (npm or GCS).

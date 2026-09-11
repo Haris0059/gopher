@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	uidoctor "github.com/projectbarks/gopher-code/pkg/ui/doctor"
+	uidoctor "github.com/Haris0059/gopher/pkg/ui/doctor"
 )
 
 func TestCollect_BasicFields(t *testing.T) {

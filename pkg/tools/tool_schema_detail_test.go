@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/internal/testharness"
+	"github.com/Haris0059/gopher/internal/testharness"
 )
 
 // helpers

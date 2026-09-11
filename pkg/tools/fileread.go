@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // binaryExtensions is the set of file extensions treated as binary.

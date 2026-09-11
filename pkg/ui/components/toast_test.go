@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 func TestNotificationToastCreation(t *testing.T) {

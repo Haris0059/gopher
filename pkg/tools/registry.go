@@ -4,7 +4,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // ToolRegistry holds registered tools keyed by name.

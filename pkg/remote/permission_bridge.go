@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 // ---------------------------------------------------------------------------

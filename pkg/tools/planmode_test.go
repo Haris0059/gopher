@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // Source: tools/EnterPlanModeTool/EnterPlanModeTool.ts, tools/ExitPlanModeTool/ExitPlanModeV2Tool.ts

@@ -3,7 +3,7 @@ package ui
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/query"
+	"github.com/Haris0059/gopher/pkg/query"
 )
 
 func TestNewEventBridge(t *testing.T) {

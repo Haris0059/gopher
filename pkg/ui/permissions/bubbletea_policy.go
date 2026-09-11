@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/ui/components"
 )
 
 // BubbleTeaPolicy implements the PermissionPolicy interface for the Bubbletea UI.

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	pkgcli "github.com/projectbarks/gopher-code/pkg/cli"
-	"github.com/projectbarks/gopher-code/pkg/query"
+	pkgcli "github.com/Haris0059/gopher/pkg/cli"
+	"github.com/Haris0059/gopher/pkg/query"
 )
 
 // PrintEvent renders a QueryEvent to stdout with ANSI colors.

@@ -188,7 +188,7 @@ func (r *Runner) buildCommand(s *Scenario) (*exec.Cmd, error) {
 	case "claude":
 		cmd = exec.Command("claude", "--debug")
 	case "gopher":
-		cmd = exec.Command("go", "run", "./cmd/gopher-code")
+		cmd = exec.Command("go", "run", "./cmd/gopher")
 	default:
 		return nil, fmt.Errorf("unknown app: %s (use 'claude' or 'gopher')", r.AppName)
 	}

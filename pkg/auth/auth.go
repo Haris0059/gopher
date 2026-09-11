@@ -53,7 +53,7 @@ func GetAPIKey() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("no API key found. Set ANTHROPIC_API_KEY or run 'gopher-code login'")
+	return "", fmt.Errorf("no API key found. Set ANTHROPIC_API_KEY or run 'gopher login'")
 }
 
 // SaveAPIKey saves the key to both OS keyring and ~/.claude/auth.json.

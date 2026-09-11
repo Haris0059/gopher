@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/skills"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
 // Budget constants for skill listing in the system prompt.

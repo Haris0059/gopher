@@ -8,11 +8,11 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
-	swarmhooks "github.com/projectbarks/gopher-code/pkg/ui/hooks/swarm"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/ui/components"
+	swarmhooks "github.com/Haris0059/gopher/pkg/ui/hooks/swarm"
 )
 
 func newTestApp() *AppModel {

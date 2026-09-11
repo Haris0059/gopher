@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/analytics"
+	"github.com/Haris0059/gopher/pkg/analytics"
 )
 
 // SessionMode represents the stored mode of a session.

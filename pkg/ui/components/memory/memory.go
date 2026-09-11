@@ -17,8 +17,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	pkgmemory "github.com/projectbarks/gopher-code/pkg/memory"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	pkgmemory "github.com/Haris0059/gopher/pkg/memory"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // FileSelectedMsg is sent when the user selects a memory file.

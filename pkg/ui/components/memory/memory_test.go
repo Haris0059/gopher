@@ -6,7 +6,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	pkgmemory "github.com/projectbarks/gopher-code/pkg/memory"
+	pkgmemory "github.com/Haris0059/gopher/pkg/memory"
 )
 
 func testFiles() []pkgmemory.FileInfo {

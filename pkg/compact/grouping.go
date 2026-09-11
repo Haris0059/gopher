@@ -2,7 +2,7 @@ package compact
 
 // Source: services/compact/grouping.ts
 
-import "github.com/projectbarks/gopher-code/pkg/message"
+import "github.com/Haris0059/gopher/pkg/message"
 
 // MessageIDFunc extracts a stable API-round identifier from a message.
 // In the TS source, this is msg.message.id (the API response ID).

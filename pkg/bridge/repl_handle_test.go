@@ -219,7 +219,7 @@ func TestSetReplBridgeHandle_FiresSessionBridgeIDUpdate(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 // TestReplBridgeHandle_BinaryIntegration exercises the complete wiring path
-// used by cmd/gopher-code/main.go:
+// used by cmd/gopher/main.go:
 //
 //	InitReplBridge → (bridge nil check) → NewReplBridgeHandle → SetReplBridgeHandle → accessors → Close
 //

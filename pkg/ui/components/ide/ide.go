@@ -11,8 +11,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	pkgide "github.com/projectbarks/gopher-code/pkg/ide"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	pkgide "github.com/Haris0059/gopher/pkg/ide"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // ---------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // Source: tools/SendMessageTool/SendMessageTool.ts

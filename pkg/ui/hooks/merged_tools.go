@@ -1,7 +1,7 @@
 package hooks
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/permissions"
 )
 
 // ToolEntry represents a tool in the merged pool. This is a lightweight

@@ -1,8 +1,8 @@
 package tools
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/coordinator"
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/coordinator"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // SimpleToolNames are the only tools available in simple mode.

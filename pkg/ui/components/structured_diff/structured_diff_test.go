@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/ui/components/diff"
+	"github.com/Haris0059/gopher/pkg/ui/components/diff"
 )
 
 func TestRenderStructuredDiff_SingleHunk(t *testing.T) {

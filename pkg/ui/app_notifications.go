@@ -5,9 +5,9 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks/notifications"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/ui/hooks/notifications"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // notifState holds the T400 notification hooks state for AppModel.

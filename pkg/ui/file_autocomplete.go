@@ -9,7 +9,7 @@ package ui
 import (
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks"
+	"github.com/Haris0059/gopher/pkg/ui/hooks"
 )
 
 // initFileSuggester creates the FileSuggester rooted at the given cwd and

@@ -5,9 +5,9 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks/input"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
-	"github.com/projectbarks/gopher-code/pkg/vim"
+	"github.com/Haris0059/gopher/pkg/ui/hooks/input"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/vim"
 )
 
 // CursorBlinkMsg is sent periodically to toggle the cursor.

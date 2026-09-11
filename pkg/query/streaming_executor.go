@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // Source: services/tools/StreamingToolExecutor.ts

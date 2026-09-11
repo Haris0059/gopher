@@ -5,7 +5,7 @@ package compact
 import (
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 // SessionMemoryCompactConfig holds thresholds for session-memory-based

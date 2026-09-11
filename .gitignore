@@ -1,6 +1,6 @@
 # Build artifacts
 /gopher
-/gopher-code
+/gopher
 /capture-tui
 
 # OS files

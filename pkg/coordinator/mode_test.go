@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/analytics"
+	"github.com/Haris0059/gopher/pkg/analytics"
 )
 
 // captureSink captures analytics events for assertions.

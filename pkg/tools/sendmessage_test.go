@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // setupTeamDir creates a team directory with a team.json file for testing.

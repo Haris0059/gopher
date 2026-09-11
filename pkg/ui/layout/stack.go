@@ -6,8 +6,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/core"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/ui/core"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // ModalStack manages a main component with an optional modal overlay.

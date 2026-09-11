@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/auth"
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/auth"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 // T1: HISTORY_PAGE_SIZE is the default number of events per page.

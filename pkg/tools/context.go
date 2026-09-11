@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/permissions"
 )
 
 // HookRunner is the interface for pre/post tool execution hooks.

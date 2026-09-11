@@ -11,14 +11,14 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/tools"
-	"github.com/projectbarks/gopher-code/pkg/ui/commands"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
-	"github.com/projectbarks/gopher-code/pkg/ui/core"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/ui/commands"
+	"github.com/Haris0059/gopher/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/ui/core"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // stripANSI removes ANSI escape sequences for text comparison.

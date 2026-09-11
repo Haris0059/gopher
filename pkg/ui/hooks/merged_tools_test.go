@@ -3,7 +3,7 @@ package hooks
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/permissions"
 )
 
 func TestMergedTools_EmptyInputs(t *testing.T) {

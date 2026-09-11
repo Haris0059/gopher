@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // AddMessageMsg triggers adding a message to the conversation pane.

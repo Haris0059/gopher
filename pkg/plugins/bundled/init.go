@@ -13,7 +13,7 @@
 package bundled
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/plugins"
+	"github.com/Haris0059/gopher/pkg/plugins"
 )
 
 // InitBuiltinPlugins registers all built-in plugins. Called during CLI startup.

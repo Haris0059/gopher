@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 func TestSyntheticOutputTool(t *testing.T) {

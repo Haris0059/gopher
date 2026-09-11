@@ -1,4 +1,4 @@
-module github.com/projectbarks/gopher-code
+module github.com/Haris0059/gopher
 
 go 1.25.8
 

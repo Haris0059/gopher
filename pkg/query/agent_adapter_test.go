@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/analytics"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/analytics"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/tools"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

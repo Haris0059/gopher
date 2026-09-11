@@ -3,7 +3,7 @@ package plugins
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/mcp"
+	"github.com/Haris0059/gopher/pkg/mcp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

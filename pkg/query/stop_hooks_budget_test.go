@@ -5,14 +5,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/internal/testharness"
-	"github.com/projectbarks/gopher-code/pkg/compact"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/internal/testharness"
+	"github.com/Haris0059/gopher/pkg/compact"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // T51-T52: Stop hook pattern — after each assistant turn with no tool calls,

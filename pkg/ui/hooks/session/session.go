@@ -19,8 +19,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
-	sess "github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/message"
+	sess "github.com/Haris0059/gopher/pkg/session"
 )
 
 // ---------------------------------------------------------------------------

@@ -72,7 +72,7 @@ func NewClient(ctx context.Context, cfg ServerConfig) (*MCPClient, error) {
 		"protocolVersion": "2024-11-05",
 		"capabilities":    map[string]interface{}{},
 		"clientInfo": map[string]interface{}{
-			"name":    "gopher-code",
+			"name":    "gopher",
 			"version": "0.1.0",
 		},
 	})

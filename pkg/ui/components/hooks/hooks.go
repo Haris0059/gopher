@@ -15,8 +15,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	pkghooks "github.com/projectbarks/gopher-code/pkg/hooks"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	pkghooks "github.com/Haris0059/gopher/pkg/hooks"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // DoneMsg is sent when the user closes the hooks browser.

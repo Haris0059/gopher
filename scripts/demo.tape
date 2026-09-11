@@ -9,7 +9,7 @@ Set Theme "Catppuccin Mocha"
 Set TypingSpeed 30ms
 Set CursorBlink false
 
-Type "gopher-code"
+Type "gopher"
 Enter
 Sleep 8s
 

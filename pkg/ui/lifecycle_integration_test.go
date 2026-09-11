@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks/lifecycle"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/ui/hooks/lifecycle"
 )
 
 // TestLifecycleDoublePress_IntegrationThroughAppModel verifies that the

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // RecordedTurn captures one request/response pair from a session.

@@ -7,7 +7,7 @@ import (
 
 // ---------------------------------------------------------------------------
 // Integration tests — exercise ReplBridge construction and basic operations
-// as wired by cmd/gopher-code/main.go's remote-control path (T195).
+// as wired by cmd/gopher/main.go's remote-control path (T195).
 // ---------------------------------------------------------------------------
 
 // TestReplBridge_Construction_BinaryWiring verifies that NewReplBridge can be

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/auth"
+	"github.com/Haris0059/gopher/pkg/auth"
 )
 
 // Source: tools/RemoteTriggerTool/RemoteTriggerTool.ts + prompt.ts

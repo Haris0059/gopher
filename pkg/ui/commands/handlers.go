@@ -20,14 +20,14 @@ import (
 
 	qrcode "github.com/skip2/go-qrcode"
 
-	"github.com/projectbarks/gopher-code/pkg/auth"
-	"github.com/projectbarks/gopher-code/pkg/compact"
-	"github.com/projectbarks/gopher-code/pkg/keybindings"
-	appcontext "github.com/projectbarks/gopher-code/pkg/context"
-	"github.com/projectbarks/gopher-code/pkg/hooks"
-	"github.com/projectbarks/gopher-code/pkg/mcp"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/auth"
+	"github.com/Haris0059/gopher/pkg/compact"
+	"github.com/Haris0059/gopher/pkg/keybindings"
+	appcontext "github.com/Haris0059/gopher/pkg/context"
+	"github.com/Haris0059/gopher/pkg/hooks"
+	"github.com/Haris0059/gopher/pkg/mcp"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // ---------------------------------------------------------------------------

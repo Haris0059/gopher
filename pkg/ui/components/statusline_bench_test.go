@@ -3,7 +3,7 @@ package components
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // BenchmarkStatusLineCreate measures the time to create a StatusLine component.

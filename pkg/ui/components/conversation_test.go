@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 func TestConversationPaneCreation(t *testing.T) {

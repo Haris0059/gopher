@@ -1,7 +1,7 @@
 package compact
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 // Source: services/compact/compact.ts:145-223

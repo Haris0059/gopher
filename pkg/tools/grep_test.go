@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 func requireRg(t *testing.T) {

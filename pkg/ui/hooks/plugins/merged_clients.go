@@ -6,7 +6,7 @@
 package plugins
 
 import (
-	"github.com/projectbarks/gopher-code/pkg/mcp"
+	"github.com/Haris0059/gopher/pkg/mcp"
 )
 
 // MCPServerConnection represents a named MCP server with its scoped config.

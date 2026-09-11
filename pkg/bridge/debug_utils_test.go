@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/analytics"
+	"github.com/Haris0059/gopher/pkg/analytics"
 )
 
 // ---------------------------------------------------------------------------

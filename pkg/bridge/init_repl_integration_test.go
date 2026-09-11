@@ -12,7 +12,7 @@ import (
 
 // ---------------------------------------------------------------------------
 // Integration tests — exercise InitReplBridge through the same wiring
-// pattern used by cmd/gopher-code/main.go's remote-control path (T194).
+// pattern used by cmd/gopher/main.go's remote-control path (T194).
 // ---------------------------------------------------------------------------
 
 // TestInitReplBridge_BinaryWiring_Success simulates the wiring pattern from
@@ -175,7 +175,7 @@ func TestInitReplBridge_BinaryWiring_FailedState(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 // TestV2Transport_BinaryWiring exercises the same wiring pattern used in
-// cmd/gopher-code/main.go: after InitReplBridge succeeds, a V2 transport
+// cmd/gopher/main.go: after InitReplBridge succeeds, a V2 transport
 // is created with the session URL and auth token, callbacks are registered
 // for status-machine transitions, and Connect() is called.
 func TestV2Transport_BinaryWiring(t *testing.T) {

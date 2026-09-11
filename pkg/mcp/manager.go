@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // Manager manages multiple MCP server connections and registers their tools.

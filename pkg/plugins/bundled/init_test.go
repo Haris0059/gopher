@@ -3,7 +3,7 @@ package bundled
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/plugins"
+	"github.com/Haris0059/gopher/pkg/plugins"
 )
 
 // ── T32: initBuiltinPlugins startup scaffold ────────────────────────

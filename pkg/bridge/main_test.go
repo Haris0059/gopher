@@ -703,7 +703,7 @@ func TestOrchestratorConstruction_DefaultsAreUsable(t *testing.T) {
 func TestOrchestratorConstruction_WiringMatchesBinary(t *testing.T) {
 	t.Parallel()
 
-	// Simulate the wiring done in cmd/gopher-code/main.go for the
+	// Simulate the wiring done in cmd/gopher/main.go for the
 	// remote-control path: config, API client, debug, poll config.
 	cfg := NewRemoteControlConfig("/tmp/test-wiring", "test-session")
 	apiClient := NewBridgeAPIClientFromConfig(cfg, func() string { return "" }, nil)

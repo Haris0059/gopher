@@ -4,7 +4,7 @@ package output_styles
 //
 // Built-in output styles and the merged style resolver.
 
-import "github.com/projectbarks/gopher-code/pkg/config"
+import "github.com/Haris0059/gopher/pkg/config"
 
 // DefaultOutputStyleName is the name of the default (no style) output style.
 const DefaultOutputStyleName = "default"

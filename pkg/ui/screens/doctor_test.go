@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/doctor"
+	"github.com/Haris0059/gopher/pkg/ui/doctor"
 )
 
 func TestDoctorModel_Init(t *testing.T) {
@@ -21,8 +21,8 @@ func TestDoctorModel_RendersDiagnostics(t *testing.T) {
 		Diagnostic: &DoctorDiagnostic{
 			Version:            "0.2.0",
 			InstallationType:   "go-binary",
-			InstallationPath:   "/usr/local/bin/gopher-code",
-			InvokedBinary:      "gopher-code",
+			InstallationPath:   "/usr/local/bin/gopher",
+			InvokedBinary:      "gopher",
 			ConfigInstallMethod: "direct",
 			AutoUpdates:        "enabled",
 		},
@@ -44,7 +44,7 @@ func TestDoctorModel_RendersDiagnostics(t *testing.T) {
 	if !strings.Contains(content, "go-binary (0.2.0)") {
 		t.Error("expected version info")
 	}
-	if !strings.Contains(content, "/usr/local/bin/gopher-code") {
+	if !strings.Contains(content, "/usr/local/bin/gopher") {
 		t.Error("expected installation path")
 	}
 	if !strings.Contains(content, "Updates") {
@@ -99,8 +99,8 @@ func TestDoctorModel_ScrollUpDown(t *testing.T) {
 		Diagnostic: &DoctorDiagnostic{
 			Version:          "0.2.0",
 			InstallationType: "go-binary",
-			InstallationPath: "/usr/local/bin/gopher-code",
-			InvokedBinary:    "gopher-code",
+			InstallationPath: "/usr/local/bin/gopher",
+			InvokedBinary:    "gopher",
 		},
 	}
 	m := NewDoctorModel(cfg)

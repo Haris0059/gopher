@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // BridgePointerTTL is the maximum age before a pointer is considered stale.

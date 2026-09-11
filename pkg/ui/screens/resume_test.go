@@ -6,7 +6,7 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 func TestResumeModel_Init(t *testing.T) {

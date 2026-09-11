@@ -8,7 +8,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	cfgpkg "github.com/projectbarks/gopher-code/pkg/config"
+	cfgpkg "github.com/Haris0059/gopher/pkg/config"
 )
 
 // ---------------------------------------------------------------------------

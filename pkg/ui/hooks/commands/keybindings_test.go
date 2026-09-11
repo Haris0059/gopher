@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/keybindings"
+	"github.com/Haris0059/gopher/pkg/keybindings"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

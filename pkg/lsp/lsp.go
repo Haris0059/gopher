@@ -91,7 +91,7 @@ func (c *Client) Initialize(ctx context.Context, rootURI string) error {
 			},
 		},
 		"clientInfo": map[string]interface{}{
-			"name":    "gopher-code",
+			"name":    "gopher",
 			"version": "0.1.0",
 		},
 	}

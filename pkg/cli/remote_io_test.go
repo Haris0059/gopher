@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/bridge"
+	"github.com/Haris0059/gopher/pkg/bridge"
 )
 
 // ---------------------------------------------------------------------------

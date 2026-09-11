@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // TurnScript is either a successful sequence of events or an error.

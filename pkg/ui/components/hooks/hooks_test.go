@@ -6,7 +6,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	pkghooks "github.com/projectbarks/gopher-code/pkg/hooks"
+	pkghooks "github.com/Haris0059/gopher/pkg/hooks"
 )
 
 func testHooks() []pkghooks.IndividualHookConfig {

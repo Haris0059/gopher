@@ -3,9 +3,9 @@ package query
 import (
 	"context"
 
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // AsQueryFunc returns a tools.QueryFunc that wraps query.Query, adapting the

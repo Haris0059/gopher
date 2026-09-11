@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 func approxEqual(a, b, tolerance float64) bool {

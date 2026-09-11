@@ -6,11 +6,11 @@ import (
 	"os"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/tools"
-	"github.com/projectbarks/gopher-code/pkg/ui"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/ui"
 )
 
 // RunTUIV2 starts the new Bubble Tea UI.

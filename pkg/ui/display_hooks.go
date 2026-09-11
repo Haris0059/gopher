@@ -4,7 +4,7 @@ import (
 	"time"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/hooks/display"
+	"github.com/Haris0059/gopher/pkg/ui/hooks/display"
 )
 
 // ---------------------------------------------------------------------------

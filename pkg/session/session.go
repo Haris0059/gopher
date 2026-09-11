@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/projectbarks/gopher-code/pkg/compact"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/services"
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/compact"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/services"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/provider"
 	"golang.org/x/text/unicode/norm"
 )
 

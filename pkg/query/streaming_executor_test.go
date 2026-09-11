@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/internal/testharness"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/internal/testharness"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // Source: services/tools/StreamingToolExecutor.ts

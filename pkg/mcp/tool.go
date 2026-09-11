@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // Source: tools/MCPTool/MCPTool.ts, tools/MCPTool/classifyForCollapse.ts

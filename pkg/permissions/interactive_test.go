@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/permissions"
 )
 
 func TestInteractivePolicy_Yes(t *testing.T) {

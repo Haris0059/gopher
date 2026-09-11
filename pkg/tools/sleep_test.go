@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 func TestSleepTool(t *testing.T) {

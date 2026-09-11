@@ -7,9 +7,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	pkgdoctor "github.com/projectbarks/gopher-code/pkg/doctor"
-	"github.com/projectbarks/gopher-code/pkg/ui/doctor"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	pkgdoctor "github.com/Haris0059/gopher/pkg/doctor"
+	"github.com/Haris0059/gopher/pkg/ui/doctor"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // DoctorDoneMsg is sent when the user dismisses the doctor screen.

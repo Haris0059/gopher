@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/components/diff"
+	"github.com/Haris0059/gopher/pkg/ui/components/diff"
 )
 
 // RenderStructuredDiff renders a list of diff hunks for a file with

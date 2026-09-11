@@ -40,7 +40,7 @@ func captureApp(appName, query, cwd string, cols, rows int, waitWelcome, waitQue
 	case "claude":
 		cmd = exec.Command("claude")
 	case "gopher":
-		cmd = exec.Command("go", "run", "./cmd/gopher-code")
+		cmd = exec.Command("go", "run", "./cmd/gopher")
 	default:
 		return nil, fmt.Errorf("unknown app: %s (use 'claude' or 'gopher')", appName)
 	}

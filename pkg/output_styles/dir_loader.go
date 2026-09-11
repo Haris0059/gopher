@@ -16,7 +16,7 @@ import (
 	"sync"
 
 	"github.com/goccy/go-yaml"
-	"github.com/projectbarks/gopher-code/pkg/config"
+	"github.com/Haris0059/gopher/pkg/config"
 )
 
 // OutputStyleConfig describes a single output style loaded from disk or built-in.

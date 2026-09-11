@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 // Source: services/compact/compact.ts:299-763

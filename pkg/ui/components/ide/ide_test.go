@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	pkgide "github.com/projectbarks/gopher-code/pkg/ide"
+	pkgide "github.com/Haris0059/gopher/pkg/ide"
 )
 
 func TestDisplayName(t *testing.T) {

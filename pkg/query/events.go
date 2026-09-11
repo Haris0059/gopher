@@ -1,6 +1,6 @@
 package query
 
-import "github.com/projectbarks/gopher-code/pkg/provider"
+import "github.com/Haris0059/gopher/pkg/provider"
 
 // QueryEventType identifies the kind of query event.
 type QueryEventType string

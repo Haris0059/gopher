@@ -5,7 +5,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/output_styles"
+	"github.com/Haris0059/gopher/pkg/output_styles"
 )
 
 // Source: components/OutputStylePicker.tsx

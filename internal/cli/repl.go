@@ -13,19 +13,19 @@ import (
 
 	"encoding/json"
 
-	"github.com/projectbarks/gopher-code/pkg/auth"
-	"github.com/projectbarks/gopher-code/pkg/config"
-	mcpPkg "github.com/projectbarks/gopher-code/pkg/mcp"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/session"
-	"github.com/projectbarks/gopher-code/pkg/skills"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/auth"
+	"github.com/Haris0059/gopher/pkg/config"
+	mcpPkg "github.com/Haris0059/gopher/pkg/mcp"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/skills"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
-// Version is the current gopher-code version (kept in sync with main).
+// Version is the current gopher version (kept in sync with main).
 const Version = "0.2.0"
 
 // RunREPL starts an interactive read-eval-print loop.
@@ -37,7 +37,7 @@ func RunREPL(ctx context.Context, sess *session.SessionState, prov provider.Mode
 	}
 
 	resuming := sess.TurnCount > 0
-	fmt.Printf("\n\033[1mgopher-code\033[0m v%s\n", Version)
+	fmt.Printf("\n\033[1mgopher\033[0m v%s\n", Version)
 	fmt.Printf("Model: \033[36m%s\033[0m\n", sess.Config.Model)
 	fmt.Printf("CWD:   %s\n", sess.CWD)
 	if resuming {
@@ -552,7 +552,7 @@ func printHelp() {
 // runDoctor performs comprehensive system diagnostics.
 // Source: screens/Doctor.tsx
 func runDoctor(sess *session.SessionState) {
-	fmt.Println("gopher-code doctor")
+	fmt.Println("gopher doctor")
 	fmt.Printf("Version: %s\n", Version)
 	fmt.Println()
 

@@ -12,10 +12,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/projectbarks/gopher-code/pkg/hooks"
-	"github.com/projectbarks/gopher-code/pkg/keybindings"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/hooks"
+	"github.com/Haris0059/gopher/pkg/keybindings"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 func TestDispatcherCreation(t *testing.T) {

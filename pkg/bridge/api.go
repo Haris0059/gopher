@@ -596,9 +596,9 @@ func (c *bridgeAPIClient) SendPermissionResponseEvent(sessionID string, event Pe
 // NewBridgeAPIClientFromConfig creates a BridgeAPIClient wired to the
 // base URL and bridge ID from a BridgeConfig. The accessToken callback
 // and optional debug hook are injected by the caller; the runner version
-// defaults to "gopher-code/0.1" when empty.
+// defaults to "gopher/0.1" when empty.
 func NewBridgeAPIClientFromConfig(cfg BridgeConfig, getAccessToken func() string, onDebug func(string)) BridgeAPIClient {
-	runnerVersion := "gopher-code/0.1"
+	runnerVersion := "gopher/0.1"
 	return NewBridgeAPIClient(BridgeAPIClientConfig{
 		BaseURL:        cfg.APIBaseURL,
 		RunnerVersion:  runnerVersion,

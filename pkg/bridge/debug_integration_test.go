@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/analytics"
-	apperrors "github.com/projectbarks/gopher-code/pkg/errors"
+	"github.com/Haris0059/gopher/pkg/analytics"
+	apperrors "github.com/Haris0059/gopher/pkg/errors"
 )
 
 // TestDebugIntegration_LevelsAndBuffer verifies that a BridgeDebug instance

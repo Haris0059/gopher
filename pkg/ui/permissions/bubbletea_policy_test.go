@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/permissions"
-	"github.com/projectbarks/gopher-code/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/permissions"
+	"github.com/Haris0059/gopher/pkg/ui/components"
 )
 
 func TestBubbleTeaPolicyCreation(t *testing.T) {

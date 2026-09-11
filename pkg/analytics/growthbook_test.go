@@ -52,7 +52,7 @@ func TestIsScratchpadEnabled(t *testing.T) {
 }
 
 // TestInitAnalytics_Integration exercises the same code path that
-// cmd/gopher-code/main.go:initAnalytics() takes: resolve the GrowthBook
+// cmd/gopher/main.go:initAnalytics() takes: resolve the GrowthBook
 // client key, wire the feature-gate checker, and verify IsScratchpadEnabled
 // reflects the gate state. This ensures the GrowthBook client key constants
 // and feature-gate plumbing are reachable through the binary.

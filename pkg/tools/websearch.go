@@ -76,7 +76,7 @@ func (t *WebSearchTool) Execute(ctx context.Context, tc *ToolContext, input json
 	if err != nil {
 		return ErrorOutput(fmt.Sprintf("failed to create request: %s", err)), nil
 	}
-	req.Header.Set("User-Agent", "gopher-code/0.1")
+	req.Header.Set("User-Agent", "gopher/0.1")
 
 	client := &http.Client{Timeout: 15 * time.Second}
 	resp, err := client.Do(req)

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/skills"
+	"github.com/Haris0059/gopher/pkg/skills"
 )
 
 func TestSkillTool_Execute_Found(t *testing.T) {

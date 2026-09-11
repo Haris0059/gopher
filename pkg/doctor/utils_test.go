@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	uidoctor "github.com/projectbarks/gopher-code/pkg/ui/doctor"
+	uidoctor "github.com/Haris0059/gopher/pkg/ui/doctor"
 )
 
 func TestDetectRipgrep(t *testing.T) {

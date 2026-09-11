@@ -6,9 +6,9 @@ import (
 
 	"charm.land/glamour/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/message"
-	"github.com/projectbarks/gopher-code/pkg/tools"
-	"github.com/projectbarks/gopher-code/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/Haris0059/gopher/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // MessageBubble renders a single message (user or assistant) with

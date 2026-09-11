@@ -1,6 +1,6 @@
 package ui
 
-import "github.com/projectbarks/gopher-code/pkg/ui/hooks/ide"
+import "github.com/Haris0059/gopher/pkg/ui/hooks/ide"
 
 // IDEConnection returns the IDE connection tracker.
 // Source: useIdeConnectionStatus.ts — exposes connection state to the TUI.

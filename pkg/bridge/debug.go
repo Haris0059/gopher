@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	apperrors "github.com/projectbarks/gopher-code/pkg/errors"
+	apperrors "github.com/Haris0059/gopher/pkg/errors"
 )
 
 // ---------------------------------------------------------------------------

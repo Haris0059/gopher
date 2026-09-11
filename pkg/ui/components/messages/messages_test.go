@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
+	"github.com/Haris0059/gopher/pkg/message"
 )
 
 func TestRenderConversation_Empty(t *testing.T) {

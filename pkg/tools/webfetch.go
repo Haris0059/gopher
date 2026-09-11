@@ -28,7 +28,7 @@ const (
 
 // WebFetchUserAgent is the User-Agent sent with fetch requests.
 // Source: utils/http.ts:56-58
-const WebFetchUserAgent = "Claude-User (gopher-code; +https://support.anthropic.com/)"
+const WebFetchUserAgent = "Claude-User (gopher; +https://support.anthropic.com/)"
 
 // WebFetchTool fetches a URL and returns its content as Markdown.
 type WebFetchTool struct{}

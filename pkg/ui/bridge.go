@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/query"
+	"github.com/Haris0059/gopher/pkg/query"
 )
 
 // EventBridge converts QueryEvent callbacks into Bubbletea messages

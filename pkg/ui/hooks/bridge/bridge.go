@@ -14,9 +14,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	br "github.com/projectbarks/gopher-code/pkg/bridge"
-	"github.com/projectbarks/gopher-code/pkg/product"
-	"github.com/projectbarks/gopher-code/pkg/session"
+	br "github.com/Haris0059/gopher/pkg/bridge"
+	"github.com/Haris0059/gopher/pkg/product"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // ---------------------------------------------------------------------------

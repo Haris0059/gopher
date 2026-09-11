@@ -2,7 +2,7 @@ package components
 
 import (
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/session"
 )
 
 // InputWithHistory wraps InputPane and adds session persistence for command history.

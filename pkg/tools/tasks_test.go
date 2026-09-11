@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // helper to find a tool by name in the slice

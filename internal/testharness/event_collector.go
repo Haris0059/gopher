@@ -3,7 +3,7 @@ package testharness
 import (
 	"sync"
 
-	"github.com/projectbarks/gopher-code/pkg/query"
+	"github.com/Haris0059/gopher/pkg/query"
 )
 
 // EventLog captures query events for post-hoc assertion.

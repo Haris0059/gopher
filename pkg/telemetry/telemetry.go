@@ -1,5 +1,5 @@
 // Package telemetry provides OpenTelemetry-based metrics, tracing, and logging
-// for gopher-code sessions.
+// for gopher sessions.
 //
 // T126: OTel counters — named counters for session events.
 // T127: statsStore.observe — lightweight metric observation.
@@ -67,7 +67,7 @@ func (p *Providers) Tracer(name string) trace.Tracer {
 // T126: OTel counters
 // ---------------------------------------------------------------------------
 
-const meterName = "gopher-code"
+const meterName = "gopher"
 
 // Counters holds all named OTel counters used throughout a session.
 // Source: bootstrap/state.ts — sessionCounter, locCounter, prCounter,

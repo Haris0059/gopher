@@ -18,7 +18,7 @@ const (
 	StateExiting                // User requested exit
 )
 
-// Model is the Bubble Tea model for the gopher-code TUI.
+// Model is the Bubble Tea model for the gopher TUI.
 type Model struct {
 	State      AppState
 	Input      string
@@ -33,7 +33,7 @@ type Model struct {
 func InitialModel() Model {
 	return Model{
 		State:      StateIdle,
-		StatusText: "gopher-code ready",
+		StatusText: "gopher ready",
 		Width:      80,
 		Height:     24,
 	}

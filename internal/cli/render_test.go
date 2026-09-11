@@ -3,7 +3,7 @@ package cli
 import (
 	"testing"
 
-	pkgcli "github.com/projectbarks/gopher-code/pkg/cli"
+	pkgcli "github.com/Haris0059/gopher/pkg/cli"
 )
 
 func TestNdjsonSafeStringify(t *testing.T) {

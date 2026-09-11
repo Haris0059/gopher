@@ -18,8 +18,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/projectbarks/gopher-code/pkg/config"
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/config"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // ---------------------------------------------------------------------------

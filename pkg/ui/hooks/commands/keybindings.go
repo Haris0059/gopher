@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/projectbarks/gopher-code/pkg/keybindings"
+	"github.com/Haris0059/gopher/pkg/keybindings"
 )
 
 // commandPrefix is the action prefix for command keybindings.

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/projectbarks/gopher-code/internal/testharness"
-	"github.com/projectbarks/gopher-code/pkg/provider"
-	"github.com/projectbarks/gopher-code/pkg/query"
-	"github.com/projectbarks/gopher-code/pkg/tools"
+	"github.com/Haris0059/gopher/internal/testharness"
+	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/query"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 func TestAgentTool(t *testing.T) {

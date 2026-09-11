@@ -3,7 +3,7 @@ package bridge
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/pkg/ui/figures"
+	"github.com/Haris0059/gopher/pkg/ui/figures"
 )
 
 // TestBridgeUI_UsesFiguresConstants verifies that the bridge UI rendering

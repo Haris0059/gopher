@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/projectbarks/gopher-code/pkg/message"
-	sess "github.com/projectbarks/gopher-code/pkg/session"
+	"github.com/Haris0059/gopher/pkg/message"
+	sess "github.com/Haris0059/gopher/pkg/session"
 )
 
 // assistantMsg creates an assistant message with a single text block (test helper).

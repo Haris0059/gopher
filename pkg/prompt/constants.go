@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/projectbarks/gopher-code/pkg/output_styles"
-	"github.com/projectbarks/gopher-code/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/output_styles"
+	"github.com/Haris0059/gopher/pkg/provider"
 )
 
 // SYSTEM_PROMPT_DYNAMIC_BOUNDARY separates static (cross-org cacheable) content

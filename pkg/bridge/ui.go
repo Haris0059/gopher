@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
-	"github.com/projectbarks/gopher-code/pkg/ui/figures"
+	"github.com/Haris0059/gopher/pkg/ui/figures"
 )
 
 // ---------------------------------------------------------------------------

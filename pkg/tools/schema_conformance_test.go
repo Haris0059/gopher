@@ -3,7 +3,7 @@ package tools_test
 import (
 	"testing"
 
-	"github.com/projectbarks/gopher-code/internal/testharness"
+	"github.com/Haris0059/gopher/internal/testharness"
 )
 
 func TestSchemaConformance(t *testing.T) {
