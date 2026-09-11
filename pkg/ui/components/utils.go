@@ -62,6 +62,13 @@ func truncateLines(s string, maxLines int) string {
 	return strings.Join(lines[:maxLines], "\n")
 }
 
+// WrapText wraps text to fit within width using simple word-wrap.
+// Exported for callers outside this package (e.g. streaming display) that
+// need the same wrapping behavior used by the message bubble renderer.
+func WrapText(text string, width int) string {
+	return wrapText(text, width)
+}
+
 // wrapText wraps text to fit within width using simple word-wrap.
 func wrapText(text string, width int) string {
 	if width <= 0 {

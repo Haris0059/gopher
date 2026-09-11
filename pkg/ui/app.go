@@ -9,14 +9,14 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	pkgdoctor "github.com/Haris0059/gopher/pkg/doctor"
-	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/compact"
+	pkgdoctor "github.com/Haris0059/gopher/pkg/doctor"
+	"github.com/Haris0059/gopher/pkg/keybindings"
+	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/permissions"
 	"github.com/Haris0059/gopher/pkg/query"
 	"github.com/Haris0059/gopher/pkg/remote"
 	"github.com/Haris0059/gopher/pkg/session"
-	"github.com/Haris0059/gopher/pkg/keybindings"
 	"github.com/Haris0059/gopher/pkg/ui/commands"
 	"github.com/Haris0059/gopher/pkg/ui/components"
 	"github.com/Haris0059/gopher/pkg/ui/core"
@@ -44,10 +44,10 @@ const ScrollDrainIdleMs = 150 * time.Millisecond
 // Module-scope (not in STATE) — ephemeral hot-path flag, no test-reset needed
 // since the debounce timer self-clears.
 type scrollTracker struct {
-	mu             sync.Mutex
-	draining       bool
-	timer          *time.Timer
-	idleNotifyCh   chan struct{} // closed when draining becomes false
+	mu           sync.Mutex
+	draining     bool
+	timer        *time.Timer
+	idleNotifyCh chan struct{} // closed when draining becomes false
 }
 
 func newScrollTracker() *scrollTracker {
@@ -169,7 +169,7 @@ type queryDoneMsg struct {
 type AppMode int
 
 const (
-	ModeIdle        AppMode = iota
+	ModeIdle AppMode = iota
 	ModeStreaming
 	ModeToolRunning
 )
@@ -226,11 +226,11 @@ type AppModel struct {
 	welcome     *components.WelcomeScreen
 
 	// Doctor screen (modal overlay)
-	showDoctor bool
+	showDoctor  bool
 	doctorModel *screens.DoctorModel
 
 	// Resume screen (modal overlay)
-	showResume bool
+	showResume  bool
 	resumeModel *screens.ResumeModel
 
 	// Permission prompt state
@@ -257,9 +257,9 @@ type AppModel struct {
 	ideSelection ide.Selection
 	// T407: Swarm/task hooks — initialization, task watcher, permission poller
 	// Source: useSwarmInitialization.ts, useTaskListWatcher.ts, useSwarmPermissionPoller.ts
-	swarmInit    *swarmhooks.SwarmInit
-	taskWatcher  *swarmhooks.TaskWatcher
-	permPoller   *swarmhooks.PermissionPoller
+	swarmInit   *swarmhooks.SwarmInit
+	taskWatcher *swarmhooks.TaskWatcher
+	permPoller  *swarmhooks.PermissionPoller
 	// T399: File/context suggestions for @-mention autocomplete.
 	// Source: useInputSuggestion.tsx — file path autocomplete on @ prefix.
 	fileSuggester     *hooks.FileSuggester
@@ -365,7 +365,6 @@ func NewAppModel(sess *session.SessionState, bridge *EventBridge) *AppModel {
 
 	// T400: Notification hooks state
 	app.notifs = initNotifState()
-
 
 	// T404: IDE connection tracker (Disconnected until IDE extension connects).
 	app.ideConn = ide.NewIDEConnection()
@@ -1003,6 +1002,21 @@ func (a *AppModel) handleQueryEvent(msg QueryEventMsg) (*AppModel, tea.Cmd) {
 	return a, nil
 }
 
+// formatStreamingDisplay renders the raw in-flight streaming buffer for
+// on-screen display: prefixed with the ⏺ marker and word-wrapped to the
+// terminal width, matching the finished-message layout so text doesn't
+// run past the pane edge while it's still arriving. The underlying
+// a.streamingText buffer stays unwrapped/unprefixed — it's the source of
+// truth used to build the final message once streaming completes.
+func (a *AppModel) formatStreamingDisplay() string {
+	raw := a.streamingText.String()
+	if raw == "" {
+		return ""
+	}
+	width := a.width - 2
+	return "⏺ " + components.WrapText(raw, width)
+}
+
 func (a *AppModel) handleTextDelta(msg TextDeltaMsg) (*AppModel, tea.Cmd) {
 	a.mode = ModeStreaming
 	a.streamingText.WriteString(msg.Text)
@@ -1010,7 +1024,7 @@ func (a *AppModel) handleTextDelta(msg TextDeltaMsg) (*AppModel, tea.Cmd) {
 	// Update streaming text component and conversation pane
 	// Show spinner line above the streaming text
 	a.streaming.AppendDelta(msg.Text)
-	streamContent := a.streamingText.String()
+	streamContent := a.formatStreamingDisplay()
 	if a.spinner.IsActive() {
 		streamContent = a.spinner.View() + "\n" + streamContent
 	}
@@ -1029,7 +1043,7 @@ func (a *AppModel) handleToolUseStart(msg ToolUseStartMsg) (*AppModel, tea.Cmd) 
 	// Source: components/messages/AssistantToolUseMessage.tsx
 	toolLine := fmt.Sprintf("\n⏺ %s", msg.ToolName)
 	a.streamingText.WriteString(toolLine)
-	streamContent := a.streamingText.String()
+	streamContent := a.formatStreamingDisplay()
 	if a.spinner.IsActive() {
 		streamContent = a.spinner.View() + "\n" + streamContent
 	}
@@ -1088,7 +1102,7 @@ func (a *AppModel) handleToolResult(msg ToolResultMsg) (*AppModel, tea.Cmd) {
 			a.streamingText.WriteString(fmt.Sprintf("\n  ✓ %s", toolName))
 		}
 	}
-	streamContent := a.streamingText.String()
+	streamContent := a.formatStreamingDisplay()
 	if a.spinner.IsActive() {
 		streamContent = a.spinner.View() + "\n" + streamContent
 	}
