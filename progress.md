@@ -67,7 +67,7 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 | LSP | `pkg/lsp` (431 LOC) | `src/services/lsp/` | **Partial** | Bare JSON-RPC transport (`NewClient`, `Initialize`, `SendRequest`, `SendNotification`, `Capabilities`); no document-sync or diagnostics helpers. See `TASKS.md` → `LSP-01/02` |
 | Auth | `pkg/auth` + `pkg/auth/aws` (1,396 LOC) | `src/services/oauth/`, `src/utils/auth.ts` (2,003 LOC) | **Done** | OAuth + PKCE, FD-based token passing, AWS credential chain (unused by Bedrock today — see `PROV-01`) |
 | Telemetry & analytics | `pkg/analytics` (817 LOC), `pkg/telemetry` (250 LOC) | `src/utils/telemetry/`, `src/services/analytics/` | **Done** | Datadog sink, GrowthBook feature flags, killswitch, metadata |
-| Stats | `pkg/stats` (142 LOC, 0 tests) | — | **Done, untested** | See `TASKS.md` → `TEST-03` |
+| Stats | `pkg/stats` (142 LOC, tested) | — | **Done** | `TEST-03` done. `GetAll()` diverges from `createStatsStore()` on 3 keys, and the package has zero consumers — see `TASKS.md` → `TEST-09` |
 | Tasks & scheduling | `pkg/tools/tasks.go` (868 LOC), `pkg/tools/cron.go` (662 LOC) | `src/tasks/`, `ScheduleCronTool` | **Done** | `TaskCreate/Get/Update/List/Output/Stop`, `CronCreate/Delete/List`, `RemoteTrigger` |
 | Installer & updater | `pkg/installer` (45 LOC) | `src/utils/nativeInstaller/` | **Stub** | Only `InstallDir()`, `BinaryName()`, `IsInstalled()` — no real install/update logic. `cmd/gopher/handlers/install.go:48` has a TODO where the real call should be. See `TASKS.md` → `INST-01/02` |
 | Voice | `pkg/voice` (106 LOC) | `src/voice/`, `src/services/voice*.ts` | **Stub** | State machine only — no audio capture, no STT. See `TASKS.md` → `VOICE-01/02` |
@@ -119,7 +119,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
 | 16 | `pkg/lsp` has no diagnostics/document-sync | `LSP-01`, `LSP-02` |
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
-| 18 | Untested packages (`pkg/stats`, `pkg/async`, `pkg/installer`, `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}`) | `TEST-03`–`TEST-07` |
+| 18 | Untested packages (`pkg/async`, `pkg/installer`, `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}`) | `TEST-04`–`TEST-07` |
 | ~~19~~ | ~~`pkg/agents` duplicates `pkg/skills/agents.go`~~ Fixed — `pkg/agents` deleted | `TEST-02` |
 | 20 | Stale rebrand references (4 scenario fixtures, self-referential comments) | `CLEAN-01`, `CLEAN-02` |
 | ~~21~~ | ~~`internal/cli/startup_bench_test.go` fails to compile~~ Fixed | `TEST-01` |
