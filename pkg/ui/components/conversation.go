@@ -81,9 +81,9 @@ func (cp *ConversationPane) View() tea.View {
 	}
 
 	if len(cp.rendered) == 0 && cp.streamingText == "" {
-		t := theme.Current()
-		placeholder := t.TextSecondary().Render("No messages yet.")
-		return tea.NewView(placeholder)
+		// No placeholder text — an empty conversation area just stays blank
+		// under the header, matching Claude Code's actual behavior.
+		return tea.NewView("")
 	}
 
 	// Collect all rendered lines
@@ -168,6 +168,15 @@ func (cp *ConversationPane) ClearStreamingText() {
 // MessageCount returns the number of messages.
 func (cp *ConversationPane) MessageCount() int {
 	return len(cp.messages)
+}
+
+// IsEmpty reports whether the pane has nothing to show — no rendered
+// messages and no in-progress streaming text. Callers use this to omit
+// the conversation section entirely rather than rendering a blank line
+// for it (e.g. the moment welcome is dismissed but before any message
+// has been added).
+func (cp *ConversationPane) IsEmpty() bool {
+	return len(cp.rendered) == 0 && cp.streamingText == ""
 }
 
 // --- Internal ---

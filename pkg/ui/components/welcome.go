@@ -62,8 +62,14 @@ func (ws *WelcomeScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // View renders the welcome splash: a 3-line block icon next to the
 // version, model, and working directory. No border, no box.
 func (ws *WelcomeScreen) View() tea.View {
-	cs := ws.theme.Colors()
+	return tea.NewView(renderGopherSplash(ws.theme.Colors(), ws.width, ws.version, ws.model, ws.cwd))
+}
 
+// renderGopherSplash renders the persistent 3-line identity block — icon +
+// "Gopher v{version}" / model / cwd — shared verbatim between WelcomeScreen
+// and Header so the top of the screen never changes look, before or after
+// the welcome screen is dismissed.
+func renderGopherSplash(cs theme.ColorScheme, width int, version, model, cwd string) string {
 	iconStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Accent)).Bold(true)
 	titleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
 	subtleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
@@ -77,18 +83,18 @@ func (ws *WelcomeScreen) View() tea.View {
 		return s + strings.Repeat(" ", n)
 	}
 
-	maxCWD := ws.width - gopherIconWidth - 4
+	maxCWD := width - gopherIconWidth - 4
 	if maxCWD < 10 {
 		maxCWD = 10
 	}
 
 	lines := []string{
-		iconStyle.Render(padIcon(gopherIcon[0])) + "  " + titleStyle.Render(fmt.Sprintf("Gopher v%s", ws.version)),
-		iconStyle.Render(padIcon(gopherIcon[1])) + "  " + subtleStyle.Render(ws.model),
-		iconStyle.Render(padIcon(gopherIcon[2])) + "  " + subtleStyle.Render(abbreviateCWD(ws.cwd, maxCWD)),
+		iconStyle.Render(padIcon(gopherIcon[0])) + "  " + titleStyle.Render(fmt.Sprintf("Gopher v%s", version)),
+		iconStyle.Render(padIcon(gopherIcon[1])) + "  " + subtleStyle.Render(model),
+		iconStyle.Render(padIcon(gopherIcon[2])) + "  " + subtleStyle.Render(abbreviateCWD(cwd, maxCWD)),
 	}
 
-	return tea.NewView(strings.Join(lines, "\n"))
+	return strings.Join(lines, "\n")
 }
 
 // SetSize updates the screen dimensions.

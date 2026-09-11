@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
-	"charm.land/lipgloss/v2"
 	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
@@ -67,47 +66,11 @@ func (h *Header) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return h, nil
 }
 
-// View renders the header bar.
+// View renders the header: the exact same 3-line icon splash as
+// WelcomeScreen, so the top of the screen looks identical before and after
+// the welcome screen is dismissed — nothing about it should change.
 func (h *Header) View() tea.View {
-	cs := h.theme.Colors()
-
-	logoStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Primary)).
-		Bold(true)
-	modelStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
-	sessionStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.TextSecondary))
-	cwdStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.TextSecondary))
-
-	var parts []string
-	// Gopher branding: asterisk glyph ✻ + "Gopher"
-	// Source: components/LogoV2/CondensedLogo.tsx + Spinner glyphs
-	parts = append(parts, logoStyle.Render("✻ Gopher"))
-
-	if h.modelName != "" {
-		parts = append(parts, modelStyle.Render(h.modelName))
-	}
-	if h.sessionName != "" {
-		parts = append(parts, sessionStyle.Render(h.sessionName))
-	}
-	if h.cwd != "" {
-		// Abbreviate home directory and long paths
-		cwd := abbreviatePath(h.cwd, h.width/3)
-		parts = append(parts, cwdStyle.Render(cwd))
-	}
-
-	content := strings.Join(parts, " │ ")
-
-	// Pad to fill width
-	if h.width > 0 {
-		barStyle := lipgloss.NewStyle().
-			Width(h.width)
-		content = barStyle.Render(content)
-	}
-
-	return tea.NewView(content)
+	return tea.NewView(renderGopherSplash(h.theme.Colors(), h.width, Version, h.modelName, h.cwd))
 }
 
 // ModelName returns the current model name.

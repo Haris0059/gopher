@@ -690,9 +690,14 @@ func (a *AppModel) View() tea.View {
 		// Welcome screen with input and status below
 		sections = append(sections, a.welcome.View().Content)
 	} else {
-		// Normal mode: header + conversation
+		// Normal mode: header + conversation. Skip the conversation section
+		// entirely when it's empty (e.g. welcome just dismissed, nothing
+		// sent yet) — otherwise it leaves a stray blank line under the
+		// header instead of the input pane sitting right below it.
 		sections = append(sections, a.header.View().Content)
-		sections = append(sections, a.conversation.View().Content)
+		if !a.conversation.IsEmpty() {
+			sections = append(sections, a.conversation.View().Content)
+		}
 	}
 
 	// Heavy divider line ━━━ separating content from input
@@ -752,8 +757,8 @@ func (a *AppModel) handleResize(msg tea.WindowSizeMsg) (*AppModel, tea.Cmd) {
 	a.width = msg.Width
 	a.height = msg.Height
 
-	// Layout: header(1) + conversation(flex) + divider(1) + input(3) + status(1)
-	headerHeight := 1
+	// Layout: header(3) + conversation(flex) + divider(1) + input(3) + status(1)
+	headerHeight := 3
 	dividerHeight := 1
 	inputHeight := 3
 	statusHeight := 1

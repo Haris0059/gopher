@@ -98,7 +98,7 @@ func TestVisualParity_WelcomeDismissLifecycle(t *testing.T) {
 	// 4. View should render header (not welcome box) — structural check
 	v := strip(app.View().Content)
 	lines := strings.Split(v, "\n")
-	// First line should be header (✻ Claude), NOT a border (╭)
+	// First line should be the condensed header, NOT a welcome border (╭)
 	first := strings.TrimSpace(lines[0])
 	if strings.HasPrefix(first, "╭") {
 		t.Error("After dismiss, first line should be header, not welcome box border")
@@ -870,20 +870,20 @@ func TestParity_ConversationViewComposition(t *testing.T) {
 
 	cp.SetSize(80, 10)
 
-	// 2. Empty conversation → placeholder
+	// 2. Empty conversation → blank, no placeholder text
 	v1 := strip(cp.View().Content)
-	if !strings.Contains(v1, "No messages yet") {
-		t.Errorf("Empty conversation should show placeholder, got: %q", v1)
+	if v1 != "" {
+		t.Errorf("Empty conversation should render blank, got: %q", v1)
 	}
 
-	// 3. Add a message → no more placeholder
+	// 3. Add a message → content appears
 	cp.AddMessage(message.Message{
 		Role:    message.RoleUser,
 		Content: []message.ContentBlock{{Type: message.ContentText, Text: "hello"}},
 	})
 	v2 := strip(cp.View().Content)
-	if strings.Contains(v2, "No messages yet") {
-		t.Error("After AddMessage, placeholder should be gone")
+	if !strings.Contains(v2, "hello") {
+		t.Errorf("After AddMessage, message content should appear, got: %q", v2)
 	}
 
 	// 5. View is padded to exactly `height` lines
@@ -1794,80 +1794,41 @@ func TestParity_InputEnterSubmitFlow(t *testing.T) {
 	}
 }
 
-// TestParity_HeaderSegmentComposition validates the Header component's
-// segment composition logic (only non-empty fields produce segments).
+// TestParity_HeaderIdentityBlock validates the Header component: it must
+// render the exact same 3-line icon splash as WelcomeScreen (icon+title,
+// icon+model, icon+cwd), not the old single-line "logo │ model │ cwd"
+// format — the top of the screen must not change look after welcome is
+// dismissed. SessionName is tracked but no longer part of the display.
 //
-// Unique behaviors (no existing test validates Header composition):
-// 1. Default: only "✻ Claude" logo segment (no │ separators)
-// 2. SetModel adds model as separate segment with │ separator
-// 3. SetCWD adds cwd segment
-// 4. SetSessionName adds session segment
-// 5. All three set → 4 segments joined by 3 │ separators
-// 6. Empty strings don't produce empty segments (segment skipping)
-// 7. Width > 0 pads rendered output to exact width
-//
-// Cross-ref: header.go:71-111 View composition logic
-func TestParity_HeaderSegmentComposition(t *testing.T) {
+// Cross-ref: header.go View composition, welcome.go renderGopherSplash
+func TestParity_HeaderIdentityBlock(t *testing.T) {
 	h := components.NewHeader(theme.Current())
 	h.SetSize(80, 1)
 
-	// 1. Default: only logo, no separators
+	// 1. Default: 3 lines, title present, no model/cwd yet.
 	v1 := strip(h.View().Content)
-	// Count │ separators — should be 0
-	sepCount1 := strings.Count(v1, "│")
-	if sepCount1 != 0 {
-		t.Errorf("Default header should have 0 │ separators (only logo), got %d: %q", sepCount1, strings.TrimSpace(v1))
+	if got := len(strings.Split(v1, "\n")); got != 3 {
+		t.Errorf("Header should always render 3 lines, got %d:\n%s", got, v1)
+	}
+	if !strings.Contains(v1, "Gopher") {
+		t.Errorf("Default header should show the Gopher title, got: %q", v1)
 	}
 
-	// Logo "✻ Gopher" must be present
-	if !strings.Contains(v1, "✻ Gopher") {
-		t.Errorf("Default header should show '✻ Gopher' logo, got: %q", v1)
-	}
-
-	// 2. SetModel → adds 1 separator (1 segment + logo = 2 segments)
+	// 2. SetModel/SetCWD populate their respective lines.
 	h.SetModel("claude-opus-4-6")
+	h.SetCWD("/some/dir")
 	v2 := strip(h.View().Content)
-	sepCount2 := strings.Count(v2, "│")
-	if sepCount2 != 1 {
-		t.Errorf("Header with model should have 1 │ separator, got %d", sepCount2)
-	}
 	if !strings.Contains(v2, "claude-opus-4-6") {
 		t.Errorf("Model name should appear, got: %q", v2)
 	}
-
-	// 3. SetCWD → 2 separators total (3 segments: logo, model, cwd)
-	h.SetCWD("/some/dir")
-	v3 := strip(h.View().Content)
-	sepCount3 := strings.Count(v3, "│")
-	if sepCount3 != 2 {
-		t.Errorf("Header with model+cwd should have 2 │ separators, got %d", sepCount3)
+	if !strings.Contains(v2, "/some/dir") {
+		t.Errorf("CWD should appear, got: %q", v2)
 	}
 
-	// 4. SetSessionName → 3 separators total (4 segments)
+	// 3. Getters reflect current state regardless of what's displayed.
 	h.SetSessionName("my-session")
-	v4 := strip(h.View().Content)
-	sepCount4 := strings.Count(v4, "│")
-	if sepCount4 != 3 {
-		t.Errorf("Header with all fields should have 3 │ separators, got %d", sepCount4)
-	}
-	if !strings.Contains(v4, "my-session") {
-		t.Errorf("Session name should appear, got: %q", v4)
-	}
-
-	// 5. Empty strings: setting model back to "" drops the segment
-	h.SetModel("")
-	v5 := strip(h.View().Content)
-	sepCount5 := strings.Count(v5, "│")
-	if sepCount5 != 2 {
-		t.Errorf("After SetModel(''), should have 2 │ separators (logo+cwd+session), got %d", sepCount5)
-	}
-	if strings.Contains(v5, "claude-opus-4-6") {
-		t.Errorf("Empty model should be removed from view, got: %q", v5)
-	}
-
-	// 6. Getters reflect current state
-	if h.ModelName() != "" {
-		t.Errorf("ModelName() should return '' after clear, got %q", h.ModelName())
+	if h.ModelName() != "claude-opus-4-6" {
+		t.Errorf("ModelName() should return 'claude-opus-4-6', got %q", h.ModelName())
 	}
 	if h.CWD() != "/some/dir" {
 		t.Errorf("CWD() should return '/some/dir', got %q", h.CWD())
@@ -1876,14 +1837,13 @@ func TestParity_HeaderSegmentComposition(t *testing.T) {
 		t.Errorf("SessionName() should return 'my-session', got %q", h.SessionName())
 	}
 
-	// 7. Width padding: ensure rendered output matches width
-	h2 := components.NewHeader(theme.Current())
-	h2.SetSize(60, 1)
-	h2.SetModel("sonnet")
-	v7 := strip(h2.View().Content)
-	// Output should be padded to 60 chars
-	if len([]rune(v7)) != 60 {
-		t.Errorf("Width=60 should pad to 60 chars, got %d: %q", len([]rune(v7)), v7)
+	// 4. Identical output to WelcomeScreen for the same model/cwd (same
+	// width budget: WelcomeScreen.SetSize subtracts 2 for its old border).
+	ws := components.NewWelcomeScreen(theme.Current(), "claude-opus-4-6", "/some/dir")
+	ws.SetSize(82, 24)
+	welcomeView := strip(ws.View().Content)
+	if v2 != welcomeView {
+		t.Errorf("Header and WelcomeScreen must render identically.\nHeader:\n%s\nWelcome:\n%s", v2, welcomeView)
 	}
 }
 
@@ -4342,12 +4302,11 @@ func TestParity_AppViewInitializingAndAltScreen(t *testing.T) {
 		v := strip(app.View().Content)
 		firstLine := strings.TrimSpace(strings.Split(v, "\n")[0])
 		// With welcome visible, the first line is the splash's icon+title
-		// row, not the condensed "✻ Gopher" header.
+		// row. (The header uses the same icon once welcome is dismissed —
+		// see "no-welcome-shows-header" below — so app.showWelcome, checked
+		// above, is what actually distinguishes the two states here.)
 		if !strings.Contains(firstLine, "Gopher") {
 			t.Errorf("with welcome, first line should show the splash title, got: %q", firstLine)
-		}
-		if strings.Contains(firstLine, "✻") {
-			t.Errorf("welcome mode should not show condensed header on first line: %q", firstLine)
 		}
 	})
 
@@ -4362,7 +4321,7 @@ func TestParity_AppViewInitializingAndAltScreen(t *testing.T) {
 		if strings.HasPrefix(strings.TrimSpace(firstLine), "╭") {
 			t.Errorf("no-welcome mode must not start with welcome border: %q", firstLine)
 		}
-		// Header should mention Gopher (from "✻ Gopher" condensed logo).
+		// Header should mention Gopher (from the condensed icon+"Gopher" logo).
 		if !strings.Contains(firstLine, "Gopher") {
 			t.Errorf("no-welcome first line should show 'Gopher' header, got: %q", firstLine)
 		}

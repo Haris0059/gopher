@@ -38,8 +38,9 @@ func TestConversationPaneViewEmpty(t *testing.T) {
 	cp.SetSize(80, 20)
 	view := cp.View()
 	plain := stripANSI(view.Content)
-	if !strings.Contains(plain, "No messages") {
-		t.Errorf("Expected 'No messages' placeholder, got %q", plain)
+	// No placeholder text — an empty conversation just renders blank.
+	if plain != "" {
+		t.Errorf("Expected blank view for an empty conversation, got %q", plain)
 	}
 }
 
