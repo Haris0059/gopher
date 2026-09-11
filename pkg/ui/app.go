@@ -1014,7 +1014,8 @@ func (a *AppModel) formatStreamingDisplay() string {
 		return ""
 	}
 	width := a.width - 2
-	return "⏺ " + components.WrapText(raw, width)
+	prefixStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.Current().Colors().Accent))
+	return prefixStyle.Render("⏺") + " " + components.WrapText(raw, width)
 }
 
 func (a *AppModel) handleTextDelta(msg TextDeltaMsg) (*AppModel, tea.Cmd) {
