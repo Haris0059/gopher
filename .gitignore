@@ -19,3 +19,6 @@ pkg/ui/BENCHMARKS.md
 pkg/ui/examples/
 data/
 .idea/
+
+# Claude Code Repo
+claude-code-main/*

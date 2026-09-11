@@ -14,10 +14,10 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Go-1.24+-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-    <img src="https://img.shields.io/badge/Go-1.24+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.24+">
+    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+    <img src="https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.25+">
   </picture>
-  <img src="https://img.shields.io/badge/Tools-33_Built--In-orange?style=for-the-badge" alt="33 Tools">
+  <img src="https://img.shields.io/badge/Tools-41_Built--In-orange?style=for-the-badge" alt="41 Tools">
   <img src="https://img.shields.io/badge/Binary-Single_Static-success?style=for-the-badge" alt="Single Binary">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License">
 </p>
@@ -57,24 +57,32 @@ Gopher asks: **what if it was just a binary?**
 
 ```text
 gopher/
-├── cmd/gopher/            # CLI entry point & REPL
-│   └── main.go
-├── pkg/                   # Core packages
-│   ├── compact/           # Token budget & context compaction
-│   ├── message/           # Message types & normalization
-│   ├── mcp/               # Model Context Protocol client
-│   ├── permissions/       # Tool permission evaluation
-│   ├── prompt/            # System prompt assembly
-│   ├── provider/          # Model providers — Anthropic, OpenAI-compatible (Ollama, vLLM, LM Studio), Bedrock, Vertex
+├── cmd/gopher/            # CLI entry point (main.go) + handlers/ subpackage
+├── pkg/                   # ~46 packages; the ones that matter most:
+│   ├── ui/                # The real TUI — Bubble Tea app, ~80 slash commands, 36 component packages
+│   ├── tools/             # 41 built-in tools
+│   ├── provider/          # Model providers — Anthropic, OpenAI-compatible (Ollama, vLLM, LM Studio);
+│   │                      #   Bedrock/Vertex are present but stubbed, see progress.md
 │   ├── query/             # Query loop orchestration
-│   ├── session/           # Session state & persistence
-│   └── tools/             # 33 built-in tools
+│   ├── session/           # Session state, persistence, teams, worktrees
+│   ├── permissions/       # Tool permission evaluation (7 modes)
+│   ├── mcp/               # Model Context Protocol client (stdio transport only today)
+│   ├── hooks/             # 27 hook events
+│   ├── compact/           # Token budget & context compaction
+│   ├── skills/            # Skill loading & built-in agents
+│   ├── agents/            # Subagent definitions
+│   ├── plugins/           # Plugin types (install/uninstall not yet implemented)
+│   ├── bridge/            # IDE / remote bridge (SSE, WebSocket, hybrid transports)
+│   └── ...                # analytics, auth, keybindings, vim, lsp, ide, voice, and more — see progress.md
 ├── internal/
-│   ├── cli/               # Bubble Tea TUI renderer
-│   └── testharness/       # Golden file test framework
-├── testdata/              # Parity test fixtures
-└── notes/                 # Architecture & dependency docs
+│   ├── cli/               # Legacy line-oriented REPL (GOPHER_OLD_UI=1); superseded by pkg/ui
+│   └── testharness/       # Golden file / differential test framework
+├── testdata/              # Parity test fixtures (JSON)
+└── scripts/               # coverage-report.sh, validate-ts-binary.sh, TUI scenario capture
 ```
+
+Full feature-by-feature status lives in [`progress.md`](progress.md); the backlog to close
+remaining gaps is in [`TASKS.md`](TASKS.md).
 
 ---
 
@@ -119,7 +127,7 @@ go build -o gopher ./cmd/gopher
 # Run interactive REPL
 ./gopher
 
-# Run headless
+# Run headless (-p is a flag, the prompt is a positional arg or --query)
 ./gopher -p "explain this codebase"
 
 # Point at a local model instead of Anthropic (e.g. Ollama)
@@ -131,19 +139,34 @@ GOOS=linux GOARCH=arm64 go build -o gopher-linux-arm64 ./cmd/gopher
 
 ### CLI Flags
 
-```text
-Usage: gopher [flags]
+Gopher uses Go's standard `flag` package (no getopt-style bundling). Only six flags have a
+short form; the prompt itself is a positional argument, not a flag value.
 
-Flags:
-  -p, --print string       Run a single query in headless mode
-  -m, --model string       Model to use (default: claude-sonnet-4-20250514)
-  --provider string        Provider: anthropic, bedrock, vertex, openai
-  --api-url string         API base URL (for custom/local providers)
-  -c, --cwd string         Working directory
-  -r, --resume string      Resume a previous session by ID
-  -o, --output-format      Output format: text, json, stream-json
-  -v, --verbose            Enable verbose logging
+```text
+Usage: gopher [flags] [prompt...]
+
+  -p, --print                Print response and exit (headless mode; bool — pair with a
+                              positional prompt or --query)
+  -c, --continue              Continue the most recent conversation
+  -r, --resume string         Resume a conversation by session ID
+  -d, --debug                 Enable debug mode
+  -n, --name string           Display name for the session
+  -w, --worktree               Create a git worktree for the session
+      --model string           Model to use (default: claude-sonnet-4-20250514)
+      --provider string        anthropic | bedrock | vertex | openai
+      --api-url string         API base URL (custom/local providers)
+      --cwd string             Working directory
+      --output-format string   text | json | stream-json
+      --verbose                Enable verbose output
+      --thinking string        enabled | disabled
+      --effort string          low | medium | high | max
+      --dangerously-skip-permissions
+                                Bypass all permission checks
+      ...                      ~30 more; run `gopher --help` for the full list
 ```
+
+Subcommands: `auth`, `mcp`, `plugin`, `agents`, `doctor`, `update`, `install`, `setup-token`,
+`completion`, `remote-control`, `auto-mode`.
 
 ---
 
@@ -151,7 +174,7 @@ Flags:
 
 ```text
                     ┌─────────────────────────┐
-                    │     CLI / Bubble Tea     │
+                    │   TUI (pkg/ui) / CLI     │
                     │      (cmd/gopher)        │
                     └────────────┬────────────┘
                                  │
@@ -162,7 +185,7 @@ Flags:
                        │          │          │
               ┌────────▼───┐ ┌───▼────┐ ┌───▼────────┐
               │  Provider   │ │ Tools  │ │  Session   │
-              │(Anthropic/  │ │ (x33)  │ │ (persist)  │
+              │(Anthropic/  │ │ (x41)  │ │ (persist)  │
               │ OpenAI-compat)│└───┬────┘ └────────────┘
               └──────┬─────┘     │
               ┌──────▼─────┐ ┌───▼────────────┐
@@ -177,7 +200,19 @@ Flags:
 - **No global state** — all state flows through explicit function parameters and the session store
 - **Context-first cancellation** — every goroutine respects `context.Context`
 - **Interfaces at boundaries** — provider, tools, and transport are all interface-based for testing
-- **Golden file tests** — parity tests run against captured terminal-UI transcripts
+- **Behavioral parity tests** — `pkg/ui/visual_parity_test.go` and `testdata/*.json` assert against
+  captured reference behavior; see `progress.md` for exactly what's covered
+
+---
+
+## Status
+
+Gopher is under active development, not yet feature-complete. **Works today:** the interactive
+TUI, ~80 slash commands, 41 built-in tools, the Anthropic and OpenAI-compatible providers, hooks
+(27 events), permissions, sessions/resume, compact, MCP over stdio, skills, and the IDE/remote
+bridge. **Not yet:** Bedrock and Vertex providers (present but stubbed), MCP over HTTP/SSE/WS,
+plugin install/uninstall, a real self-updater, and voice input. Full detail in
+[`progress.md`](progress.md); the backlog is [`TASKS.md`](TASKS.md).
 
 ---
 
@@ -194,7 +229,16 @@ go test -race ./...
 
 # Update golden files
 go test ./... -update
+
+# Format & vet before submitting
+gofmt -w . && go vet ./...
+
+# Coverage report
+./scripts/coverage-report.sh
 ```
+
+`scripts/validate-ts-binary.sh` diffs behavior against a sibling checkout of the original TS
+Claude Code — only runs if `../research/claude-code-source-build/dist/cli.js` exists locally.
 
 ---
 

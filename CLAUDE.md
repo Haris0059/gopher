@@ -8,9 +8,11 @@ Gopher (module `github.com/Haris0059/gopher`) is a from-scratch Go reimplementat
 Claude Code CLI, targeting behavioral parity with Claude Code v2.1.88. It is an independent,
 unaffiliated research project — not a wrapper or transpilation. Single Go module, no monorepo.
 Forked from `ProjectBarks/gopher-code` and rebranded; the old `gopher-code` name and
-`cmd/gopher-code/` path still appear in some leftovers (e.g. `scripts/capture-tui/scenarios/*.json`).
+`cmd/gopher-code/` path still appear in some leftovers (e.g. `scripts/capture-tui/scenarios/*.json`
+— tracked as `CLEAN-01` in `TASKS.md`).
 
-The README's layout diagram lists a `notes/` directory that doesn't exist in this tree.
+See `progress.md` for a feature-by-feature parity matrix against the reference TS implementation
+(`claude-code-main/`), and `TASKS.md` for the backlog it feeds.
 
 ## Layout
 
