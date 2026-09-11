@@ -180,7 +180,7 @@ func (mb *MessageBubble) renderTextBlock(text string) string {
 	if mb.renderer != nil {
 		rendered, err := mb.renderer.Render(text)
 		if err == nil {
-			return strings.TrimRight(rendered, "\n")
+			return strings.Trim(rendered, "\n")
 		}
 	}
 
