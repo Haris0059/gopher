@@ -123,7 +123,7 @@ func (m Model) viewGeneral() string {
 	}{
 		{"Enter", "Send message"},
 		{"Escape", "Cancel current operation / interrupt"},
-		{"Ctrl+C (×2)", "Exit Claude Code"},
+		{"Ctrl+C (×2)", "Exit Gopher"},
 		{"Ctrl+R", "Search command history"},
 		{"Ctrl+O", "Toggle transcript view"},
 		{"Ctrl+T", "View tasks"},

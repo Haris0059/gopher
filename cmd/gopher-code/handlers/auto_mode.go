@@ -95,7 +95,7 @@ const externalPermissionsTemplate = `## Auto-approve rules
 </user_environment_to_replace>`
 
 // basePrompt is the outer wrapper that includes the permissions template.
-const basePrompt = `You are an auto-mode classifier for Claude Code. Your job is to decide
+const basePrompt = `You are an auto-mode classifier for Gopher. Your job is to decide
 whether tool calls should be auto-approved or require user confirmation.
 
 <permissions_template>` + externalPermissionsTemplate + `</permissions_template>
@@ -202,9 +202,9 @@ func AutoModeConfigHandler(cfg *AutoModeConfig) {
 
 // critiqueSystemPrompt is the system prompt for the critique side query.
 // Source: cli/handlers/autoMode.ts:49-71
-const critiqueSystemPrompt = "You are an expert reviewer of auto mode classifier rules for Claude Code.\n" +
+const critiqueSystemPrompt = "You are an expert reviewer of auto mode classifier rules for Gopher.\n" +
 	"\n" +
-	"Claude Code has an \"auto mode\" that uses an AI classifier to decide whether " +
+	"Gopher has an \"auto mode\" that uses an AI classifier to decide whether " +
 	"tool calls should be auto-approved or require user confirmation. Users can " +
 	"write custom rules in three categories:\n" +
 	"\n" +

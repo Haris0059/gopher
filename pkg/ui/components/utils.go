@@ -2,10 +2,10 @@ package components
 
 import "strings"
 
-// UI characters matching Claude Code's visual language.
+// UI characters matching Gopher's visual language.
 const (
 	// PromptPrefix is the "❯" (U+276F) character used for input prompts and user messages.
-	// Claude Code uses figures.pointer from the npm figures package.
+	// Gopher uses figures.pointer from the npm figures package.
 	PromptPrefix = "❯ "
 
 	// ResponseConnector is the "⎿" (U+23BF) character for tool results/responses.
@@ -17,7 +17,7 @@ const (
 	ResponseContinuation = "    "
 
 	// DividerChar is the light horizontal line (U+2500) for section dividers.
-	// Claude Code uses ─ (light), not ━ (heavy).
+	// Gopher uses ─ (light), not ━ (heavy).
 	DividerChar = "─"
 )
 

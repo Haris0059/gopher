@@ -70,7 +70,7 @@ func OnboardingContent(ideType pkgide.IdeType, installedVersion string) string {
 
 	// Title line
 	b.WriteString(titleStyle.Render("✻ "))
-	b.WriteString(fmt.Sprintf("Welcome to Claude Code for %s\n", ideName))
+	b.WriteString(fmt.Sprintf("Welcome to Gopher for %s\n", ideName))
 	if installedVersion != "" {
 		b.WriteString(dimStyle.Render(fmt.Sprintf("  installed %s v%s", pluginOrExt, installedVersion)))
 		b.WriteString("\n")
@@ -85,7 +85,7 @@ func OnboardingContent(ideType pkgide.IdeType, installedVersion string) string {
 
 	addStyle := lipgloss.NewStyle().Foreground(addColor)
 	rmStyle := lipgloss.NewStyle().Foreground(removeColor)
-	b.WriteString(fmt.Sprintf("• Review Claude Code's changes %s %s in the comfort of your IDE\n",
+	b.WriteString(fmt.Sprintf("• Review Gopher's changes %s %s in the comfort of your IDE\n",
 		addStyle.Render("+11"),
 		rmStyle.Render("-22"),
 	))

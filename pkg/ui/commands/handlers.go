@@ -669,7 +669,7 @@ func (d *Dispatcher) Commands() []string {
 }
 
 // HelpText builds a formatted help screen listing all visible commands,
-// keybindings, and tips. This matches the HelpV2 screen from Claude Code TS.
+// keybindings, and tips. This matches the HelpV2 screen from Gopher TS.
 func (d *Dispatcher) HelpText() string {
 	var b strings.Builder
 
@@ -2370,7 +2370,7 @@ func newFeedbackHandler() Handler {
 // Source: src/commands/install-slack-app.ts
 // ---------------------------------------------------------------------------
 
-// slackAppInstallURL is the URL for installing the Claude Code Slack app.
+// slackAppInstallURL is the URL for installing the Gopher Slack app.
 const slackAppInstallURL = "https://slackbot.anthropic.com/install"
 
 // newInstallSlackAppHandler creates the /install-slack-app command handler.
@@ -2382,7 +2382,7 @@ func newInstallSlackAppHandler() Handler {
 			if err := openBrowser(slackAppInstallURL); err == nil {
 				opened = true
 			}
-			msg := "Install the Claude Code Slack app at " + slackAppInstallURL
+			msg := "Install the Gopher Slack app at " + slackAppInstallURL
 			if opened {
 				msg = "Opened " + slackAppInstallURL + " in your browser"
 			}
@@ -2412,7 +2412,7 @@ func newPassesHandler() Handler {
 			if err := openBrowser(passesReferralURL); err == nil {
 				opened = true
 			}
-			msg := "Share Claude Code — refer friends at " + passesReferralURL
+			msg := "Share Gopher — refer friends at " + passesReferralURL
 			if opened {
 				msg = "Opened " + passesReferralURL + " in your browser"
 			}
@@ -2666,7 +2666,7 @@ func newFilesHandler(deps FilesDeps) Handler {
 
 // initPromptTemplate is the prompt text returned by /init.
 // Source: src/commands/init.ts — OLD_INIT_PROMPT
-const initPromptTemplate = `Please analyze this codebase and create a CLAUDE.md file, which will be given to future instances of Claude Code to operate in this repository.
+const initPromptTemplate = `Please analyze this codebase and create a CLAUDE.md file, which will be given to future instances of Gopher to operate in this repository.
 
 What to add:
 1. Commands that will be commonly used, such as how to build, lint, and run tests. Include the necessary commands to develop in this codebase, such as how to run a single test.
@@ -2685,7 +2685,7 @@ Usage notes:
 ` + "```" + `
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Gopher (claude.ai/code) when working with code in this repository.
 ` + "```"
 
 // newInitHandler creates the /init prompt command handler.
@@ -3519,7 +3519,7 @@ func (d *Dispatcher) registerDefaults() {
 	// T246: /exit — graceful shutdown with goodbye message
 	d.RegisterCommand(CommandRegistration{
 		Name:        "exit",
-		Description: "Exit Claude Code",
+		Description: "Exit Gopher",
 		Type:        CommandTypeLocal,
 		Aliases:     []string{"quit"},
 		Immediate:   true,
@@ -3628,7 +3628,7 @@ func (d *Dispatcher) registerDefaults() {
 	// T260: /install-slack-app — open Slack app installation page
 	d.RegisterCommand(CommandRegistration{
 		Name:        "install-slack-app",
-		Description: "Install the Claude Code Slack app",
+		Description: "Install the Gopher Slack app",
 		Type:        CommandTypeLocal,
 		Source:      "builtin",
 		Handler:     newInstallSlackAppHandler(),
@@ -3736,7 +3736,7 @@ func (d *Dispatcher) registerDefaults() {
 	// T269: /passes — open the Claude passes/referral page
 	d.RegisterCommand(CommandRegistration{
 		Name:         "passes",
-		Description:  "Share Claude Code with friends via referral",
+		Description:  "Share Gopher with friends via referral",
 		Type:         CommandTypeLocal,
 		Availability: []CommandAvailability{AvailabilityClaudeAI},
 		Source:       "builtin",
@@ -3776,13 +3776,13 @@ func (d *Dispatcher) registerDefaults() {
 	// Source: src/commands/stickers/index.ts
 	d.RegisterCommand(CommandRegistration{
 		Name:        "stickers",
-		Description: "Get Claude Code stickers",
+		Description: "Get Gopher stickers",
 		Type:        CommandTypeLocal,
 		Source:      "builtin",
 		Handler: func(args string) tea.Cmd {
 			return func() tea.Msg {
 				return StickersMsg{
-					Message: "Visit https://www.anthropic.com/stickers to order Claude Code stickers!",
+					Message: "Visit https://www.anthropic.com/stickers to order Gopher stickers!",
 				}
 			}
 		},
@@ -4203,13 +4203,13 @@ PR number: %s`, "`", "`", "`", "`", "`", "`", args)
 	// T282: /ultrareview — remote enhanced review (CCR)
 	d.RegisterCommand(CommandRegistration{
 		Name:        "ultrareview",
-		Description: "~10-20 min · Finds and verifies bugs in your branch via Claude Code on the web",
+		Description: "~10-20 min · Finds and verifies bugs in your branch via Gopher on the web",
 		Type:        CommandTypeLocal,
 		Source:      "builtin",
 		Handler: func(args string) tea.Cmd {
 			return func() tea.Msg {
 				return OutputStyleMsg{
-					Message: "ultrareview requires Claude Code on the web. Use /review for local PR review.",
+					Message: "ultrareview requires Gopher on the web. Use /review for local PR review.",
 				}
 			}
 		},

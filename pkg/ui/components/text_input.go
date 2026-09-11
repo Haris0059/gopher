@@ -14,7 +14,7 @@ import (
 // voice waveform, clipboard hints, and animation. In Go, we wrap
 // bubbles/v2/textinput with our styling and add placeholder rendering.
 
-// TextInputModel wraps bubbles/v2/textinput with Claude Code styling.
+// TextInputModel wraps bubbles/v2/textinput with Gopher styling.
 type TextInputModel struct {
 	inner       textinput.Model
 	placeholder string

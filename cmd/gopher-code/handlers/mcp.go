@@ -185,7 +185,7 @@ func (h *MCPHandler) Remove(name, scopeStr string) error {
 // Source: src/cli/handlers/mcp.tsx — mcpResetChoicesHandler
 func (h *MCPHandler) ResetChoices() error {
 	fmt.Fprintln(h.Stdout, "All project-scoped (.mcp.json) server approvals and rejections have been reset.")
-	fmt.Fprintln(h.Stdout, "You will be prompted for approval next time you start Claude Code.")
+	fmt.Fprintln(h.Stdout, "You will be prompted for approval next time you start Gopher.")
 	return nil
 }
 

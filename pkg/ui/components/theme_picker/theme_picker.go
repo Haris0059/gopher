@@ -115,7 +115,7 @@ func (m Model) View() string {
 	if m.showIntroText {
 		b.WriteString(titleStyle.Render("Choose your theme"))
 		b.WriteString("\n")
-		b.WriteString(dimStyle.Render("  Select a color theme for Claude Code"))
+		b.WriteString(dimStyle.Render("  Select a color theme for Gopher"))
 		b.WriteString("\n\n")
 	} else {
 		b.WriteString(titleStyle.Render("Theme"))

@@ -30,7 +30,9 @@ func strip(s string) string {
 
 // TestVisualParity_StartupWelcomeBoxIntegrity validates the welcome screen
 // renders a structurally complete bordered box with proper layout.
-func TestVisualParity_StartupWelcomeBoxIntegrity(t *testing.T) {
+// TestVisualParity_StartupWelcomeSplash verifies the borderless startup
+// splash: a 3-line block icon next to version/model/cwd, no box.
+func TestVisualParity_StartupWelcomeSplash(t *testing.T) {
 	config := session.DefaultConfig()
 	config.Model = "claude-opus-4-6"
 	sess := session.New(config, "/Users/test/project")
@@ -39,78 +41,14 @@ func TestVisualParity_StartupWelcomeBoxIntegrity(t *testing.T) {
 
 	view := app.View()
 	plain := strip(view.Content)
-	lines := strings.Split(plain, "\n")
 
-	// 1. Find top border ╭...╮ with title integrated
-	topIdx := -1
-	for i, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmed, "╭") {
-			topIdx = i
-			if !strings.HasSuffix(trimmed, "╮") {
-				t.Errorf("Top border incomplete: %s", trimmed)
-			}
-			if !strings.Contains(trimmed, "Claude Code") {
-				t.Errorf("Title must be in top border line: %s", trimmed)
-			}
-			break
-		}
+	if !strings.Contains(plain, "Gopher") {
+		t.Errorf("Expected 'Gopher' title in startup view.\nView:\n%s", plain)
 	}
-	if topIdx < 0 {
-		t.Fatalf("No top border ╭...╮ found.\nView:\n%s", plain)
+	if strings.Contains(plain, "╭") || strings.Contains(plain, "╮") || strings.Contains(plain, "╰") {
+		t.Errorf("Welcome splash should have no box border.\nView:\n%s", plain)
 	}
 
-	// 2. Find bottom border ╰...╯
-	botIdx := -1
-	for i := len(lines) - 1; i > topIdx; i-- {
-		trimmed := strings.TrimSpace(lines[i])
-		if strings.HasPrefix(trimmed, "╰") {
-			botIdx = i
-			if !strings.HasSuffix(trimmed, "╯") {
-				t.Errorf("Bottom border incomplete: %s", trimmed)
-			}
-			break
-		}
-	}
-	if botIdx < 0 {
-		t.Fatalf("No bottom border found")
-	}
-
-	// 3. Every body line between borders must start and end with │
-	bodyCount := 0
-	for i := topIdx + 1; i < botIdx; i++ {
-		trimmed := strings.TrimSpace(lines[i])
-		if trimmed == "" {
-			continue
-		}
-		if !strings.HasPrefix(trimmed, "│") || !strings.HasSuffix(trimmed, "│") {
-			t.Errorf("Body line %d breaks box: %s", i, lines[i])
-		}
-		bodyCount++
-	}
-	if bodyCount < 3 {
-		t.Errorf("Box needs 3+ body lines, got %d", bodyCount)
-	}
-
-	// 4. Top and bottom widths must match
-	topW := len([]rune(strings.TrimSpace(lines[topIdx])))
-	botW := len([]rune(strings.TrimSpace(lines[botIdx])))
-	if topW != botW {
-		t.Errorf("Border width mismatch: top=%d bot=%d", topW, botW)
-	}
-
-	// 5. Two-column layout: body lines should have 3+ │ chars (left border, separator, right)
-	colSepCount := 0
-	for i := topIdx + 1; i < botIdx; i++ {
-		if strings.Count(lines[i], "│") >= 3 {
-			colSepCount++
-		}
-	}
-	if colSepCount < 3 {
-		t.Errorf("Expected two-column layout (3+ │ per row in 3+ rows), got %d rows", colSepCount)
-	}
-
-	// 6. showWelcome should be true, mode idle
 	if !app.showWelcome {
 		t.Error("showWelcome should be true on startup")
 	}
@@ -211,15 +149,18 @@ func TestVisualParity_FullConversationFlow(t *testing.T) {
 
 	// 1. Start: welcome screen visible
 	v1 := strip(app.View().Content)
-	if !strings.Contains(v1, "Welcome") {
+	if !app.showWelcome {
 		t.Error("Step 1: Expected welcome screen")
+	}
+	if !strings.Contains(v1, "Gopher") {
+		t.Errorf("Step 1: Expected Gopher splash title, got:\n%s", v1)
 	}
 
 	// 2. Submit query: welcome dismissed, spinner starts
 	app.Update(components.SubmitMsg{Text: "hello world"})
 	v2 := strip(app.View().Content)
-	if strings.Contains(v2, "Welcome") {
-		t.Error("Step 2: Welcome should be gone")
+	if app.showWelcome {
+		t.Error("Step 2: Welcome should be dismissed")
 	}
 	if !strings.Contains(v2, "❯ hello world") {
 		t.Error("Step 2: Expected user message with ❯ prefix")
@@ -1878,9 +1819,9 @@ func TestParity_HeaderSegmentComposition(t *testing.T) {
 		t.Errorf("Default header should have 0 │ separators (only logo), got %d: %q", sepCount1, strings.TrimSpace(v1))
 	}
 
-	// Logo "✻ Claude" must be present
-	if !strings.Contains(v1, "✻ Claude") {
-		t.Errorf("Default header should show '✻ Claude' logo, got: %q", v1)
+	// Logo "✻ Gopher" must be present
+	if !strings.Contains(v1, "✻ Gopher") {
+		t.Errorf("Default header should show '✻ Gopher' logo, got: %q", v1)
 	}
 
 	// 2. SetModel → adds 1 separator (1 segment + logo = 2 segments)
@@ -2314,63 +2255,23 @@ func TestParity_UserMessageWrappingAndPrefix(t *testing.T) {
 // 6. Width changes trigger re-render (idempotent SetSize works)
 //
 // Cross-ref: welcome.go:165-172 SetSize
+// TestParity_WelcomeResponsiveSizing verifies the borderless splash reacts
+// to terminal width by truncating the CWD line, not by resizing a box.
 func TestParity_WelcomeResponsiveSizing(t *testing.T) {
-	ws := components.NewWelcomeScreen(theme.Current(), "claude-opus-4-6", "/tmp")
+	ws := components.NewWelcomeScreen(theme.Current(), "claude-opus-4-6", "/home/user/a/very/deeply/nested/project/path")
 
-	// Test various terminal sizes
-	cases := []struct {
-		termWidth int
-		wantBox   int // expected box content width (= termWidth - 2, or 20 min)
-	}{
-		{80, 78},
-		{100, 98},
-		{60, 58},
-		{40, 38},
-		{22, 20}, // 22-2=20 (exact minimum)
-		{15, 20}, // clamped to 20
-		{5, 20},  // clamped to 20
+	// A wide terminal shows the full path; a narrow one truncates it with "…".
+	ws.SetSize(120, 24)
+	wide := strip(ws.View().Content)
+
+	ws.SetSize(30, 24)
+	narrow := strip(ws.View().Content)
+
+	if !strings.Contains(wide, "nested/project/path") {
+		t.Errorf("Wide terminal should show the full CWD, got:\n%s", wide)
 	}
-
-	for _, tc := range cases {
-		ws.SetSize(tc.termWidth, 24)
-		// Render and verify top border width
-		view := ws.View()
-		plain := strip(view.Content)
-		lines := strings.Split(plain, "\n")
-
-		// Find top border line
-		var topLine string
-		for _, l := range lines {
-			if strings.HasPrefix(strings.TrimSpace(l), "╭") && strings.HasSuffix(strings.TrimSpace(l), "╮") {
-				topLine = strings.TrimSpace(l)
-				break
-			}
-		}
-		if topLine == "" {
-			t.Errorf("termWidth=%d: no ╭...╮ border line found", tc.termWidth)
-			continue
-		}
-
-		// Top line includes ╭ + content + ╮ = wantBox + 2
-		actualWidth := len([]rune(topLine))
-		expectedWidth := tc.wantBox + 2
-		if actualWidth != expectedWidth {
-			t.Errorf("termWidth=%d: expected border width %d, got %d (line: %s)",
-				tc.termWidth, expectedWidth, actualWidth, topLine)
-		}
-	}
-
-	// Test that growing width expands box (not static)
-	ws.SetSize(50, 24)
-	v1 := strip(ws.View().Content)
-	w1 := maxLineWidth(v1)
-
-	ws.SetSize(100, 24)
-	v2 := strip(ws.View().Content)
-	w2 := maxLineWidth(v2)
-
-	if w2 <= w1 {
-		t.Errorf("Growing from 50 to 100 should increase width, got %d → %d", w1, w2)
+	if !strings.Contains(narrow, "…") {
+		t.Errorf("Narrow terminal should truncate the CWD with '…', got:\n%s", narrow)
 	}
 
 	// Idempotent: calling SetSize with same value is safe
@@ -4290,25 +4191,23 @@ func TestParity_WelcomeCWDAbbreviation(t *testing.T) {
 		}
 	})
 
-	// -- Behavior 2: /Users/{user}/{rest} rewritten to ~/{rest} when long.
-	// Note: the $HOME of "user" is /Users/user, so ~/{rest} correctly
-	// represents the same path to that user — the username segment is
-	// dropped intentionally (tilde-expansion semantics). --
+	// The splash's CWD budget is dynamic (terminal width - icon - gap), not
+	// a fixed 30 chars like the old boxed layout. At width=40 that budget
+	// is 25 runes (38 content width - 9 icon - 4 gap) — behaviors below
+	// pin paths to that exact boundary.
+	const narrowWidth = 40
+	const cwdBudget = 25
+
+	// -- Behavior 2: /Users/{user}/{rest} rewritten to ~/{rest} when long. --
 	t.Run("home-prefix-rewritten-when-long", func(t *testing.T) {
-		longPath := "/Users/alex/my-project-directory" // 32 chars → >30
-		if len(longPath) <= 30 {
-			t.Fatalf("setup: path should be >30 chars, got %d", len(longPath))
-		}
+		longPath := "/Users/alex/my-project-directory" // rewrites to 23 runes, fits budget
 		ws := components.NewWelcomeScreen(theme.Current(), "opus", longPath)
-		ws.SetSize(80, 24)
+		ws.SetSize(narrowWidth, 24)
 		v := strip(ws.View().Content)
-		// After rewrite: "~/my-project-directory" (username dropped, since
-		// ~ expands to /Users/{user} on unix).
 		want := "~/my-project-directory"
 		if !strings.Contains(v, want) {
 			t.Errorf("long /Users/ path should be rewritten to %q, got:\n%s", want, v)
 		}
-		// Original absolute prefix must NOT appear.
 		if strings.Contains(v, "/Users/alex") {
 			t.Errorf("original /Users/ prefix should be gone:\n%s", v)
 		}
@@ -4316,63 +4215,46 @@ func TestParity_WelcomeCWDAbbreviation(t *testing.T) {
 
 	// -- Behavior 3: extremely long path → … prefix --
 	t.Run("extremely-long-path-has-ellipsis", func(t *testing.T) {
-		// A path so long even ~/ rewrite doesn't fit in 30.
 		path := "/Users/alex/" + strings.Repeat("x", 100)
 		ws := components.NewWelcomeScreen(theme.Current(), "opus", path)
-		ws.SetSize(80, 24)
+		ws.SetSize(narrowWidth, 24)
 		v := strip(ws.View().Content)
-		// Find the line that would contain the CWD — look for "…".
 		if !strings.Contains(v, "…") {
 			t.Errorf("extremely long path should produce … prefix:\n%s", v)
 		}
 	})
 
-	// -- Behavior 4: exactly 30 runes NOT abbreviated --
-	t.Run("exactly-30-runes-verbatim", func(t *testing.T) {
-		// 30 runes exactly — must stay verbatim.
-		path := "/" + strings.Repeat("a", 29) // 30 chars total
-		if len([]rune(path)) != 30 {
-			t.Fatalf("setup: path should be 30 runes, got %d", len([]rune(path)))
+	// -- Behavior 4: path exactly at the budget is NOT abbreviated --
+	t.Run("exactly-at-budget-verbatim", func(t *testing.T) {
+		path := "/" + strings.Repeat("a", cwdBudget-1) // cwdBudget runes total
+		if len([]rune(path)) != cwdBudget {
+			t.Fatalf("setup: path should be %d runes, got %d", cwdBudget, len([]rune(path)))
 		}
 		ws := components.NewWelcomeScreen(theme.Current(), "opus", path)
-		ws.SetSize(80, 24)
+		ws.SetSize(narrowWidth, 24)
 		v := strip(ws.View().Content)
 		if !strings.Contains(v, path) {
-			t.Errorf("30-rune path should appear verbatim:\n%s", v)
+			t.Errorf("%d-rune path should appear verbatim:\n%s", cwdBudget, v)
 		}
-		// Search just the line containing the path for an ellipsis — the
-		// box separator line uses "─" (not "…"), so looking for "…" on a
-		// line containing the path tells us whether abbreviation triggered.
-		for _, line := range strings.Split(v, "\n") {
-			if strings.Contains(line, path) && strings.Contains(line, "…") {
-				t.Errorf("30-rune path should not be abbreviated, got line: %q", line)
-			}
+		if strings.Contains(v, "…") {
+			t.Errorf("%d-rune path should not be abbreviated, got:\n%s", cwdBudget, v)
 		}
 	})
 
-	// -- Behavior 5: 31 runes IS abbreviated --
-	t.Run("thirty-one-runes-abbreviated", func(t *testing.T) {
-		path := "/" + strings.Repeat("a", 30) // 31 chars
-		if len([]rune(path)) != 31 {
-			t.Fatalf("setup: path should be 31 runes, got %d", len([]rune(path)))
+	// -- Behavior 5: one rune over budget IS abbreviated --
+	t.Run("one-over-budget-abbreviated", func(t *testing.T) {
+		path := "/" + strings.Repeat("a", cwdBudget) // cwdBudget+1 runes
+		if len([]rune(path)) != cwdBudget+1 {
+			t.Fatalf("setup: path should be %d runes, got %d", cwdBudget+1, len([]rune(path)))
 		}
 		ws := components.NewWelcomeScreen(theme.Current(), "opus", path)
-		ws.SetSize(80, 24)
+		ws.SetSize(narrowWidth, 24)
 		v := strip(ws.View().Content)
-		// Must NOT appear verbatim anywhere.
 		if strings.Contains(v, path) {
-			t.Errorf("31-rune path MUST be abbreviated, but verbatim form present:\n%s", v)
+			t.Errorf("%d-rune path MUST be abbreviated, but verbatim form present:\n%s", cwdBudget+1, v)
 		}
-		// The "…" prefix should be present on the abbreviated line.
-		foundEllipsis := false
-		for _, line := range strings.Split(v, "\n") {
-			if strings.Contains(line, "…") && strings.Contains(line, "a") {
-				foundEllipsis = true
-				break
-			}
-		}
-		if !foundEllipsis {
-			t.Errorf("31-rune path should produce an abbreviated line with …:\n%s", v)
+		if !strings.Contains(v, "…") {
+			t.Errorf("%d-rune path should produce an abbreviated line with …:\n%s", cwdBudget+1, v)
 		}
 	})
 }
@@ -4459,16 +4341,13 @@ func TestParity_AppViewInitializingAndAltScreen(t *testing.T) {
 		}
 		v := strip(app.View().Content)
 		firstLine := strings.TrimSpace(strings.Split(v, "\n")[0])
-		if !strings.HasPrefix(firstLine, "╭") {
-			t.Errorf("with welcome, first non-space char should be ╭ border, got: %q", firstLine)
+		// With welcome visible, the first line is the splash's icon+title
+		// row, not the condensed "✻ Gopher" header.
+		if !strings.Contains(firstLine, "Gopher") {
+			t.Errorf("with welcome, first line should show the splash title, got: %q", firstLine)
 		}
-		// Header should NOT be on first line.
-		if strings.Contains(firstLine, "Claude") && !strings.Contains(firstLine, "Claude Code") {
-			// The welcome's top border DOES contain " Claude Code " — that's fine.
-			// But the condensed header "✻ Claude" shouldn't appear on its own first.
-			if !strings.HasPrefix(firstLine, "╭") {
-				t.Errorf("welcome mode should not show condensed header: %q", firstLine)
-			}
+		if strings.Contains(firstLine, "✻") {
+			t.Errorf("welcome mode should not show condensed header on first line: %q", firstLine)
 		}
 	})
 
@@ -4483,9 +4362,9 @@ func TestParity_AppViewInitializingAndAltScreen(t *testing.T) {
 		if strings.HasPrefix(strings.TrimSpace(firstLine), "╭") {
 			t.Errorf("no-welcome mode must not start with welcome border: %q", firstLine)
 		}
-		// Header should mention Claude (from "✻ Claude" condensed logo).
-		if !strings.Contains(firstLine, "Claude") {
-			t.Errorf("no-welcome first line should show 'Claude' header, got: %q", firstLine)
+		// Header should mention Gopher (from "✻ Gopher" condensed logo).
+		if !strings.Contains(firstLine, "Gopher") {
+			t.Errorf("no-welcome first line should show 'Gopher' header, got: %q", firstLine)
 		}
 	})
 

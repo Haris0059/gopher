@@ -471,7 +471,7 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case components.SlashCommandSelectedMsg:
 		// Fill the input with the chosen command; the user presses Enter
-		// to submit. Matches Claude Code: autocomplete completes the name
+		// to submit. Matches Gopher: autocomplete completes the name
 		// but does not auto-submit.
 		if a.input != nil {
 			a.input.SetValue(msg.Command.Name + " ")
@@ -799,7 +799,7 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	}
 
 	switch {
-	// Ctrl+C behavior (matching Claude Code):
+	// Ctrl+C behavior (matching Gopher):
 	// 1. During streaming → cancel the query
 	// 2. With text in input → clear input (stash behavior)
 	// 3. Empty input, first press → show "Press Ctrl-C again to exit" hint

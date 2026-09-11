@@ -106,9 +106,9 @@ func (m OnboardingModel) viewWelcome() string {
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var sb strings.Builder
-	sb.WriteString(titleStyle.Render("Welcome to Claude Code"))
+	sb.WriteString(titleStyle.Render("Welcome to Gopher"))
 	sb.WriteString("\n\n")
-	sb.WriteString("Claude Code is an AI-powered coding assistant that runs\n")
+	sb.WriteString("Gopher is an AI-powered coding assistant that runs\n")
 	sb.WriteString("in your terminal. It can read files, run commands, edit\n")
 	sb.WriteString("code, and help you with software engineering tasks.\n")
 	sb.WriteString("\n")
@@ -144,6 +144,6 @@ func (m OnboardingModel) viewSecurity() string {
 	sb.WriteString("  3. CLAUDE.md files are loaded automatically.\n")
 	sb.WriteString("     Be cautious with untrusted repositories.\n")
 	sb.WriteString("\n")
-	sb.WriteString(dimStyle.Render("Press Enter to start using Claude Code"))
+	sb.WriteString(dimStyle.Render("Press Enter to start using Gopher"))
 	return sb.String()
 }

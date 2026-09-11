@@ -39,7 +39,7 @@ const (
 	Cyan600 = "#0097a7"
 	Cyan500 = "#00acc1"
 	Cyan400 = "#00bcd4" // Active/selected in dark mode
-	Cyan300 = "#00d7ff" // Bright cyan — primary accent
+	Cyan300 = "#6ad4e1" // Bright cyan — primary accent (Go gopher cyan)
 	Cyan200 = "#4dd0e1"
 	Cyan100 = "#80deea"
 	Cyan50  = "#b2ebf2"

@@ -15,8 +15,21 @@ const WelcomeScreenWidth = 58
 // Version is the current gopher version.
 const Version = "0.2.0"
 
-// WelcomeScreen renders the initial greeting with bordered box,
-// mascot, model info, tips, and recent activity.
+// gopherIcon is the compact block-character mark shown at startup, in the
+// style of Claude Code's v2 splash. Same shape, recolored to the Gopher
+// accent instead of Claude's color.
+var gopherIcon = [3]string{
+	" ▐▛███▛█",
+	"▝▜██████▀",
+	"  ▝▝ ▝▝",
+}
+
+// gopherIconWidth is the rune width of the widest icon row, used to pad
+// the shorter rows so the text column after the icon stays aligned.
+const gopherIconWidth = 9
+
+// WelcomeScreen renders the initial greeting: a 3-line icon + version/model/cwd
+// splash, no border.
 type WelcomeScreen struct {
 	model   string
 	cwd     string
@@ -46,117 +59,36 @@ func (ws *WelcomeScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return ws, nil
 }
 
-// View renders the full welcome screen.
+// View renders the welcome splash: a 3-line block icon next to the
+// version, model, and working directory. No border, no box.
 func (ws *WelcomeScreen) View() tea.View {
 	cs := ws.theme.Colors()
-	boxWidth := ws.width
-	if boxWidth < 20 {
-		boxWidth = 20
-	}
 
-	// Build the bordered welcome box
-	titleStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Primary)).
-		Bold(true)
-	labelStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Warning)).
-		Bold(true)
-	textStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.TextPrimary))
-	subtleStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.TextSecondary))
+	iconStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Accent)).Bold(true)
+	titleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
+	subtleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 
-	// Left panel content — mascot is multi-line, so split into individual lines
-	mascotLines := strings.Split(ws.renderMascot(cs), "\n")
-	leftLines := []string{
-		"",
-		titleStyle.Render("  Welcome!"),
-		"",
-	}
-	leftLines = append(leftLines, mascotLines...)
-	leftLines = append(leftLines,
-		"",
-		subtleStyle.Render(fmt.Sprintf("  %s", ws.model)),
-		subtleStyle.Render(fmt.Sprintf("  %s", abbreviateCWD(ws.cwd, 30))),
-		"",
-	)
-
-	// Right panel content
-	// Source: LogoV2 renders Tips, a ──── separator, then Recent activity
-	sepLine := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.BorderSubtle)).
-		Render(strings.Repeat("─", boxWidth/2-1))
-	rightLines := []string{
-		"",
-		labelStyle.Render("Tips for getting started"),
-		textStyle.Render("Run /init to create a CLAUDE.md"),
-		textStyle.Render("file with project instructions"),
-		sepLine,
-		labelStyle.Render("Recent activity"),
-		subtleStyle.Render("No recent activity"),
-		"",
-	}
-
-	// Merge into a two-column layout
-	leftWidth := boxWidth / 2
-	rightWidth := boxWidth - leftWidth
-
-	var bodyLines []string
-	maxLines := len(leftLines)
-	if len(rightLines) > maxLines {
-		maxLines = len(rightLines)
-	}
-
-	for i := 0; i < maxLines; i++ {
-		left := ""
-		if i < len(leftLines) {
-			left = leftLines[i]
+	// Text column stays fixed regardless of which icon row is widest.
+	padIcon := func(s string) string {
+		n := gopherIconWidth - len([]rune(s))
+		if n < 0 {
+			n = 0
 		}
-		right := ""
-		if i < len(rightLines) {
-			right = rightLines[i]
-		}
-
-		// Pad left column to fixed width, add │ separator, then right column
-		// Claude renders: │ left-content │ right-content │
-		sepStyle := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(cs.BorderSubtle))
-		leftPad := lipgloss.NewStyle().Width(leftWidth).Render(left)
-		rightPad := lipgloss.NewStyle().Width(rightWidth - 1).Render(right) // -1 for separator
-		bodyLines = append(bodyLines, leftPad+sepStyle.Render("│")+rightPad)
+		return s + strings.Repeat(" ", n)
 	}
 
-	// Build a manually-drawn border with title integrated into the top line.
-	// Claude renders: ╭─── Claude Code v2.1.92 ──...╮
-	borderStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.BorderSubtle))
-
-	// Top border with integrated title — total width = boxWidth + 2 (for ╭ and ╮)
-	titleText := fmt.Sprintf(" Claude Code v%s ", ws.version)
-	// Available space between ╭─── and ╮
-	availForTitle := boxWidth - 3 // boxWidth minus "───" prefix
-	if len([]rune(titleText)) > availForTitle {
-		// Truncate title if box too narrow
-		titleText = " Claude Code "
-	}
-	topPadding := boxWidth - 3 - len([]rune(titleText))
-	if topPadding < 0 {
-		topPadding = 0
-	}
-	topLine := borderStyle.Render("╭───" + titleText + strings.Repeat("─", topPadding) + "╮")
-
-	// Body lines with │ borders
-	var boxLines []string
-	boxLines = append(boxLines, topLine)
-	for _, bl := range bodyLines {
-		boxLines = append(boxLines, borderStyle.Render("│")+bl+borderStyle.Render("│"))
+	maxCWD := ws.width - gopherIconWidth - 4
+	if maxCWD < 10 {
+		maxCWD = 10
 	}
 
-	// Bottom border
-	bottomLine := borderStyle.Render("╰" + strings.Repeat("─", boxWidth) + "╯")
-	boxLines = append(boxLines, bottomLine)
+	lines := []string{
+		iconStyle.Render(padIcon(gopherIcon[0])) + "  " + titleStyle.Render(fmt.Sprintf("Gopher v%s", ws.version)),
+		iconStyle.Render(padIcon(gopherIcon[1])) + "  " + subtleStyle.Render(ws.model),
+		iconStyle.Render(padIcon(gopherIcon[2])) + "  " + subtleStyle.Render(abbreviateCWD(ws.cwd, maxCWD)),
+	}
 
-	return tea.NewView(strings.Join(boxLines, "\n"))
+	return tea.NewView(strings.Join(lines, "\n"))
 }
 
 // SetSize updates the screen dimensions.
@@ -169,21 +101,6 @@ func (ws *WelcomeScreen) SetSize(width, height int) {
 		ws.width = 20
 	}
 	ws.height = height
-}
-
-// renderMascot renders Claude's "Clawd" mascot using quadrant block characters.
-// Source: components/LogoV2/Clawd.tsx — default pose uses ▗ ▖ for eyes, ▘▘ ▝▝ for mouth.
-func (ws *WelcomeScreen) renderMascot(cs theme.ColorScheme) string {
-	bodyStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
-
-	// Clawd face using quadrant block elements (matching Claude Code)
-	lines := []string{
-		bodyStyle.Render("    ▗ ▗   ▖ ▖"),
-		"",
-		bodyStyle.Render("      ▘▘ ▝▝"),
-	}
-	return strings.Join(lines, "\n")
 }
 
 // abbreviateCWD shortens a path for display.

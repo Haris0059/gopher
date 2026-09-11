@@ -14,7 +14,7 @@ import (
 	"github.com/projectbarks/gopher-code/pkg/ui/theme"
 )
 
-// Spinner glyph animation frames (from Claude Code's src/components/Spinner/utils.ts).
+// Spinner glyph animation frames (from Gopher's src/components/Spinner/utils.ts).
 // Platform-specific: macOS uses ✽, Ghostty uses *, others use * instead of ✳.
 // Source: components/Spinner/utils.ts:4-11
 var SpinnerGlyphs = getSpinnerGlyphs()
@@ -30,7 +30,7 @@ func getSpinnerGlyphs() []string {
 }
 
 // SpinnerVerbs are random action words shown during thinking.
-// Complete list from Claude Code's src/constants/spinnerVerbs.ts (188 verbs).
+// Complete list from Gopher's src/constants/spinnerVerbs.ts (188 verbs).
 var SpinnerVerbs = []string{
 	"Accomplishing", "Actioning", "Actualizing", "Architecting",
 	"Baking", "Beaming", "Beboppin'", "Befuddling", "Billowing", "Blanching",

@@ -1,7 +1,7 @@
 // Package logo provides the welcome screen and logo rendering.
-// Source: components/LogoV2/ — WelcomeV2.tsx, LogoV2.tsx, Clawd.tsx
+// Source: components/LogoV2/ — WelcomeV2.tsx, LogoV2.tsx, Gopher.tsx
 //
-// The TS version has animated ASCII art with the Clawd mascot. In Go,
+// The TS version has animated ASCII art with the Gopher mascot. In Go,
 // we render a styled text-based welcome with version and model info.
 package logo
 
@@ -30,12 +30,12 @@ func RenderWelcome(model, cwd string) string {
 
 	var sb strings.Builder
 
-	// ASCII art asterisk (simplified from TS's block-character Clawd)
+	// ASCII art asterisk (simplified from TS's block-character Gopher)
 	sb.WriteString(renderAsterisk())
 	sb.WriteString("\n")
 
 	// Welcome text
-	sb.WriteString(titleStyle.Render("Welcome to Claude Code"))
+	sb.WriteString(titleStyle.Render("Welcome to Gopher"))
 	sb.WriteString(" ")
 	sb.WriteString(versionStyle.Render("v" + Version))
 	sb.WriteString("\n\n")
@@ -60,7 +60,7 @@ func RenderCondensedLogo(model string) string {
 	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("12"))
 	modelStyle := lipgloss.NewStyle().Faint(true)
 
-	logo := nameStyle.Render("✻ Claude Code")
+	logo := nameStyle.Render("✻ Gopher")
 	if model != "" {
 		logo += " " + modelStyle.Render("("+model+")")
 	}
@@ -72,7 +72,7 @@ func RenderSpinnerLogo(model, verb string) string {
 	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("12"))
 	verbStyle := lipgloss.NewStyle().Faint(true).Italic(true)
 
-	logo := nameStyle.Render("✻ Claude")
+	logo := nameStyle.Render("✻ Gopher")
 	if verb != "" {
 		logo += " " + verbStyle.Render(verb+"...")
 	}

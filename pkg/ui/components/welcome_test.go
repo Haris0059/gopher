@@ -19,11 +19,8 @@ func TestWelcomeScreenView(t *testing.T) {
 	view := ws.View()
 	plain := stripANSI(view.Content)
 
-	if !strings.Contains(plain, "Welcome") {
-		t.Error("Expected 'Welcome' in view")
-	}
-	if !strings.Contains(plain, "Claude Code") {
-		t.Error("Expected 'Claude Code' in view")
+	if !strings.Contains(plain, "Gopher") {
+		t.Error("Expected 'Gopher' in view")
 	}
 }
 
@@ -51,33 +48,6 @@ func TestWelcomeScreenShowsCWD(t *testing.T) {
 	plain := stripANSI(view.Content)
 	if !strings.Contains(plain, "project") {
 		t.Error("Expected CWD in view")
-	}
-}
-
-func TestWelcomeScreenShowsTips(t *testing.T) {
-	ws := NewWelcomeScreen(theme.Current(), "model", "/tmp")
-	view := ws.View()
-	plain := stripANSI(view.Content)
-	if !strings.Contains(plain, "Tips") {
-		t.Error("Expected 'Tips' section in view")
-	}
-}
-
-func TestWelcomeScreenShowsRecentActivity(t *testing.T) {
-	ws := NewWelcomeScreen(theme.Current(), "model", "/tmp")
-	view := ws.View()
-	plain := stripANSI(view.Content)
-	if !strings.Contains(plain, "Recent activity") {
-		t.Error("Expected 'Recent activity' section in view")
-	}
-}
-
-func TestWelcomeScreenHasBorder(t *testing.T) {
-	ws := NewWelcomeScreen(theme.Current(), "model", "/tmp")
-	view := ws.View()
-	// Rounded border uses ╭ and ╮ characters
-	if !strings.Contains(view.Content, "╭") && !strings.Contains(view.Content, "┌") {
-		t.Error("Expected border characters in view")
 	}
 }
 
@@ -114,11 +84,11 @@ func TestAbbreviateCWD(t *testing.T) {
 	}
 }
 
-func TestWelcomeScreenHasMascot(t *testing.T) {
+func TestWelcomeScreenHasIcon(t *testing.T) {
 	ws := NewWelcomeScreen(theme.Current(), "model", "/tmp")
 	view := ws.View()
-	// Clawd mascot uses quadrant block characters (▗ ▖ ▘ ▝)
-	if !strings.Contains(view.Content, "▗") && !strings.Contains(view.Content, "▘") {
-		t.Error("Expected Clawd mascot with quadrant block characters (▗ ▖ ▘ ▝)")
+	// The Gopher icon uses block characters ▛/▜/▝ etc.
+	if !strings.Contains(view.Content, "█") {
+		t.Error("Expected Gopher icon block characters in view")
 	}
 }

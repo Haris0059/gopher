@@ -95,7 +95,7 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 	cs := mb.theme.Colors()
 	var parts []string
 
-	// User messages: bold primary text on subtle background (matching Claude Code)
+	// User messages: bold primary text on subtle background (matching Gopher)
 	userStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(cs.TextPrimary)).
 		Bold(true)
@@ -151,7 +151,7 @@ func (mb *MessageBubble) renderAssistantMessage(msg *message.Message) string {
 	for _, block := range msg.Content {
 		rendered := mb.RenderContent(block)
 		if rendered != "" {
-			// Claude Code prefixes the first text block with ⏺ (U+23FA)
+			// Gopher prefixes the first text block with ⏺ (U+23FA)
 			if firstText && block.Type == message.ContentText {
 				rendered = prefixStyle.Render("⏺") + " " + rendered
 				firstText = false

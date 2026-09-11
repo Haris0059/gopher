@@ -27,8 +27,8 @@ func TestRenderWelcome_NoModel(t *testing.T) {
 
 func TestRenderCondensedLogo(t *testing.T) {
 	got := RenderCondensedLogo("opus-4-6")
-	if !strings.Contains(got, "Claude Code") {
-		t.Error("should contain Claude Code")
+	if !strings.Contains(got, "Gopher") {
+		t.Error("should contain Gopher")
 	}
 }
 
@@ -41,8 +41,8 @@ func TestRenderCondensedLogo_NoModel(t *testing.T) {
 
 func TestRenderSpinnerLogo(t *testing.T) {
 	got := RenderSpinnerLogo("opus", "Thinking")
-	if !strings.Contains(got, "Claude") {
-		t.Error("should contain Claude")
+	if !strings.Contains(got, "Gopher") {
+		t.Error("should contain Gopher")
 	}
 }
 
