@@ -119,12 +119,13 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
 | 16 | `pkg/lsp` has no diagnostics/document-sync | `LSP-01`, `LSP-02` |
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
-| ~~18~~ | ~~Untested packages (`pkg/async`, ...)~~ `pkg/async` and `pkg/installer` fixed. Remaining: `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}` | `TEST-05`–`TEST-07` |
+| ~~18~~ | ~~Untested packages (`pkg/async`, ...)~~ `pkg/async`, `pkg/installer`, and `pkg/commands/install_github_app` fixed. Remaining: `pkg/ui/components/{shell,wizard}` | `TEST-05`–`TEST-07` |
 | ~~19~~ | ~~`pkg/agents` duplicates `pkg/skills/agents.go`~~ Fixed — `pkg/agents` deleted | `TEST-02` |
 | 20 | Stale rebrand references (4 scenario fixtures, self-referential comments) | `CLEAN-01`, `CLEAN-02` |
 | ~~21~~ | ~~`internal/cli/startup_bench_test.go` fails to compile~~ Fixed | `TEST-01` |
 | 22 | Sandbox has no Go equivalent | not yet in `TASKS.md` |
 | 23 | `pkg/async` has zero importers anywhere in the repo (not in `deps.go` either) | `TEST-10` |
+| 24 | `pkg/commands/install_github_app` has zero importers; `/install-github-app` is a stub that doesn't use it | `TEST-11` |
 
 ---
 

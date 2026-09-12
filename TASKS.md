@@ -25,11 +25,12 @@ repo; it's now fixed.
 | ~~TEST-03~~ | ~~Add tests for `pkg/stats` (`store.go`, 142 LOC, 0 tests)~~ Done | 1 | — |
 | ~~TEST-04~~ | ~~Add tests for `pkg/async` (63 LOC, 0 tests)~~ Done | 0.5 | — |
 | ~~TEST-05~~ | ~~Add tests for `pkg/installer` (45 LOC, 0 tests)~~ Done — full suite alongside `INST-01` | 0.5 | ~~INST-01~~ |
-| TEST-06 | Add tests for `pkg/commands/install_github_app` (53 LOC, 0 tests) | 0.5 | — |
+| ~~TEST-06~~ | ~~Add tests for `pkg/commands/install_github_app` (53 LOC, 0 tests)~~ Done — also ported the two constants missing from the reference (`PRBody`, `CodeReviewPluginWorkflowContent`) and restored `WorkflowContent`'s dropped inline comments; see `TEST-11` for the zero-consumer finding this turned up | 0.5 | — |
 | TEST-07 | Add tests for `pkg/ui/components/shell` (55 LOC, 0 tests) and `pkg/ui/components/wizard` (108 LOC, 0 tests) | 1 | — |
 | TEST-08 | Thicken `pkg/services` tests (451 src / 109 test LOC — thinnest ratio outside known stubs) | 2 | — |
 | TEST-09 | `pkg/stats` parity + wiring: `GetAll()` diverges from `createStatsStore()` (`src/context/stats.tsx`) — Go emits an extra `<name>_sum`, emits sets as `<name>_unique` instead of plain `<name>`, and skips percentile keys on an empty reservoir. Also: the package has zero consumers (the TS `StatsProvider` flushes `getAll()` into `lastSessionMetrics` on process exit; Gopher has no equivalent). Decide keep-or-align, then wire it or delete it. | 1 | — |
 | TEST-10 | `pkg/async` keep-or-delete: the package has zero importers anywhere in the repo (not in `deps.go` either). Decide whether to wire `Debouncer`/`Throttler` into the call sites that want them (`pkg/ui`, `internal/cli`) or delete the package. | 0.5 | — |
+| TEST-11 | `pkg/commands/install_github_app` keep-or-wire: the package (constants only) has zero importers anywhere in the repo — `/install-github-app` (`pkg/ui/commands/handlers.go:3117`, registered at `:3673`) is a stub `Handler` that returns a static `InstallGitHubAppMsg` without importing it. Either wire the stub to surface these constants or accept it stays dormant pending the real wizard (`setupGitHubActions.ts` port, out of scope here). | 0.5 | ~~TEST-06~~ |
 
 ## MCP — Remote MCP transports & auth
 
@@ -146,5 +147,5 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 
 ## Suggested starting point
 
-~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**INST-01**~~, ~~**INST-02**~~ — done.
+~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**TEST-06**~~, ~~**INST-01**~~, ~~**INST-02**~~ — done.
 Next smallest: **CLEAN-02** or **TOOL-03**.
