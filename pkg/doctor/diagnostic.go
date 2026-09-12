@@ -11,7 +11,7 @@ import (
 
 // Version is injected at build time or set by caller.
 // Patch segment is the count of Haris0059's commits on this project.
-var Version = "0.3.029"
+var Version = "0.3.030"
 
 // DiagnosticData holds all collected diagnostic information.
 // Source: Doctor.tsx — getDoctorDiagnostic return type

@@ -36,7 +36,7 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 
 | Area | Go package | TS reference | Status | Notes |
 |---|---|---|---|---|
-| Tools | `pkg/tools` (50 files, 11,941 LOC) | `src/tools/` (43 dirs) | **Done** | 41 tools registered; 1 near-stub inside this set (`REPL` — see below). `Brief`/`SendUserMessage` is a real port as of `TOOL-01` |
+| Tools | `pkg/tools` (50 files, 11,941 LOC) | `src/tools/` (43 dirs) | **Done** | 41 tools registered. `Brief`/`SendUserMessage` is a real port as of `TOOL-01`. `REPL` (`TOOL-02`) is now a real persistent interpreter session, but a deliberate divergence rather than a port — see below and Notable divergences |
 | Slash commands | `pkg/ui/commands/handlers.go` | `src/commands/` (102 entries) | **Done** | ~80 commands; gap is mostly internal/debug/plugin-migrated commands in the reference |
 | Query loop | `pkg/query` (11 files, 1,904 LOC) | `src/QueryEngine.ts`, `src/query.ts` | **Done** | Has its own `parity_test.go` / `parity_gaps_test.go` against `testdata/parity_rules.json` |
 | Provider: Anthropic | `pkg/provider/anthropic.go` | `src/services/api/claude.ts` | **Done** | Real SSE streaming, retries, betas, cost tracking |
@@ -83,6 +83,12 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 - 27 hook events vs. 12 in the TS source.
 - A first-class OpenAI-compatible provider (`pkg/provider/openai.go`) with no equivalent in the
   reference — lets Gopher talk to Ollama, vLLM, LM Studio directly.
+- `pkg/tools/repltool.go`'s `REPL` tool keeps a real python/node/ruby/bash interpreter process
+  alive per (session, language) across tool calls (`pkg/tools/repl_session.go`), which the TS
+  reference's `REPL` tool does not do at all — that tool is a JS VM sandbox for wrapping other
+  tools (ant-only, `TOOL-10`), not an interpreter session. `TOOL-02`'s original wording assumed
+  the reference tool was a persistent REPL; it isn't, so this was built as a Gopher-native
+  capability instead of a port.
 
 **Where Gopher deliberately differs, not a gap:**
 - The TUI is built on Bubble Tea/Lip Gloss (`pkg/ui`), not a port of the vendored Ink fork
@@ -113,7 +119,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 9 | Doctor and setup-token TUI screens stubbed | `INST-03`, `INST-04` |
 | 10 | Voice is a state machine with no audio/STT | `VOICE-01`, `VOICE-02` |
 | ~~11~~ | ~~`Brief` tool is echo-only~~ Fixed — ported as `SendUserMessage` (legacy alias `Brief`, resolved by `ToolRegistry.Get`): real `{message, attachments?, status}` schema, attachment validation/resolution, `Message delivered to user.` model-facing result, `IsEnabled()` gated on Kairos/opt-in, proactive system-prompt section, and a `BriefDisplay` renderer in `message_bubble.go`. Bridge attachment upload (`upload.ts`) remains unported | `TOOL-01` |
-| 12 | `REPL` tool is one-shot, not persistent | `TOOL-02` |
+| ~~12~~ | ~~`REPL` tool is one-shot, not persistent~~ Fixed — `pkg/tools/repl_session.go` keeps one interpreter alive per (session, language) with sentinel-framed I/O, idle reaping, and timeout-kills-and-drops; note this is a Gopher-native capability, not a port (see Notable divergences) | `TOOL-02` |
 | 13 | `TestingPermission` tool registered unconditionally | `TOOL-03` |
 | ~~14~~ | ~~Agent tool's agent-list section is a static placeholder~~ Fixed — `Prompt()` renders the loaded agent list, `subagent_type` resolves a real agent definition, and `Execute` now enforces `Agent(<type>)` deny rules and `requiredMcpServers` gating (fork-subagent routing remains unported — no such feature exists in Gopher) | `TOOL-04` |
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
@@ -126,6 +132,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 22 | Sandbox has no Go equivalent | not yet in `TASKS.md` |
 | 23 | `pkg/async` has zero importers anywhere in the repo (not in `deps.go` either) | `TEST-10` |
 | 24 | `pkg/commands/install_github_app` has zero importers; `/install-github-app` is a stub that doesn't use it | `TEST-11` |
+| 25 | Reference's actual JS-VM `REPL` tool (hides primitive tools behind an in-VM wrapper, ant-only) is unported; core implementation file missing from the leak | `TOOL-10` |
 
 ---
 

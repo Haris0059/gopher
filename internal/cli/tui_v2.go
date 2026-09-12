@@ -21,6 +21,12 @@ func RunTUIV2(
 	prov provider.ModelProvider,
 	registry *tools.ToolRegistry,
 ) error {
+	// Kill any live REPL interpreter sessions on exit — there is no
+	// SessionEnd hook firing anywhere in Gopher today (pkg/hooks/hooks.go:25
+	// defines the event but nothing emits it), so this is the closest thing
+	// to session-end cleanup for the persistent REPL tool's child processes.
+	defer tools.CloseAllREPLSessions()
+
 	// Create the event bridge for query → UI communication
 	bridge := ui.NewEventBridge()
 
