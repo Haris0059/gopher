@@ -26,7 +26,8 @@ import (
 )
 
 // Version is the current gopher version (kept in sync with main).
-const Version = "0.2.0"
+// Patch segment is the count of Haris0059's commits on this project.
+const Version = "0.3.024"
 
 // RunREPL starts an interactive read-eval-print loop.
 func RunREPL(ctx context.Context, sess *session.SessionState, prov provider.ModelProvider, registry *tools.ToolRegistry, verbose bool, hookRunner tools.HookRunner, noSessionPersist bool, prefill string, planState *tools.PlanState) {
@@ -202,7 +203,7 @@ func RunREPL(ctx context.Context, sess *session.SessionState, prov provider.Mode
 			} else {
 				modes := map[permissions.PermissionMode]string{
 					permissions.AutoApprove: "auto-approve",
-					permissions.Deny:       "deny",
+					permissions.Deny:        "deny",
 					permissions.Interactive: "interactive",
 				}
 				fmt.Printf("Permission mode: %s\n", modes[sess.Config.PermissionMode])
@@ -672,7 +673,7 @@ func runDoctor(sess *session.SessionState) {
 	fmt.Printf("  Uptime: %s\n", duration.Truncate(time.Second))
 	modes := map[permissions.PermissionMode]string{
 		permissions.AutoApprove: "auto-approve",
-		permissions.Deny:       "deny",
+		permissions.Deny:        "deny",
 		permissions.Interactive: "interactive",
 	}
 	fmt.Printf("  Permission mode: %s\n", modes[sess.Config.PermissionMode])

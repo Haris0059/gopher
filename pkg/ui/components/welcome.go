@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"charm.land/lipgloss/v2"
 	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
@@ -13,7 +13,8 @@ import (
 const WelcomeScreenWidth = 58
 
 // Version is the current gopher version.
-const Version = "0.2.0"
+// Patch segment is the count of Haris0059's commits on this project.
+const Version = "0.3.024"
 
 // gopherIcon is the compact block-character mark shown at startup, in the
 // style of Claude Code's v2 splash. Same shape, recolored to the Gopher

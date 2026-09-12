@@ -10,18 +10,19 @@ import (
 )
 
 // Version is injected at build time or set by caller.
-var Version = "0.2.0"
+// Patch segment is the count of Haris0059's commits on this project.
+var Version = "0.3.024"
 
 // DiagnosticData holds all collected diagnostic information.
 // Source: Doctor.tsx — getDoctorDiagnostic return type
 type DiagnosticData struct {
 	// Core diagnostic info (T61)
-	Version            string
-	InstallationType   string
-	InstallationPath   string
-	InvokedBinary      string
+	Version             string
+	InstallationType    string
+	InstallationPath    string
+	InvokedBinary       string
 	ConfigInstallMethod string
-	PackageManager     string
+	PackageManager      string
 
 	// Dist tags (T62)
 	DistTags    *uidoctor.DistTags
@@ -40,9 +41,9 @@ type DiagnosticData struct {
 	EnvValidation []uidoctor.EnvValidationResult
 
 	// Settings/keybinding/MCP warnings (T67)
-	SettingsErrors      []uidoctor.SettingsError
-	KeybindingWarnings  []uidoctor.KeybindingWarning
-	MCPWarnings         []uidoctor.MCPParsingWarning
+	SettingsErrors     []uidoctor.SettingsError
+	KeybindingWarnings []uidoctor.KeybindingWarning
+	MCPWarnings        []uidoctor.MCPParsingWarning
 
 	// Sandbox status (T68)
 	Sandbox uidoctor.SandboxStatus
@@ -85,13 +86,13 @@ type CollectOptions struct {
 // Source: Doctor.tsx — getDoctorDiagnostic function
 func Collect(opts CollectOptions) *DiagnosticData {
 	data := &DiagnosticData{
-		Version:            Version,
-		InstallationType:   "go-binary",
-		InstallationPath:   executablePath(),
-		InvokedBinary:      os.Args[0],
+		Version:             Version,
+		InstallationType:    "go-binary",
+		InstallationPath:    executablePath(),
+		InvokedBinary:       os.Args[0],
 		ConfigInstallMethod: "direct",
-		AutoUpdates:        "enabled",
-		UpdateChannel:      "latest",
+		AutoUpdates:         "enabled",
+		UpdateChannel:       "latest",
 	}
 
 	// T62: Dist tags
