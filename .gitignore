@@ -7,7 +7,10 @@
 .DS_Store
 
 # Development files
-.claude/
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
+!.claude/skills/
 run-phase.sh
 testdata/tui-snapshots/
 

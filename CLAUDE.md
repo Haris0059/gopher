@@ -52,6 +52,22 @@ before real usage exists — don't "clean it up" by removing entries.
 Recent history used `T<number>: implement <feature>` tied to an internal task tracker; that convention is
 being retired going forward. Use plain, descriptive imperative commit messages instead (no ticket prefix).
 
+Always commit through the project `gopher-commit` skill (`.claude/skills/gopher-commit/`), not the
+global `commit-message` skill — only `gopher-commit` does the version bump below.
+
+## Versioning
+
+**Every commit authored by `Haris0059` must bump the version in the same commit.** Version is
+`MAJOR.MINOR.PATCH` (e.g. `0.3.024`):
+
+- MAJOR.MINOR — manual decision by the user; never change it on your own.
+- PATCH — zero-padded (min 3 digits) count of `Haris0059` commits **including the one being made**:
+  `$(( $(git log --author="Haris0059" --oneline | wc -l) + 1 ))`.
+- The `Version` constant is duplicated in four files; update and stage all of them:
+  `cmd/gopher/main.go`, `internal/cli/repl.go`, `pkg/doctor/diagnostic.go`, `pkg/ui/components/welcome.go`.
+
+`.claude/hooks/pre-commit-check.sh` enforces this: a commit whose staged versions don't match is denied.
+
 ## Env vars
 
 The provider layer (`pkg/provider/`) mirrors real Claude Code's environment surface, including
