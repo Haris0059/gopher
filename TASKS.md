@@ -23,12 +23,13 @@ repo; it's now fixed.
 | ~~TEST-01~~ | ~~Fix `internal/cli/startup_bench_test.go:23` — it calls `RunTUIV2` with a stale 5-arg signature; current signature is `(ctx, *session.SessionState, provider.ModelProvider, *tools.ToolRegistry)` at `internal/cli/tui_v2.go:18`~~ Done | 0.25 | — |
 | ~~TEST-02~~ | ~~Resolve `pkg/agents` (236 LOC, 0 tests) vs `pkg/skills/agents.go` — two independent agent-loading paths (`agents.Agent` vs `skills.AgentDefinition`); determine which is live, delete or merge the other~~ Done — `pkg/skills` kept (it had zero consumers before this), `pkg/agents` deleted, `gopher agents` repointed | 2 | — |
 | ~~TEST-03~~ | ~~Add tests for `pkg/stats` (`store.go`, 142 LOC, 0 tests)~~ Done | 1 | — |
-| TEST-04 | Add tests for `pkg/async` (63 LOC, 0 tests) | 0.5 | — |
+| ~~TEST-04~~ | ~~Add tests for `pkg/async` (63 LOC, 0 tests)~~ Done | 0.5 | — |
 | TEST-05 | Add tests for `pkg/installer` (45 LOC, 0 tests) | 0.5 | INST-01 |
 | TEST-06 | Add tests for `pkg/commands/install_github_app` (53 LOC, 0 tests) | 0.5 | — |
 | TEST-07 | Add tests for `pkg/ui/components/shell` (55 LOC, 0 tests) and `pkg/ui/components/wizard` (108 LOC, 0 tests) | 1 | — |
 | TEST-08 | Thicken `pkg/services` tests (451 src / 109 test LOC — thinnest ratio outside known stubs) | 2 | — |
 | TEST-09 | `pkg/stats` parity + wiring: `GetAll()` diverges from `createStatsStore()` (`src/context/stats.tsx`) — Go emits an extra `<name>_sum`, emits sets as `<name>_unique` instead of plain `<name>`, and skips percentile keys on an empty reservoir. Also: the package has zero consumers (the TS `StatsProvider` flushes `getAll()` into `lastSessionMetrics` on process exit; Gopher has no equivalent). Decide keep-or-align, then wire it or delete it. | 1 | — |
+| TEST-10 | `pkg/async` keep-or-delete: the package has zero importers anywhere in the repo (not in `deps.go` either). Decide whether to wire `Debouncer`/`Throttler` into the call sites that want them (`pkg/ui`, `internal/cli`) or delete the package. | 0.5 | — |
 
 ## MCP — Remote MCP transports & auth
 
@@ -144,4 +145,4 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 
 ## Suggested starting point
 
-~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~ — done. Next smallest: **CLEAN-02** or **TOOL-03**.
+~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~ — done. Next smallest: **CLEAN-02** or **TOOL-03**.

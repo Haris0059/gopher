@@ -9,9 +9,9 @@ import (
 
 // Debouncer delays execution until after a quiet period.
 type Debouncer struct {
-	mu       sync.Mutex
-	timer    *time.Timer
-	delay    time.Duration
+	mu    sync.Mutex
+	timer *time.Timer
+	delay time.Duration
 }
 
 // NewDebouncer creates a debouncer with the given delay.
