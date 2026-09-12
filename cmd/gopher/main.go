@@ -46,7 +46,7 @@ import (
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.027"
+const Version = "0.3.028"
 
 // Model alias mappings
 var modelAliases = map[string]string{
@@ -1167,6 +1167,11 @@ func main() {
 		if code := handlers.Install(handlers.InstallOpts{
 			Target: target,
 			Force:  *force,
+			// GOPHER_INSTALL_API_BASE_URL / GOPHER_INSTALL_DOWNLOAD_BASE_URL
+			// override where releases are resolved/downloaded from; unset in
+			// production, used by tests to point at a local fake release.
+			APIBaseURL:      os.Getenv("GOPHER_INSTALL_API_BASE_URL"),
+			DownloadBaseURL: os.Getenv("GOPHER_INSTALL_DOWNLOAD_BASE_URL"),
 		}); code != 0 {
 			cliError("install failed")
 		}

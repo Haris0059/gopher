@@ -24,7 +24,7 @@ repo; it's now fixed.
 | ~~TEST-02~~ | ~~Resolve `pkg/agents` (236 LOC, 0 tests) vs `pkg/skills/agents.go` — two independent agent-loading paths (`agents.Agent` vs `skills.AgentDefinition`); determine which is live, delete or merge the other~~ Done — `pkg/skills` kept (it had zero consumers before this), `pkg/agents` deleted, `gopher agents` repointed | 2 | — |
 | ~~TEST-03~~ | ~~Add tests for `pkg/stats` (`store.go`, 142 LOC, 0 tests)~~ Done | 1 | — |
 | ~~TEST-04~~ | ~~Add tests for `pkg/async` (63 LOC, 0 tests)~~ Done | 0.5 | — |
-| TEST-05 | Add tests for `pkg/installer` (45 LOC, 0 tests) | 0.5 | INST-01 |
+| ~~TEST-05~~ | ~~Add tests for `pkg/installer` (45 LOC, 0 tests)~~ Done — full suite alongside `INST-01` | 0.5 | ~~INST-01~~ |
 | TEST-06 | Add tests for `pkg/commands/install_github_app` (53 LOC, 0 tests) | 0.5 | — |
 | TEST-07 | Add tests for `pkg/ui/components/shell` (55 LOC, 0 tests) and `pkg/ui/components/wizard` (108 LOC, 0 tests) | 1 | — |
 | TEST-08 | Thicken `pkg/services` tests (451 src / 109 test LOC — thinnest ratio outside known stubs) | 2 | — |
@@ -78,16 +78,17 @@ are TODO no-ops. `pkg/plugins/builtin.go` and `types.go` are real.
 
 ## INST — Self-install & update
 
-`pkg/installer` (45 LOC) only has `InstallDir()`, `BinaryName()`, `IsInstalled()`.
-`cmd/gopher/handlers/install.go:48` has a TODO in place of calling real install logic.
+`pkg/installer` now implements real install/update logic (`INST-01`) and both CLI
+handlers are wired to it (`INST-02`).
 
 | ID | Task | Est | Depends on |
 |---|---|---|---|
-| INST-01 | Implement real install/update logic in `pkg/installer` (download release, verify checksum, replace binary) | 3 | — |
-| INST-02 | Wire `cmd/gopher/handlers/install.go` to call `pkg/installer` instead of its current placeholder | 1 | INST-01 |
+| ~~INST-01~~ | ~~Implement real install/update logic in `pkg/installer` (download release, verify checksum, replace binary)~~ Done — ported the reference's directory layout, versioned installs, atomic symlink, and GC (`installer.ts`/`download.ts`/`pidLock.ts`), scoped down: GitHub Releases + `checksums.txt` instead of the internal GCS/manifest host, no npm/Artifactory branch, no musl detection, `pidLock.ts`'s 434 LOC reduced to a plain PID-liveness lockfile. Also fixed `cmd/gopher/handlers/update.go`'s `DefaultFetchLatestVersion`, which pointed at `anthropics/claude-code` despite its own comment saying "the gopher repository" | 3 | — |
+| ~~INST-02~~ | ~~Wire `cmd/gopher/handlers/install.go` to call `pkg/installer` instead of its current placeholder~~ Done — `handlers.Install`'s default engine now calls `installer.Install` and prints `installer.CheckInstall()`'s PATH warnings; `handlers.Update`'s install-delegation stub now calls it too via a new `PerformInstall` seam, and `DefaultFetchLatestVersion` delegates to `installer.ResolveVersion` instead of duplicating the GitHub API call. Behavior change: `gopher install <channel>` now rejects anything that isn't `""`/`latest`/`stable`/semver (previously any string, e.g. `beta`, was accepted and echoed back). New `GOPHER_INSTALL_API_BASE_URL`/`GOPHER_INSTALL_DOWNLOAD_BASE_URL` env overrides let tests point at a fake release server | 1 | ~~INST-01~~ |
 | INST-03 | `cmd/gopher/handlers/doctor.go:22` — launch the real Doctor TUI screen instead of the current stand-in | 2 | — |
 | INST-04 | `cmd/gopher/handlers/setup_token.go:82` — launch the real `ConsoleOAuthFlow` TUI component | 2 | — |
 | INST-05 | `cmd/gopher/main.go:827` — wire real user config from settings instead of the current placeholder | 1 | — |
+| INST-06 | Publish real GitHub releases (CI workflow + goreleaser config, none exist yet) with `gopher_<version>_<goos>_<goarch>[.exe]` assets and a `checksums.txt`, matching the naming `pkg/installer` already expects — `INST-01`'s httptest coverage is not a substitute for one real end-to-end install | 2 | ~~INST-01~~ |
 
 ## TOOL — Tool completeness
 
@@ -145,4 +146,5 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 
 ## Suggested starting point
 
-~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~ — done. Next smallest: **CLEAN-02** or **TOOL-03**.
+~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**INST-01**~~, ~~**INST-02**~~ — done.
+Next smallest: **CLEAN-02** or **TOOL-03**.

@@ -24,8 +24,8 @@ func TestCompareVersions(t *testing.T) {
 		{"1.9.9", "2.0.0", -1},
 		{"0.2.0", "0.2.0", 0},
 		{"0.2.0", "0.3.0", -1},
-		{"v1.2.3", "1.2.3", 0},   // leading v tolerated
-		{"1.2.3-beta", "1.2.3", 0}, // pre-release stripped
+		{"v1.2.3", "1.2.3", 0},      // leading v tolerated
+		{"1.2.3-beta", "1.2.3", 0},  // pre-release stripped
 		{"1.2.3+build", "1.2.3", 0}, // build metadata stripped
 		{"0.0.0", "0.0.1", -1},
 		{"10.0.0", "9.9.9", 1},
@@ -116,9 +116,9 @@ func TestInstallationType_Constants(t *testing.T) {
 func TestUpdate_CurrentVersionPrinted(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.2.3",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "1.2.3",
 		DetectInstallType: func() InstallationType { return InstallUnknown },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "1.2.3", nil
@@ -149,9 +149,9 @@ func TestUpdate_CheckingUpdatesChannel(t *testing.T) {
 func TestUpdate_DefaultChannelIsLatest(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "1.0.0",
 		DetectInstallType: func() InstallationType { return InstallUnknown },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "1.0.0", nil
@@ -165,9 +165,9 @@ func TestUpdate_DefaultChannelIsLatest(t *testing.T) {
 func TestUpdate_UpToDate(t *testing.T) {
 	var buf bytes.Buffer
 	code := Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "2.0.0",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "2.0.0",
 		DetectInstallType: func() InstallationType { return InstallUnknown },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "2.0.0", nil
@@ -184,13 +184,14 @@ func TestUpdate_UpToDate(t *testing.T) {
 func TestUpdate_UpdateAvailableArrow(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "1.0.0",
 		DetectInstallType: func() InstallationType { return InstallUnknown },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "2.0.0", nil
 		},
+		PerformInstall: func(_ context.Context, _ string) error { return nil },
 	})
 	out := buf.String()
 	if !strings.Contains(out, "1.0.0 \u2192 2.0.0") {
@@ -198,12 +199,61 @@ func TestUpdate_UpdateAvailableArrow(t *testing.T) {
 	}
 }
 
+func TestUpdate_PerformsInstall(t *testing.T) {
+	var buf bytes.Buffer
+	var installedVersion string
+	code := Update(UpdateOpts{
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "1.0.0",
+		DetectInstallType: func() InstallationType { return InstallUnknown },
+		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
+			return "2.0.0", nil
+		},
+		PerformInstall: func(_ context.Context, version string) error {
+			installedVersion = version
+			return nil
+		},
+	})
+	if code != 0 {
+		t.Errorf("expected exit 0, got %d", code)
+	}
+	if installedVersion != "2.0.0" {
+		t.Errorf("expected install of version 2.0.0, got %q", installedVersion)
+	}
+	if !strings.Contains(buf.String(), "Successfully installed version 2.0.0") {
+		t.Errorf("expected success message, got: %s", buf.String())
+	}
+}
+
+func TestUpdate_InstallError(t *testing.T) {
+	var buf, errBuf bytes.Buffer
+	code := Update(UpdateOpts{
+		Output:            &buf,
+		Stderr:            &errBuf,
+		Version:           "1.0.0",
+		DetectInstallType: func() InstallationType { return InstallUnknown },
+		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
+			return "2.0.0", nil
+		},
+		PerformInstall: func(_ context.Context, _ string) error {
+			return fmt.Errorf("download failed")
+		},
+	})
+	if code != 1 {
+		t.Errorf("expected exit 1 on install error, got %d", code)
+	}
+	if !strings.Contains(errBuf.String(), "Failed to install update") {
+		t.Errorf("expected install failure message on stderr, got: %s", errBuf.String())
+	}
+}
+
 func TestUpdate_DevelopmentBuild(t *testing.T) {
 	var buf bytes.Buffer
 	code := Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "0.0.1",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "0.0.1",
 		DetectInstallType: func() InstallationType { return InstallDevelopment },
 	})
 	if code != 1 {
@@ -217,9 +267,9 @@ func TestUpdate_DevelopmentBuild(t *testing.T) {
 func TestUpdate_FetchError(t *testing.T) {
 	var buf, errBuf bytes.Buffer
 	code := Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &errBuf,
-		Version: "1.0.0",
+		Output:            &buf,
+		Stderr:            &errBuf,
+		Version:           "1.0.0",
 		DetectInstallType: func() InstallationType { return InstallUnknown },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "", fmt.Errorf("network error")
@@ -240,9 +290,9 @@ func TestUpdate_FetchError(t *testing.T) {
 func TestUpdate_Homebrew(t *testing.T) {
 	var buf bytes.Buffer
 	code := Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:             &buf,
+		Stderr:             &bytes.Buffer{},
+		Version:            "1.0.0",
 		DetectInstallType:  func() InstallationType { return InstallPackageManager },
 		DetectPackageMgr:   func() PackageManager { return PMHomebrew },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) { return "2.0.0", nil },
@@ -265,9 +315,9 @@ func TestUpdate_Homebrew(t *testing.T) {
 func TestUpdate_Homebrew_UpToDate(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "2.0.0",
+		Output:             &buf,
+		Stderr:             &bytes.Buffer{},
+		Version:            "2.0.0",
 		DetectInstallType:  func() InstallationType { return InstallPackageManager },
 		DetectPackageMgr:   func() PackageManager { return PMHomebrew },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) { return "2.0.0", nil },
@@ -284,9 +334,9 @@ func TestUpdate_Homebrew_UpToDate(t *testing.T) {
 func TestUpdate_Winget(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:             &buf,
+		Stderr:             &bytes.Buffer{},
+		Version:            "1.0.0",
 		DetectInstallType:  func() InstallationType { return InstallPackageManager },
 		DetectPackageMgr:   func() PackageManager { return PMWinget },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) { return "2.0.0", nil },
@@ -303,9 +353,9 @@ func TestUpdate_Winget(t *testing.T) {
 func TestUpdate_Apk(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:             &buf,
+		Stderr:             &bytes.Buffer{},
+		Version:            "1.0.0",
 		DetectInstallType:  func() InstallationType { return InstallPackageManager },
 		DetectPackageMgr:   func() PackageManager { return PMApk },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) { return "2.0.0", nil },
@@ -322,9 +372,9 @@ func TestUpdate_Apk(t *testing.T) {
 func TestUpdate_GenericPackageManager(t *testing.T) {
 	var buf bytes.Buffer
 	Update(UpdateOpts{
-		Output:  &buf,
-		Stderr:  &bytes.Buffer{},
-		Version: "1.0.0",
+		Output:            &buf,
+		Stderr:            &bytes.Buffer{},
+		Version:           "1.0.0",
 		DetectInstallType: func() InstallationType { return InstallPackageManager },
 		DetectPackageMgr:  func() PackageManager { return PMOther },
 	})
@@ -348,10 +398,11 @@ func TestUpdate_ConfigMismatch(t *testing.T) {
 		Stderr:              &bytes.Buffer{},
 		Version:             "1.0.0",
 		ConfigInstallMethod: "native",
-		DetectInstallType: func() InstallationType { return InstallNPMGlobal },
+		DetectInstallType:   func() InstallationType { return InstallNPMGlobal },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "2.0.0", nil
 		},
+		PerformInstall: func(_ context.Context, _ string) error { return nil },
 	})
 	out := buf.String()
 	if !strings.Contains(out, "Warning: Configuration mismatch") {
@@ -369,10 +420,11 @@ func TestUpdate_NoConfigMismatchWhenMatching(t *testing.T) {
 		Stderr:              &bytes.Buffer{},
 		Version:             "1.0.0",
 		ConfigInstallMethod: "global",
-		DetectInstallType: func() InstallationType { return InstallNPMGlobal },
+		DetectInstallType:   func() InstallationType { return InstallNPMGlobal },
 		FetchLatestVersion: func(_ context.Context, _ string) (string, error) {
 			return "2.0.0", nil
 		},
+		PerformInstall: func(_ context.Context, _ string) error { return nil },
 	})
 	if strings.Contains(buf.String(), "Configuration mismatch") {
 		t.Error("should not show mismatch when config matches install type")

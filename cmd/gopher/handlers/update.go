@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Haris0059/gopher/pkg/installer"
 )
 
 // InstallationType describes how the binary was installed.
@@ -80,6 +81,9 @@ type InstallTypeDetector func() InstallationType
 // PackageManagerDetector detects which package manager manages the install.
 type PackageManagerDetector func() PackageManager
 
+// Installer installs the given version, returning an error on failure.
+type Installer func(ctx context.Context, version string) error
+
 // UpdateOpts configures the update handler.
 type UpdateOpts struct {
 	Output  io.Writer
@@ -87,13 +91,14 @@ type UpdateOpts struct {
 	Version string // current version
 
 	// Settings
-	AutoUpdatesChannel string
+	AutoUpdatesChannel  string
 	ConfigInstallMethod string
 
 	// Pluggable dependencies for testing
-	DetectInstallType InstallTypeDetector
-	DetectPackageMgr  PackageManagerDetector
+	DetectInstallType  InstallTypeDetector
+	DetectPackageMgr   PackageManagerDetector
 	FetchLatestVersion VersionFetcher
+	PerformInstall     Installer
 }
 
 // Verbatim user-visible strings from TS source.
@@ -213,11 +218,21 @@ func Update(opts UpdateOpts) int {
 		}
 	}
 
-	// Actual install delegation is a stub for now (requires pkg/installer/).
-	// The update check + messaging is the core of T219.
 	fmt.Fprintf(w, "New version available: %s (current: %s)\n", latest, version)
 	fmt.Fprintln(w, "Installing update...")
 
+	performInstall := opts.PerformInstall
+	if performInstall == nil {
+		performInstall = DefaultPerformInstall
+	}
+	installCtx, installCancel := context.WithTimeout(context.Background(), 10*time.Minute)
+	defer installCancel()
+	if err := performInstall(installCtx, latest); err != nil {
+		fmt.Fprintf(stderr, "Failed to install update: %v\n", err)
+		return 1
+	}
+
+	fmt.Fprintf(w, "Successfully installed version %s\n", latest)
 	return 0
 }
 
@@ -374,38 +389,14 @@ func DefaultDetectPackageManager() PackageManager {
 	return PMOther
 }
 
-// gitHubRelease is the subset of GitHub release API response we need.
-type gitHubRelease struct {
-	TagName string `json:"tag_name"`
+// DefaultFetchLatestVersion fetches the latest version from GitHub releases,
+// via pkg/installer.ResolveVersion.
+func DefaultFetchLatestVersion(ctx context.Context, channel string) (string, error) {
+	return installer.ResolveVersion(ctx, http.DefaultClient, "", channel)
 }
 
-// DefaultFetchLatestVersion fetches the latest version from GitHub releases.
-// For a Go binary, this checks the GitHub releases API.
-func DefaultFetchLatestVersion(ctx context.Context, channel string) (string, error) {
-	// Use GitHub releases API for the gopher repository.
-	url := "https://api.github.com/repos/anthropics/claude-code/releases/latest"
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("Accept", "application/vnd.github+json")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("GitHub API returned status %d", resp.StatusCode)
-	}
-
-	var release gitHubRelease
-	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
-		return "", err
-	}
-
-	tag := strings.TrimPrefix(release.TagName, "v")
-	return tag, nil
+// DefaultPerformInstall installs the given version via pkg/installer.Install.
+func DefaultPerformInstall(ctx context.Context, version string) error {
+	_, err := installer.Install(ctx, installer.Options{Version: version})
+	return err
 }

@@ -2,10 +2,56 @@ package handlers
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/Haris0059/gopher/pkg/installer"
 )
+
+// newFakeReleaseServer serves a single fake release good enough for
+// installer.Install: a GitHub-releases-API "latest" response, the platform
+// asset, and its checksums.txt. version is the tag without a leading "v".
+func newFakeReleaseServer(t *testing.T, version, content string) *httptest.Server {
+	t.Helper()
+	filename := fmt.Sprintf("gopher_%s_%s_%s", version, runtime.GOOS, runtime.GOARCH)
+	if runtime.GOOS == "windows" {
+		filename += ".exe"
+	}
+	sum := sha256.Sum256([]byte(content))
+	sumHex := hex.EncodeToString(sum[:])
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/repos/Haris0059/gopher/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, `{"tag_name":"v%s"}`, version)
+	})
+	mux.HandleFunc(fmt.Sprintf("/Haris0059/gopher/releases/download/v%s/checksums.txt", version), func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "%s  %s\n", sumHex, filename)
+	})
+	mux.HandleFunc(fmt.Sprintf("/Haris0059/gopher/releases/download/v%s/%s", version, filename), func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(content))
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+	return srv
+}
+
+func testDirs(t *testing.T) installer.Dirs {
+	t.Helper()
+	root := t.TempDir()
+	return installer.Dirs{
+		Versions:   filepath.Join(root, "versions"),
+		Staging:    filepath.Join(root, "staging"),
+		Locks:      filepath.Join(root, "locks"),
+		Executable: filepath.Join(root, "bin", installer.BinaryName()),
+	}
+}
 
 func TestInstall_ForceFlag(t *testing.T) {
 	var calledForce bool
@@ -96,20 +142,41 @@ func TestInstall_FailureDetection(t *testing.T) {
 }
 
 func TestInstall_DefaultInstaller(t *testing.T) {
+	srv := newFakeReleaseServer(t, "1.2.3", "fake gopher binary")
+	dirs := testDirs(t)
+
 	var buf bytes.Buffer
 	code := Install(InstallOpts{
-		Target: "beta",
-		Force:  true,
-		Output: &buf,
+		Target:          "1.2.3",
+		Force:           true,
+		Output:          &buf,
+		APIBaseURL:      srv.URL,
+		DownloadBaseURL: srv.URL,
+		Dirs:            dirs,
 	})
 	if code != 0 {
-		t.Fatalf("expected exit 0, got %d", code)
+		t.Fatalf("expected exit 0, got %d\noutput:\n%s", code, buf.String())
 	}
 	out := buf.String()
-	if !strings.Contains(out, "beta") {
-		t.Errorf("expected target in output, got: %s", out)
+	if !strings.Contains(out, "1.2.3") {
+		t.Errorf("expected version in output, got: %s", out)
 	}
-	if !strings.Contains(out, "forced") {
-		t.Errorf("expected forced indicator in output, got: %s", out)
+	if !strings.Contains(out, "Install complete") {
+		t.Errorf("expected completion message, got: %s", out)
+	}
+}
+
+func TestInstall_DefaultInstaller_InvalidChannel(t *testing.T) {
+	var buf bytes.Buffer
+	code := Install(InstallOpts{
+		Target: "beta", // not "latest"/"stable"/semver
+		Output: &buf,
+		Dirs:   testDirs(t),
+	})
+	if code != 1 {
+		t.Fatalf("expected exit 1 for an invalid channel, got %d\noutput:\n%s", code, buf.String())
+	}
+	if !strings.Contains(buf.String(), "invalid channel") {
+		t.Errorf("expected invalid-channel message, got: %s", buf.String())
 	}
 }

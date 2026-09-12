@@ -69,7 +69,7 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 | Telemetry & analytics | `pkg/analytics` (817 LOC), `pkg/telemetry` (250 LOC) | `src/utils/telemetry/`, `src/services/analytics/` | **Done** | Datadog sink, GrowthBook feature flags, killswitch, metadata |
 | Stats | `pkg/stats` (142 LOC, tested) | — | **Done** | `TEST-03` done. `GetAll()` diverges from `createStatsStore()` on 3 keys, and the package has zero consumers — see `TASKS.md` → `TEST-09` |
 | Tasks & scheduling | `pkg/tools/tasks.go` (868 LOC), `pkg/tools/cron.go` (662 LOC) | `src/tasks/`, `ScheduleCronTool` | **Done** | `TaskCreate/Get/Update/List/Output/Stop`, `CronCreate/Delete/List`, `RemoteTrigger` |
-| Installer & updater | `pkg/installer` (45 LOC) | `src/utils/nativeInstaller/` | **Stub** | Only `InstallDir()`, `BinaryName()`, `IsInstalled()` — no real install/update logic. `cmd/gopher/handlers/install.go:48` has a TODO where the real call should be. See `TASKS.md` → `INST-01/02` |
+| Installer & updater | `pkg/installer` (11 files, tested) | `src/utils/nativeInstaller/` | **Done** | XDG directory layout, versioned installs with atomic symlink activation, SHA-256-verified downloads with stall/network retry, PID-liveness lockfiles, GC/retention. Scoped down from the reference: GitHub Releases + `checksums.txt` (not the internal GCS host + `manifest.json`), no npm/Artifactory branch, no musl detection. `cmd/gopher/handlers/install.go` and `update.go` are wired to it (`INST-02`), exercised end-to-end against a local fake release server in `cmd/gopher/setup_doctor_install_integration_test.go`. No real releases are published yet — see `TASKS.md` → `INST-06` |
 | Voice | `pkg/voice` (106 LOC) | `src/voice/`, `src/services/voice*.ts` | **Stub** | State machine only — no audio capture, no STT. See `TASKS.md` → `VOICE-01/02` |
 | Sandbox | — | `@anthropic-ai/sandbox-runtime`, `src/utils/sandbox/` | **Missing** | No Go equivalent found; not yet scoped into `TASKS.md` |
 | Shell parsing / bash security | `pkg/tools/bash_security.go` (376 LOC), `bash_validation.go` (221 LOC), `shellparse.go` (270 LOC) | `src/utils/bash/` (~10,000 LOC incl. `bashParser.ts`, `treeSitterAnalysis.ts`) | **Partial** | Functional bash AST parsing and permission classification exists at roughly a tenth of the reference's LOC — narrower coverage, not verified line-for-line |
@@ -109,7 +109,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 5 | No MCP OAuth | `MCP-04`, `MCP-09` |
 | 6 | No MCP prompts/sampling/elicitation/subscriptions | `MCP-05`–`MCP-08` |
 | 7 | Plugin install/uninstall/list are no-ops | `PLUG-01`–`PLUG-05` |
-| 8 | No real installer/updater | `INST-01`, `INST-02` |
+| ~~8~~ | ~~No real installer/updater~~ Fixed — `pkg/installer` implements install/update/GC against GitHub Releases, and both `install`/`update` CLI handlers are wired to it, tested against `httptest` (no real releases published yet — `INST-06`) | `INST-01`, `INST-02` |
 | 9 | Doctor and setup-token TUI screens stubbed | `INST-03`, `INST-04` |
 | 10 | Voice is a state machine with no audio/STT | `VOICE-01`, `VOICE-02` |
 | ~~11~~ | ~~`Brief` tool is echo-only~~ Fixed — ported as `SendUserMessage` (legacy alias `Brief`, resolved by `ToolRegistry.Get`): real `{message, attachments?, status}` schema, attachment validation/resolution, `Message delivered to user.` model-facing result, `IsEnabled()` gated on Kairos/opt-in, proactive system-prompt section, and a `BriefDisplay` renderer in `message_bubble.go`. Bridge attachment upload (`upload.ts`) remains unported | `TOOL-01` |
@@ -119,7 +119,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 15 | `pkg/ide` has no RPC/attach protocol | `IDE-01`, `IDE-02` |
 | 16 | `pkg/lsp` has no diagnostics/document-sync | `LSP-01`, `LSP-02` |
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
-| ~~18~~ | ~~Untested packages (`pkg/async`, ...)~~ `pkg/async` fixed — see below. Remaining: `pkg/installer`, `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}` | `TEST-05`–`TEST-07` |
+| ~~18~~ | ~~Untested packages (`pkg/async`, ...)~~ `pkg/async` and `pkg/installer` fixed. Remaining: `pkg/commands/install_github_app`, `pkg/ui/components/{shell,wizard}` | `TEST-05`–`TEST-07` |
 | ~~19~~ | ~~`pkg/agents` duplicates `pkg/skills/agents.go`~~ Fixed — `pkg/agents` deleted | `TEST-02` |
 | 20 | Stale rebrand references (4 scenario fixtures, self-referential comments) | `CLEAN-01`, `CLEAN-02` |
 | ~~21~~ | ~~`internal/cli/startup_bench_test.go` fails to compile~~ Fixed | `TEST-01` |
