@@ -262,9 +262,10 @@ type AppModel struct {
 	permPoller  *swarmhooks.PermissionPoller
 	// T399: File/context suggestions for @-mention autocomplete.
 	// Source: useInputSuggestion.tsx — file path autocomplete on @ prefix.
-	fileSuggester     *hooks.FileSuggester
-	fileSuggestions   []hooks.SuggestionItem
-	fileSuggestActive bool
+	fileSuggester       *hooks.FileSuggester
+	fileSuggestions     []hooks.SuggestionItem
+	fileSuggestActive   bool
+	fileSuggestSelected int
 
 	// T406: Bridge/remote hooks
 	replBridgeHook    *bridgehooks.ReplBridgeHook
@@ -828,17 +829,22 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 		a.statusLine.Update(components.CtrlCHintMsg{})
 		return a, cmd
 
-	// Focus cycling
-	case msg.Code == tea.KeyTab && msg.Mod == 0:
-		a.focus.Next()
-		return a, nil
-	case msg.Code == tea.KeyTab && msg.Mod == tea.ModShift:
-		a.focus.Prev()
-		return a, nil
+	// Scrollback: PgUp/PgDn always scroll the conversation transcript,
+	// independent of focus. The input pane keeps focus permanently now that
+	// Tab is reserved for completion-accept (below) rather than a focus ring
+	// — see TestParity_AppFocusCyclingTabShiftTab's replacement.
+	case msg.Code == tea.KeyPgUp || msg.Code == tea.KeyPgDown:
+		_, cmd := a.conversation.Update(msg)
+		return a, cmd
 
-	// Escape: cancel running query OR close modal
-	// Source: screens/REPL.tsx — Escape cancels running queries
+	// Escape: dismiss @-mention suggestions, else close modal, else cancel
+	// running query. Source: screens/REPL.tsx — Escape cancels running queries;
+	// useTypeahead.tsx handleAutocompleteDismiss — Escape closes the popup first.
 	case msg.Code == tea.KeyEscape:
+		if a.fileSuggestActive {
+			a.dismissFileSuggestions()
+			return a, nil
+		}
 		if a.focus.ModalActive() {
 			a.focus.PopModal()
 			return a, nil
@@ -853,6 +859,30 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	if a.cmdKeybindings != nil {
 		if cmd := a.cmdKeybindings.Update(msg); cmd != nil {
 			return a, cmd
+		}
+	}
+
+	// @-mention file autocomplete: when active, Up/Down move the selection
+	// and Tab/Enter accept. Escape is handled above (dismiss). Other keys
+	// fall through so the user can keep typing to narrow the match.
+	// Source: useTypeahead.tsx handleTab (prefix-commit) / handleEnter
+	// (always commits selection) / handleAutocompleteNext/Previous.
+	if a.fileSuggestActive {
+		switch msg.Code {
+		case tea.KeyUp:
+			a.moveFileSuggestSelection(-1)
+			return a, nil
+		case tea.KeyDown:
+			a.moveFileSuggestSelection(1)
+			return a, nil
+		case tea.KeyTab:
+			a.acceptFileSuggestion(true)
+			return a, nil
+		case tea.KeyEnter:
+			// Reference blocks submission while the popup is open — Enter
+			// commits the selection instead (no prefix-commit step).
+			a.acceptFileSuggestion(false)
+			return a, nil
 		}
 	}
 

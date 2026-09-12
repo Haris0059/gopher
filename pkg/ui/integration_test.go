@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	tea "charm.land/bubbletea/v2"
 	"github.com/Haris0059/gopher/pkg/query"
 	"github.com/Haris0059/gopher/pkg/session"
 )
@@ -352,5 +353,103 @@ func TestExtractAtPartial(t *testing.T) {
 			t.Errorf("extractAtPartial(%q) = (%q, %v), want (%q, %v)",
 				tt.input, got, ok, tt.want, tt.wantOK)
 		}
+	}
+}
+
+// newFileSuggestApp builds an AppModel rooted at a temp dir containing
+// main.go, utils.go, and README.md — the fixture shared by the @-mention
+// interaction tests below.
+func newFileSuggestApp(t *testing.T) *AppModel {
+	t.Helper()
+	dir := t.TempDir()
+	for _, name := range []string{"main.go", "utils.go", "README.md"} {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte("// "+name), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	config := session.DefaultConfig()
+	sess := session.New(config, dir)
+	app := NewAppModel(sess, nil)
+	app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+	return app
+}
+
+// TestFileSuggestionTabAccept validates Tab's prefix-commit / commit-and-close
+// behavior: the first Tab completes up to the longest shared prefix and
+// keeps the popup open; a second Tab (no further prefix to add) commits the
+// selection and closes it. Source: useTypeahead.tsx handleTab.
+func TestFileSuggestionTabAccept(t *testing.T) {
+	app := newFileSuggestApp(t)
+
+	app.input.SetValue("@main")
+	app.refreshFileAutocomplete()
+	if !app.FileSuggestionsActive() {
+		t.Fatal("expected suggestions active for @main")
+	}
+
+	app.Update(tea.KeyPressMsg{Code: tea.KeyTab})
+	if got := app.input.Value(); got != "@main.go" {
+		t.Fatalf("after first Tab: got %q, want %q (prefix-commit, popup stays open)", got, "@main.go")
+	}
+	if !app.FileSuggestionsActive() {
+		t.Error("popup should stay open after a prefix-commit Tab")
+	}
+
+	app.Update(tea.KeyPressMsg{Code: tea.KeyTab})
+	if got := app.input.Value(); got != "@main.go " {
+		t.Fatalf("after second Tab: got %q, want %q (commit + trailing space)", got, "@main.go ")
+	}
+	if app.FileSuggestionsActive() {
+		t.Error("popup should close once the suggestion is fully committed")
+	}
+}
+
+// TestFileSuggestionUpDownWrap validates that Up/Down move the selected
+// index and wrap at both ends. Source: useTypeahead.tsx
+// handleAutocompleteNext/Previous.
+func TestFileSuggestionUpDownWrap(t *testing.T) {
+	app := newFileSuggestApp(t)
+
+	app.input.SetValue("@")
+	app.refreshFileAutocomplete()
+	n := len(app.FileSuggestions())
+	if n < 2 {
+		t.Fatalf("need at least 2 suggestions to test wrap, got %d", n)
+	}
+	if app.FileSuggestSelected() != 0 {
+		t.Fatalf("initial selection should be 0, got %d", app.FileSuggestSelected())
+	}
+
+	// Up from the first item wraps to the last.
+	app.Update(tea.KeyPressMsg{Code: tea.KeyUp})
+	if app.FileSuggestSelected() != n-1 {
+		t.Errorf("Up from index 0 should wrap to %d, got %d", n-1, app.FileSuggestSelected())
+	}
+
+	// Down from the last item wraps back to the first.
+	app.Update(tea.KeyPressMsg{Code: tea.KeyDown})
+	if app.FileSuggestSelected() != 0 {
+		t.Errorf("Down should wrap back to 0, got %d", app.FileSuggestSelected())
+	}
+}
+
+// TestFileSuggestionEscapeDismiss validates that Escape closes the popup
+// without touching the input text. Source: useTypeahead.tsx
+// handleAutocompleteDismiss / clearSuggestions.
+func TestFileSuggestionEscapeDismiss(t *testing.T) {
+	app := newFileSuggestApp(t)
+
+	app.input.SetValue("@main")
+	app.refreshFileAutocomplete()
+	if !app.FileSuggestionsActive() {
+		t.Fatal("expected suggestions active for @main")
+	}
+
+	app.Update(tea.KeyPressMsg{Code: tea.KeyEscape})
+	if app.FileSuggestionsActive() {
+		t.Error("Escape should close the @-mention popup")
+	}
+	if got := app.input.Value(); got != "@main" {
+		t.Errorf("Escape should not modify input text, got %q", got)
 	}
 }

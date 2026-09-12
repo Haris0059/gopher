@@ -35,8 +35,8 @@ type InputPane struct {
 
 	// Vim mode state — see pkg/vim for types.
 	VimEnabled bool
-	vimMode    vim.Mode           // INSERT or NORMAL
-	vimCmd     vim.CommandState   // normal-mode command accumulator
+	vimMode    vim.Mode            // INSERT or NORMAL
+	vimCmd     vim.CommandState    // normal-mode command accumulator
 	vimPersist vim.PersistentState // register + last-find + last-change
 }
 
@@ -117,20 +117,37 @@ func (ip *InputPane) SetSize(width, height int) {
 }
 
 // Focus gives focus to this pane.
-func (ip *InputPane) Focus()        { ip.focused = true }
+func (ip *InputPane) Focus() { ip.focused = true }
+
 // Blur removes focus from this pane.
-func (ip *InputPane) Blur()         { ip.focused = false }
+func (ip *InputPane) Blur() { ip.focused = false }
+
 // Focused returns whether this pane has focus.
 func (ip *InputPane) Focused() bool { return ip.focused }
 
 // Value returns the current input text.
 func (ip *InputPane) Value() string { return string(ip.runes) }
 
-// SetValue sets the input text.
+// SetValue sets the input text and moves the cursor to the end.
 func (ip *InputPane) SetValue(v string) {
 	ip.runes = []rune(v)
 	ip.cursor = len(ip.runes)
 	ip.Buffer.SetValue(v)
+}
+
+// SetValueWithCursor sets the input text and places the cursor at the given
+// rune offset (clamped into range). Used by autocomplete acceptors that
+// splice a completion in mid-line rather than typing at end-of-line.
+func (ip *InputPane) SetValueWithCursor(v string, cursor int) {
+	ip.runes = []rune(v)
+	ip.Buffer.SetValue(v)
+	if cursor < 0 {
+		cursor = 0
+	}
+	if cursor > len(ip.runes) {
+		cursor = len(ip.runes)
+	}
+	ip.cursor = cursor
 }
 
 // HasText returns true if the input buffer contains any text.
@@ -652,4 +669,3 @@ func parseCount(digits string) int {
 	}
 	return n
 }
-

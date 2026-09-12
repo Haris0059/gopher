@@ -346,7 +346,7 @@ func TestParity_CtrlCFourStateMachine(t *testing.T) {
 	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // clears 'x'
 
 	// 4. Double Ctrl+C on empty → quit
-	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // first: hint
+	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})            // first: hint
 	_, cmd4 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // second: quit
 	if cmd4 == nil {
 		t.Fatal("Double Ctrl+C on empty should produce quit")
@@ -1508,12 +1508,12 @@ type fakeFocusable struct {
 	focused bool
 }
 
-func (f *fakeFocusable) Focus()                             { f.focused = true }
-func (f *fakeFocusable) Blur()                              { f.focused = false }
-func (f *fakeFocusable) Focused() bool                      { return f.focused }
-func (f *fakeFocusable) Init() tea.Cmd                      { return nil }
+func (f *fakeFocusable) Focus()                                  { f.focused = true }
+func (f *fakeFocusable) Blur()                                   { f.focused = false }
+func (f *fakeFocusable) Focused() bool                           { return f.focused }
+func (f *fakeFocusable) Init() tea.Cmd                           { return nil }
 func (f *fakeFocusable) Update(msg tea.Msg) (tea.Model, tea.Cmd) { return f, nil }
-func (f *fakeFocusable) View() tea.View                     { return tea.NewView("") }
+func (f *fakeFocusable) View() tea.View                          { return tea.NewView("") }
 
 // TestParity_CommandResultRouting validates how AppModel routes the three
 // command result message types: QuitMsg, ShowHelpMsg, CommandResult.
@@ -2501,80 +2501,67 @@ func TestParity_DispatcherParsingAndErrorPaths(t *testing.T) {
 	}
 }
 
-// TestParity_AppFocusCyclingTabShiftTab validates Tab/Shift+Tab key routing
-// and the FocusManager's ring cycling behavior through AppModel.Update.
+// TestParity_TabDoesNotCycleFocus supersedes the retired
+// TestParity_AppFocusCyclingTabShiftTab. Claude Code's reference
+// implementation (claude-code-main/src/keybindings/defaultBindings.ts) binds
+// Tab to "autocomplete:accept" only, never a focus ring — treating Tab as
+// focus-cycling in Gopher was a local invention that broke the @-mention
+// popup (Tab moved focus to the conversation pane instead of accepting the
+// suggestion, after which the input pane no longer received keystrokes at
+// all). This test locks in the fix: Tab leaves focus on the input pane
+// whether or not a completion popup is active, and PgUp/PgDn — the
+// replacement way to reach conversation scrollback — still work without
+// needing focus to move.
 //
-// Unique behaviors (no existing test validates focus management):
-// 1. Tab key triggers focus.Next() in AppModel.handleKey
-// 2. Shift+Tab key triggers focus.Prev()
-// 3. Next cycles forward, wraps from last to first
-// 4. Prev cycles backward, wraps from first to last
-// 5. Blur is called on outgoing child, Focus on incoming
-// 6. Initial focus is on the first child (input pane)
-//
-// Cross-ref: app.go:377-383 Tab/Shift+Tab handlers
-// Cross-ref: core/focus.go:46-71 Next/Prev ring arithmetic
-func TestParity_AppFocusCyclingTabShiftTab(t *testing.T) {
+// Cross-ref: app.go handleKey (Tab / PgUp / PgDn cases)
+// Cross-ref: core/focus.go — FocusManager.Next/Prev are no longer called
+// from AppModel; they remain covered directly by focus_test.go.
+func TestParity_TabDoesNotCycleFocus(t *testing.T) {
 	config := session.DefaultConfig()
 	sess := session.New(config, "/tmp")
 	app := NewAppModel(sess, nil)
 	app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
 
-	// NewAppModel creates focus ring with [input, conversation]
-	// 1. Initial focus should be on input
 	initial := app.focus.Focused()
-	if initial == nil {
-		t.Fatal("FocusManager should have a focused child initially")
-	}
-	if !initial.Focused() {
-		t.Error("Initially focused child should report Focused()==true")
+	if initial == nil || !initial.Focused() {
+		t.Fatal("input pane should be focused initially")
 	}
 
-	// 2. Tab → Next() cycles to second child
+	// Plain Tab, no popup open: focus must not move.
 	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: 0})
-	second := app.focus.Focused()
-	if second == initial {
-		t.Error("Tab should cycle to a different child")
-	}
-	if second == nil || !second.Focused() {
-		t.Error("After Tab, new child should be focused")
-	}
-	if initial.Focused() {
-		t.Error("After Tab, previous child should be Blur'd")
+	if app.focus.Focused() != initial || !initial.Focused() {
+		t.Error("Tab should not move focus off the input pane")
 	}
 
-	// 3. Tab again → wraps back to first (2 children in ring)
-	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: 0})
-	wrapped := app.focus.Focused()
-	if wrapped != initial {
-		t.Error("Tab should wrap back to initial child (ring of 2)")
-	}
-
-	// 4. Shift+Tab → Prev() goes backward
+	// Shift+Tab likewise must not move focus (no permission-mode cycling
+	// wired up yet; this only asserts the old focus-ring behavior is gone).
 	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: tea.ModShift})
-	reversed := app.focus.Focused()
-	if reversed != second {
-		t.Error("Shift+Tab should go back to second child")
+	if app.focus.Focused() != initial || !initial.Focused() {
+		t.Error("Shift+Tab should not move focus off the input pane")
 	}
 
-	// 5. Shift+Tab from first → wraps to last (prev from 0)
-	// First reset to initial
-	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: tea.ModShift}) // now on initial
-	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: tea.ModShift}) // wrap to last
-	wrapped2 := app.focus.Focused()
-	if wrapped2 == initial {
-		t.Error("Shift+Tab from first should wrap to last child")
+	// Tab while the @-mention popup is open accepts instead of cycling focus.
+	app.input.SetValue("@main")
+	app.refreshFileAutocomplete()
+	if !app.FileSuggestionsActive() {
+		t.Fatal("expected @-mention suggestions for @main")
 	}
-
-	// 6. Modal active blocks cycling
-	// Use the second child as a fake modal
-	app.focus.PushModal(second)
-	focusBeforeTab := app.focus.Focused()
 	app.Update(tea.KeyPressMsg{Code: tea.KeyTab, Mod: 0})
-	if app.focus.Focused() != focusBeforeTab {
-		t.Error("Tab with active modal should NOT cycle focus")
+	if app.focus.Focused() != initial || !initial.Focused() {
+		t.Error("Tab with the @-mention popup open should still leave focus on the input pane")
 	}
-	app.focus.PopModal()
+	if app.input.Value() == "@main" {
+		t.Error("Tab should have accepted or extended the @-mention, not left the input untouched")
+	}
+
+	// PgUp/PgDn scroll the conversation pane directly, without needing focus
+	// to move there first — this is what replaces Tab-to-focus-conversation
+	// as the way to reach scrollback.
+	app.dismissFileSuggestions()
+	app.Update(tea.KeyPressMsg{Code: tea.KeyPgUp}) // must not panic; focus stays on input
+	if app.focus.Focused() != initial {
+		t.Error("PgUp should not move focus")
+	}
 }
 
 // TestParity_ThinkingSpinnerLifecycle validates the spinner's state machine
@@ -2674,14 +2661,14 @@ func TestParity_ThinkingSpinnerLifecycle(t *testing.T) {
 // truncation rules and the error-vs-success path divergence.
 //
 // Unique behaviors (no existing test validates truncation rules):
-// 1. Error result >300 chars → truncated to 300 + "…"
-// 2. Success result with >10 lines → keeps 10 + "…[truncated]" marker
-// 3. Success result >500 chars (single line) → truncated to 500 + "…"
-// 4. Empty content → shows "(no content)" placeholder
-// 5. Multi-line success: first line prefixed with ResponseConnector (⎿),
-//    subsequent lines prefixed with ResponseContinuation (no connector)
-// 6. block.Content takes precedence over block.Text when both set
-// 7. Empty Content falls through to block.Text
+//  1. Error result >300 chars → truncated to 300 + "…"
+//  2. Success result with >10 lines → keeps 10 + "…[truncated]" marker
+//  3. Success result >500 chars (single line) → truncated to 500 + "…"
+//  4. Empty content → shows "(no content)" placeholder
+//  5. Multi-line success: first line prefixed with ResponseConnector (⎿),
+//     subsequent lines prefixed with ResponseContinuation (no connector)
+//  6. block.Content takes precedence over block.Text when both set
+//  7. Empty Content falls through to block.Text
 //
 // Cross-ref: message_bubble.go:213-265 renderToolResultBlock
 func TestParity_ToolResultTruncationAndStyling(t *testing.T) {
@@ -3193,13 +3180,13 @@ func TestParity_ModelSwitchDispatch(t *testing.T) {
 // submit → tool start → tool result → text → turn complete.
 //
 // Unique behaviors (not covered by QueryEventFlow which only tests text deltas):
-// 1. ToolUseStartMsg sets mode to ModeToolRunning
-// 2. ToolUseStartMsg tracks tool in activeToolCalls[toolUseID]
-// 3. ToolResultMsg removes tool from activeToolCalls
-// 4. Streaming text accumulates tool indicators inline
-// 5. TurnCompleteMsg finalizes: creates conversation message, resets streamingText,
-//    clears activeToolCalls, stops spinner, returns to ModeIdle
-// 6. Multiple sequential tools tracked independently
+//  1. ToolUseStartMsg sets mode to ModeToolRunning
+//  2. ToolUseStartMsg tracks tool in activeToolCalls[toolUseID]
+//  3. ToolResultMsg removes tool from activeToolCalls
+//  4. Streaming text accumulates tool indicators inline
+//  5. TurnCompleteMsg finalizes: creates conversation message, resets streamingText,
+//     clears activeToolCalls, stops spinner, returns to ModeIdle
+//  6. Multiple sequential tools tracked independently
 //
 // Cross-ref: app.go:504-560 — handleToolUseStart/handleToolResult/handleTurnComplete
 func TestParity_ToolUseStateMachine(t *testing.T) {
@@ -4350,31 +4337,31 @@ func TestParity_AppViewInitializingAndAltScreen(t *testing.T) {
 	})
 }
 
-// TestParity_TabToConversationThenScroll validates that after Tab shifts
-// focus from InputPane to ConversationPane, keyboard events (Up/Down,
-// PgUp/PgDown) route to the conversation's scroll handlers rather than
-// to the input pane's history navigation.
+// TestParity_ScrollWithoutLosingFocus supersedes the retired
+// TestParity_TabToConversationThenScroll. Gopher used to require Tab to move
+// focus onto the conversation pane before Up/Down/PgUp/PgDn would scroll it
+// — the same Tab binding that broke @-mention completion (see
+// TestParity_TabDoesNotCycleFocus). Now the input pane keeps focus
+// permanently and PgUp/PgDn reach the conversation pane directly, so
+// scrollback and input history no longer fight over the same keys or
+// require a focus hop.
 //
-// Unique behaviors (B11 tests focus cycling identity; this tests the
-// after-cycling KEY ROUTING):
-//  1. After Tab, the focused component is conversation (not input).
-//  2. Up arrow routed to the focused conversation disables autoScroll
-//     and increments scrollOffset — NOT history navigation on input.
-//  3. Input buffer remains unchanged when Up routes to conversation.
-//  4. Down arrow (routed to conversation) while scrollOffset>0 decrements
-//     scrollOffset; at 0 it re-enables autoScroll.
-//  5. Tab again cycles back to input; then Up does touch history.
+//  1. Input keeps focus throughout — Tab never moves it to conversation.
+//  2. PgUp routed directly to conversation disables autoScroll and moves
+//     scrollOffset, without touching the input buffer or its focus.
+//  3. PgDn moves scrollOffset back down.
+//  4. Up/Down always navigate input history (never conversation scroll),
+//     since conversation no longer takes focus.
 //
-// Cross-ref: app.go:384-386 Tab/Shift+Tab focus cycling;
-//            app.go:435 focus.Route(msg) routes unhandled keys.
+// Cross-ref: app.go handleKey (PgUp/PgDn routed to conversation directly).
 // Cross-ref: conversation.go:175-204 scrollUp/scrollDown, autoScroll flag.
-func TestParity_TabToConversationThenScroll(t *testing.T) {
+func TestParity_ScrollWithoutLosingFocus(t *testing.T) {
 	sess := session.New(session.DefaultConfig(), "/tmp")
 	app := NewAppModel(sess, nil)
 	app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
 	app.showWelcome = false
 
-	// Build history so we can detect if Up leaks into InputPane.
+	// Build history so we can detect if PgUp/PgDn ever leak into InputPane.
 	app.input.AddToHistory("historical-entry")
 	// Add some messages so scrolling has content to scroll over.
 	for i := 0; i < 20; i++ {
@@ -4386,54 +4373,37 @@ func TestParity_TabToConversationThenScroll(t *testing.T) {
 		})
 	}
 
-	// -- Behavior 1: Tab shifts focus to conversation --
+	// Tab must not move focus off the input pane (see
+	// TestParity_TabDoesNotCycleFocus for the full assertion of this).
 	app.Update(tea.KeyPressMsg{Code: tea.KeyTab})
-	if app.input.Focused() {
-		t.Error("after Tab, input should NOT be focused")
-	}
-	if !app.conversation.Focused() {
-		t.Error("after Tab, conversation should be focused")
-	}
-
-	// -- Behavior 2+3: Up arrow routes to conversation, NOT input history --
-	inputBefore := app.input.Value()
-	app.Update(tea.KeyPressMsg{Code: tea.KeyUp})
-	// Input buffer must be unchanged (Up didn't leak into history nav).
-	if app.input.Value() != inputBefore {
-		t.Errorf("Up with conversation focus MUST NOT touch input history; "+
-			"input buffer changed from %q to %q", inputBefore, app.input.Value())
-	}
-	// Verify by rendering: after Up the view should show earlier messages.
-	// The conversation's last message has text "msg-19"; if scrolled up,
-	// the viewport tail should not show msg-19 anymore.
-	// But direct verification is via scrollOffset field — however, that's
-	// on conversation which is a child component. We can only check
-	// externally by view change. Let's send several Ups and verify the
-	// view shifts.
-	for i := 0; i < 5; i++ {
-		app.Update(tea.KeyPressMsg{Code: tea.KeyUp})
-	}
-	// The view should be different from the initial tail view; confirm
-	// by checking input is still untouched and focused state preserved.
-	if app.input.Value() != inputBefore {
-		t.Errorf("repeated Up with conversation focus changed input to %q",
-			app.input.Value())
-	}
-	if !app.conversation.Focused() {
-		t.Error("conversation should remain focused after multiple Ups")
-	}
-
-	// -- Behavior 5: Tab-back, then Up hits history --
-	app.Update(tea.KeyPressMsg{Code: tea.KeyTab}) // cycle back to input
 	if !app.input.Focused() {
-		t.Fatal("second Tab should return focus to input")
+		t.Fatal("Tab should not move focus off the input pane")
 	}
-	// Clear the buffer so Up will navigate history.
+
+	// PgUp scrolls the conversation directly; input stays focused and
+	// unchanged.
+	inputBefore := app.input.Value()
+	app.Update(tea.KeyPressMsg{Code: tea.KeyPgUp})
+	if app.input.Value() != inputBefore {
+		t.Errorf("PgUp must not touch the input buffer; changed from %q to %q",
+			inputBefore, app.input.Value())
+	}
+	if !app.input.Focused() {
+		t.Error("input should remain focused after PgUp")
+	}
+
+	// PgDn scrolls back down; still no effect on input.
+	app.Update(tea.KeyPressMsg{Code: tea.KeyPgDown})
+	if app.input.Value() != inputBefore {
+		t.Errorf("PgDn must not touch the input buffer; changed from %q to %q",
+			inputBefore, app.input.Value())
+	}
+
+	// Up always navigates input history now, regardless of scroll state.
 	app.input.Clear()
 	app.Update(tea.KeyPressMsg{Code: tea.KeyUp})
 	if app.input.Value() != "historical-entry" {
-		t.Errorf("Up with input focus should navigate history, got %q",
-			app.input.Value())
+		t.Errorf("Up should navigate input history, got %q", app.input.Value())
 	}
 }
 
@@ -4686,7 +4656,7 @@ func TestParity_AssistantMultiBlockFirstTextPrefix(t *testing.T) {
 		msg := &message.Message{
 			Role: message.RoleAssistant,
 			Content: []message.ContentBlock{
-				{Type: message.ContentText, Text: ""},            // dropped
+				{Type: message.ContentText, Text: ""},             // dropped
 				{Type: message.ContentText, Text: "real content"}, // should get ⏺
 			},
 		}
@@ -5008,8 +4978,9 @@ func TestParity_CompactSessionContract(t *testing.T) {
 //     Display is set (error wins).
 //
 // Cross-ref: query/query.go:429-434 emit QueryEvent with Display;
-//            app.go:537-541 QEventToolResult → ToolResultMsg adapter;
-//            app.go:604 Display-dispatch branch.
+//
+//	app.go:537-541 QEventToolResult → ToolResultMsg adapter;
+//	app.go:604 Display-dispatch branch.
 func TestParity_QueryEventDisplayThreading(t *testing.T) {
 	mkApp := func() *AppModel {
 		sess := session.New(session.DefaultConfig(), "/tmp")
@@ -5285,6 +5256,7 @@ func TestParity_RenderDiffDisplayLineNumbers(t *testing.T) {
 //  8. Change at end of file: trailing context clamps at file end.
 //  9. Pure insertion (empty old → new content): single hunk with only
 //     "+" lines and no "-" lines.
+//
 // 10. BuildUnifiedDiff wraps with "--- a/PATH\n+++ b/PATH\n@@ -… @@" header.
 //
 // Cross-ref: tools/diff.go:41-104 ComputeDiffHunks; :109-126 BuildUnifiedDiff.
@@ -6224,9 +6196,10 @@ func countContentLines(view, token string) int {
 
 // TestParity_AppEscapeBranchPriority validates the priority ordering of the
 // three Escape handler branches in app.handleKey:
-//   (branch A) modal active → PopModal
-//   (branch B) mode != Idle && cancelQuery != nil → cancelQuery()
-//   (branch C) fall through → route to focused component
+//
+//	(branch A) modal active → PopModal
+//	(branch B) mode != Idle && cancelQuery != nil → cancelQuery()
+//	(branch C) fall through → route to focused component
 //
 // The priority matters: when BOTH a modal is active AND a query is running,
 // Escape must only pop the modal and MUST NOT cancel the query. Otherwise a
@@ -6308,11 +6281,11 @@ func TestParity_AppEscapeBranchPriority(t *testing.T) {
 // TestParity_InputKillToEndAndPaste validates two readline behaviors the
 // existing input tests don't cover:
 //
-//   1. Ctrl+K kills from cursor to END of line (complement of Ctrl+U).
-//      Cursor position is preserved. Covers start/middle/end cursor positions.
-//   2. Multi-character text insertion (paste path): when a KeyPressMsg carries
-//      a Text payload with >1 rune, ALL runes are inserted at the cursor and
-//      the cursor advances by the rune count.
+//  1. Ctrl+K kills from cursor to END of line (complement of Ctrl+U).
+//     Cursor position is preserved. Covers start/middle/end cursor positions.
+//  2. Multi-character text insertion (paste path): when a KeyPressMsg carries
+//     a Text payload with >1 rune, ALL runes are inserted at the cursor and
+//     the cursor advances by the rune count.
 //
 // Unique behaviors (B6 tests Ctrl+A/E/U/W; B27 single-char insert+cursor):
 //  1. Ctrl+K at cursor=0 truncates buffer to empty string.
@@ -6321,7 +6294,7 @@ func TestParity_AppEscapeBranchPriority(t *testing.T) {
 //  4. Ctrl+K does NOT move the cursor (distinct from Ctrl+U which resets to 0).
 //  5. Multi-rune paste inserts the entire run atomically at the cursor.
 //  6. Cursor advances by the RUNE count of the pasted text (not byte count),
-//      so multi-byte paste positions the cursor correctly after.
+//     so multi-byte paste positions the cursor correctly after.
 //  7. Paste into the middle splits the buffer: before + pasted + after.
 //
 // Cross-ref: input.go:177-179 Ctrl+K branch; input.go:202-210 default paste path.

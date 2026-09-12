@@ -151,8 +151,21 @@ func (fs *FileSuggester) GenerateSuggestions(partial string, showOnEmpty bool) [
 
 // ApplySuggestion splices the selected suggestion into input at startPos,
 // replacing the partial path, and returns the new input and cursor position.
+// startPos and the partial-derived end are clamped into range so a stale or
+// out-of-sync token position (input edited between token extraction and
+// accept) cannot slice out of bounds.
 func ApplySuggestion(suggestion string, input string, partial string, startPos int) (newInput string, cursorPos int) {
-	newInput = input[:startPos] + suggestion + input[startPos+len(partial):]
+	if startPos < 0 {
+		startPos = 0
+	}
+	if startPos > len(input) {
+		startPos = len(input)
+	}
+	end := startPos + len(partial)
+	if end > len(input) {
+		end = len(input)
+	}
+	newInput = input[:startPos] + suggestion + input[end:]
 	cursorPos = startPos + len(suggestion)
 	return
 }
