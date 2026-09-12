@@ -66,8 +66,10 @@ func TestSetupTokenSubcommand_AuthWarning(t *testing.T) {
 	}
 }
 
-// TestDoctorSubcommand_Integration verifies that `gopher doctor`
-// runs successfully and prints the diagnostics message.
+// TestDoctorSubcommand_Integration verifies that `gopher doctor` runs
+// successfully and prints the real diagnostic sections. CombinedOutput
+// pipes stdout, so this exercises DefaultRunDoctor's non-TTY plain-text
+// path rather than the full-screen TUI.
 func TestDoctorSubcommand_Integration(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping integration test in short mode")
@@ -82,8 +84,10 @@ func TestDoctorSubcommand_Integration(t *testing.T) {
 	}
 
 	got := string(out)
-	if !strings.Contains(got, "Running diagnostics") {
-		t.Errorf("expected 'Running diagnostics' in output, got:\n%s", got)
+	for _, want := range []string{"Diagnostics", "Updates", "Sandbox"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("expected %q section in output, got:\n%s", want, got)
+		}
 	}
 }
 

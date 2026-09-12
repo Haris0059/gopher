@@ -46,7 +46,7 @@ import (
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.030"
+const Version = "0.3.031"
 
 // Model alias mappings
 var modelAliases = map[string]string{
@@ -1152,7 +1152,10 @@ func main() {
 
 	// Handle "doctor" subcommand before flag.Parse()
 	if len(os.Args) > 1 && os.Args[1] == "doctor" {
-		if code := handlers.Doctor(handlers.DoctorOpts{}); code != 0 {
+		if code := handlers.Doctor(handlers.DoctorOpts{
+			Output:  os.Stdout,
+			Version: Version,
+		}); code != 0 {
 			cliError("doctor failed")
 		}
 		cliOk("")

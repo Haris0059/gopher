@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -93,4 +94,69 @@ func readLockInfo(path string) (lockInfo, error) {
 		return lockInfo{}, err
 	}
 	return info, nil
+}
+
+// LockInfo describes a single version lock, for display (e.g. the /doctor
+// screen's Version Locks section).
+// Source: pidLock.ts LockInfo type
+type LockInfo struct {
+	Version   string
+	PID       int
+	IsRunning bool
+}
+
+// ListLocks scans dirs.Locks and returns the lock state of every version
+// that currently has (or recently had) a lockfile. It performs no mutation;
+// see CleanupStaleLocks to remove stale entries.
+// Source: pidLock.ts getAllLockInfo (:XXX)
+func ListLocks(dirs Dirs) []LockInfo {
+	entries, err := os.ReadDir(dirs.Locks)
+	if err != nil {
+		return nil
+	}
+
+	var locks []LockInfo
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".lock") {
+			continue
+		}
+		info, err := readLockInfo(filepath.Join(dirs.Locks, entry.Name()))
+		if err != nil {
+			continue
+		}
+		locks = append(locks, LockInfo{
+			Version:   info.Version,
+			PID:       info.PID,
+			IsRunning: isProcessAlive(info.PID),
+		})
+	}
+	return locks
+}
+
+// CleanupStaleLocks removes lockfiles in dirs.Locks whose holder PID is no
+// longer running, returning the count removed.
+// Source: pidLock.ts cleanupStaleLocks
+func CleanupStaleLocks(dirs Dirs) int {
+	entries, err := os.ReadDir(dirs.Locks)
+	if err != nil {
+		return 0
+	}
+
+	cleaned := 0
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".lock") {
+			continue
+		}
+		path := filepath.Join(dirs.Locks, entry.Name())
+		info, err := readLockInfo(path)
+		if err != nil {
+			continue
+		}
+		if !isProcessAlive(info.PID) {
+			if err := os.Remove(path); err == nil {
+				cleaned++
+			}
+		}
+	}
+	return cleaned
 }

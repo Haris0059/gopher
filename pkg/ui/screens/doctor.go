@@ -18,17 +18,25 @@ type DoctorDoneMsg struct{}
 // DoctorDiagnostic holds the core installation diagnostic info.
 // Source: Doctor.tsx — DiagnosticInfo fields
 type DoctorDiagnostic struct {
-	Version            string
-	InstallationType   string
-	InstallationPath   string
-	InvokedBinary      string
+	Version             string
+	InstallationType    string
+	InstallationPath    string
+	InvokedBinary       string
 	ConfigInstallMethod string
-	PackageManager     string
-	AutoUpdates        string
-	HasUpdatePerms     *bool    // nil = unknown
-	Warnings           []DoctorWarning
-	MultipleInstalls   []InstallEntry
-	Recommendation     string
+	PackageManager      string
+	AutoUpdates         string
+	HasUpdatePerms      *bool // nil = unknown
+	Warnings            []DoctorWarning
+	MultipleInstalls    []InstallEntry
+	Recommendation      string
+	Ripgrep             *RipgrepStatus // nil = not collected
+}
+
+// RipgrepStatus mirrors pkg/doctor.RipgrepStatus for the "└ Search:" line.
+type RipgrepStatus struct {
+	Working    bool
+	Mode       string // "system", "builtin", "embedded"
+	SystemPath string
 }
 
 // DoctorWarning is a diagnostic warning with a fix suggestion.
@@ -70,15 +78,26 @@ type DoctorConfig struct {
 // NewDoctorConfigFromDiagnostic builds a DoctorConfig from an aggregated DiagnosticData.
 // Source: Doctor.tsx — wiring getDoctorDiagnostic into the UI
 func NewDoctorConfigFromDiagnostic(d *pkgdoctor.DiagnosticData) DoctorConfig {
+	var warnings []DoctorWarning
+	for _, w := range d.Warnings {
+		warnings = append(warnings, DoctorWarning{Issue: w.Issue, Fix: w.Fix})
+	}
+
 	cfg := DoctorConfig{
 		Diagnostic: &DoctorDiagnostic{
-			Version:            d.Version,
-			InstallationType:   d.InstallationType,
-			InstallationPath:   d.InstallationPath,
-			InvokedBinary:      d.InvokedBinary,
+			Version:             d.Version,
+			InstallationType:    d.InstallationType,
+			InstallationPath:    d.InstallationPath,
+			InvokedBinary:       d.InvokedBinary,
 			ConfigInstallMethod: d.ConfigInstallMethod,
-			PackageManager:     d.PackageManager,
-			AutoUpdates:        d.AutoUpdates,
+			PackageManager:      d.PackageManager,
+			AutoUpdates:         d.AutoUpdates,
+			Warnings:            warnings,
+			Ripgrep: &RipgrepStatus{
+				Working:    d.Ripgrep.Working,
+				Mode:       d.Ripgrep.Mode,
+				SystemPath: d.Ripgrep.SystemPath,
+			},
 		},
 		DistTags:           d.DistTags,
 		DistTagsErr:        d.DistTagsErr,
@@ -204,7 +223,15 @@ func (m *DoctorModel) renderContent() string {
 	if m.rendered != "" {
 		return m.rendered
 	}
+	m.rendered = RenderDoctorText(m.config)
+	return m.rendered
+}
 
+// RenderDoctorText renders the same diagnostic sections the interactive
+// DoctorModel shows, as plain text — used by the standalone `gopher doctor`
+// CLI path when stdout isn't a terminal.
+// Source: Doctor.tsx — the same section list, without Ink's interactivity.
+func RenderDoctorText(cfg DoctorConfig) string {
 	t := theme.Current()
 	bold := t.TextPrimary().Bold(true)
 	warn := t.TextWarning()
@@ -213,7 +240,7 @@ func (m *DoctorModel) renderContent() string {
 	var sections []string
 
 	// === Diagnostics section ===
-	if diag := m.config.Diagnostic; diag != nil {
+	if diag := cfg.Diagnostic; diag != nil {
 		var lines []string
 		lines = append(lines, bold.Render("Diagnostics"))
 		lines = append(lines, "└ Currently running: "+diag.InstallationType+" ("+diag.Version+")")
@@ -223,6 +250,18 @@ func (m *DoctorModel) renderContent() string {
 		lines = append(lines, "└ Path: "+diag.InstallationPath)
 		lines = append(lines, "└ Invoked: "+diag.InvokedBinary)
 		lines = append(lines, "└ Config install method: "+diag.ConfigInstallMethod)
+
+		if diag.Ripgrep != nil {
+			searchStatus := "Not working"
+			if diag.Ripgrep.Working {
+				searchStatus = "OK"
+			}
+			mode := diag.Ripgrep.Mode
+			if mode == "system" && diag.Ripgrep.SystemPath != "" {
+				mode = diag.Ripgrep.SystemPath
+			}
+			lines = append(lines, "└ Search: "+searchStatus+" ("+mode+")")
+		}
 
 		if diag.Recommendation != "" {
 			parts := strings.SplitN(diag.Recommendation, "\n", 2)
@@ -252,65 +291,64 @@ func (m *DoctorModel) renderContent() string {
 
 	// === Updates / dist tags section ===
 	distSection := doctor.RenderDistTags(
-		m.config.DistTags,
-		m.config.DistTagsErr,
-		m.config.AutoUpdates,
-		m.config.UpdateChannel,
+		cfg.DistTags,
+		cfg.DistTagsErr,
+		cfg.AutoUpdates,
+		cfg.UpdateChannel,
 	)
 	if distSection != "" {
 		sections = append(sections, distSection)
 	}
 
 	// === Version Locks section ===
-	lockSection := doctor.RenderPIDLocks(m.config.VersionLocks)
+	lockSection := doctor.RenderPIDLocks(cfg.VersionLocks)
 	if lockSection != "" {
 		sections = append(sections, lockSection)
 	}
 
 	// === Agents section ===
-	agentSection := doctor.RenderAgents(m.config.AgentInfo)
+	agentSection := doctor.RenderAgents(cfg.AgentInfo)
 	if agentSection != "" {
 		sections = append(sections, agentSection)
 	}
 
 	// === Context Warnings section ===
-	ctxSection := doctor.RenderContextWarnings(m.config.ContextWarnings)
+	ctxSection := doctor.RenderContextWarnings(cfg.ContextWarnings)
 	if ctxSection != "" {
 		sections = append(sections, ctxSection)
 	}
 
 	// === T66: Env-var validation section ===
-	envSection := doctor.RenderEnvValidation(m.config.EnvValidation)
+	envSection := doctor.RenderEnvValidation(cfg.EnvValidation)
 	if envSection != "" {
 		sections = append(sections, envSection)
 	}
 
 	// === T67: Settings errors section ===
-	settingsSection := doctor.RenderSettingsErrors(m.config.SettingsErrors)
+	settingsSection := doctor.RenderSettingsErrors(cfg.SettingsErrors)
 	if settingsSection != "" {
 		sections = append(sections, settingsSection)
 	}
 
 	// === T67: Keybinding warnings section ===
-	kbSection := doctor.RenderKeybindingWarnings(m.config.KeybindingWarnings)
+	kbSection := doctor.RenderKeybindingWarnings(cfg.KeybindingWarnings)
 	if kbSection != "" {
 		sections = append(sections, kbSection)
 	}
 
 	// === T67: MCP warnings section ===
-	mcpSection := doctor.RenderMCPWarnings(m.config.MCPWarnings)
+	mcpSection := doctor.RenderMCPWarnings(cfg.MCPWarnings)
 	if mcpSection != "" {
 		sections = append(sections, mcpSection)
 	}
 
 	// === T68: Sandbox section ===
-	if m.config.Sandbox != nil {
-		sandboxSection := doctor.RenderSandbox(*m.config.Sandbox)
+	if cfg.Sandbox != nil {
+		sandboxSection := doctor.RenderSandbox(*cfg.Sandbox)
 		if sandboxSection != "" {
 			sections = append(sections, sandboxSection)
 		}
 	}
 
-	m.rendered = strings.Join(sections, "\n\n")
-	return m.rendered
+	return strings.Join(sections, "\n\n")
 }
