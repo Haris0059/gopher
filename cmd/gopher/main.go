@@ -382,10 +382,10 @@ func main() {
 		// T178: Initialize TrustedDeviceManager so the bridge session can
 		// inject X-Trusted-Device-Token headers into API requests.
 		tdm := bridge.NewTrustedDeviceManager(bridge.TrustedDeviceDeps{
-			GetFeatureValueBool: func(key string, defaultVal bool) bool { return defaultVal },
-			CheckGateBlocking:   func(key string) (bool, error) { return false, nil },
-			GetAccessToken:      bridgeDeps.GetAccessToken,
-			GetBaseAPIURL:       bridgeDeps.GetBaseAPIURL,
+			GetFeatureValueBool:    func(key string, defaultVal bool) bool { return defaultVal },
+			CheckGateBlocking:      func(key string) (bool, error) { return false, nil },
+			GetAccessToken:         bridgeDeps.GetAccessToken,
+			GetBaseAPIURL:          bridgeDeps.GetBaseAPIURL,
 			IsEssentialTrafficOnly: func() bool { return false },
 		})
 		if tok := tdm.GetToken(); tok != "" {
@@ -407,7 +407,7 @@ func main() {
 		// shutdown for each bridge work item.
 		sessionRunner := bridge.NewSessionRunner(bridge.SessionRunnerDeps{
 			API:           apiClient,
-			EnvironmentID: "",                          // set after RegisterBridgeEnvironment
+			EnvironmentID: "", // set after RegisterBridgeEnvironment
 			OnDebug:       func(msg string) { bridgeDebug.LogStatus(msg, nil) },
 			OnStateChange: func(from, to bridge.RunnerState) {
 				slog.Debug("bridge: session runner state change", "from", from, "to", to)
@@ -550,9 +550,11 @@ func main() {
 
 		// T194: Run the REPL bridge pre-flight checks and init sequence.
 		replHandle, replErr := bridge.InitReplBridge(bridge.InitReplDeps{
-			IsBridgeEnabledBlocking:   func() (bool, error) { return bridge.IsBridgeEnabled(), nil },
-			GetBridgeAccessToken:      bridgeDeps.GetAccessToken,
-			GetBridgeTokenOverride:    func() (string, bool) { return os.Getenv("CLAUDE_BRIDGE_OAUTH_TOKEN"), os.Getenv("CLAUDE_BRIDGE_OAUTH_TOKEN") != "" },
+			IsBridgeEnabledBlocking: func() (bool, error) { return bridge.IsBridgeEnabled(), nil },
+			GetBridgeAccessToken:    bridgeDeps.GetAccessToken,
+			GetBridgeTokenOverride: func() (string, bool) {
+				return os.Getenv("CLAUDE_BRIDGE_OAUTH_TOKEN"), os.Getenv("CLAUDE_BRIDGE_OAUTH_TOKEN") != ""
+			},
 			WaitForPolicyLimitsToLoad: func() error { return nil },
 			IsPolicyAllowed:           func(key string) bool { return true },
 			GetGlobalConfig:           func() bridge.GlobalBridgeConfig { return bridge.GlobalBridgeConfig{} },
@@ -1529,6 +1531,20 @@ func main() {
 			cfg.JSONSchema = *jsonSchema
 		}
 		sess = session.New(cfg, *cwd)
+	}
+
+	// Seed the SendUserMessage ("Brief") feature gate from the resolved
+	// session, before any tool list is built for the API. CLAUDE_CODE_BRIEF
+	// (checked inside tools.BriefEntitled) is a dev/testing override. This
+	// runs after sysPrompt was already built (line ~1367, before the session
+	// was loaded), so append the brief section here and refresh
+	// sess.Config.SystemPrompt rather than trying to gate the earlier build.
+	// Source: tools/BriefTool/BriefTool.ts:86-127
+	tools.SetKairosActive(sess.KairosActive)
+	tools.SetUserMsgOptIn(sess.UserMsgOptIn)
+	if briefSection := prompt.ResolveSystemPromptSections([]prompt.Section{prompt.BriefSection(tools.BriefEnabled)}); len(briefSection) == 1 && briefSection[0] != nil {
+		sysPrompt += "\n\n" + *briefSection[0]
+		sess.Config.SystemPrompt = sysPrompt
 	}
 
 	// Apply --session-id and --name overrides.

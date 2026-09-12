@@ -36,7 +36,7 @@ reference) · **Stub** (present but non-functional or placeholder) · **Missing*
 
 | Area | Go package | TS reference | Status | Notes |
 |---|---|---|---|---|
-| Tools | `pkg/tools` (50 files, 11,941 LOC) | `src/tools/` (43 dirs) | **Done** | 41 tools registered; 2 near-stubs inside this set (`Brief`, `REPL` — see below) |
+| Tools | `pkg/tools` (50 files, 11,941 LOC) | `src/tools/` (43 dirs) | **Done** | 41 tools registered; 1 near-stub inside this set (`REPL` — see below). `Brief`/`SendUserMessage` is a real port as of `TOOL-01` |
 | Slash commands | `pkg/ui/commands/handlers.go` | `src/commands/` (102 entries) | **Done** | ~80 commands; gap is mostly internal/debug/plugin-migrated commands in the reference |
 | Query loop | `pkg/query` (11 files, 1,904 LOC) | `src/QueryEngine.ts`, `src/query.ts` | **Done** | Has its own `parity_test.go` / `parity_gaps_test.go` against `testdata/parity_rules.json` |
 | Provider: Anthropic | `pkg/provider/anthropic.go` | `src/services/api/claude.ts` | **Done** | Real SSE streaming, retries, betas, cost tracking |
@@ -112,7 +112,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 8 | No real installer/updater | `INST-01`, `INST-02` |
 | 9 | Doctor and setup-token TUI screens stubbed | `INST-03`, `INST-04` |
 | 10 | Voice is a state machine with no audio/STT | `VOICE-01`, `VOICE-02` |
-| 11 | `Brief` tool is echo-only | `TOOL-01` |
+| ~~11~~ | ~~`Brief` tool is echo-only~~ Fixed — ported as `SendUserMessage` (legacy alias `Brief`, resolved by `ToolRegistry.Get`): real `{message, attachments?, status}` schema, attachment validation/resolution, `Message delivered to user.` model-facing result, `IsEnabled()` gated on Kairos/opt-in, proactive system-prompt section, and a `BriefDisplay` renderer in `message_bubble.go`. Bridge attachment upload (`upload.ts`) remains unported | `TOOL-01` |
 | 12 | `REPL` tool is one-shot, not persistent | `TOOL-02` |
 | 13 | `TestingPermission` tool registered unconditionally | `TOOL-03` |
 | ~~14~~ | ~~Agent tool's agent-list section is a static placeholder~~ Fixed — `Prompt()` renders the loaded agent list, `subagent_type` resolves a real agent definition, and `Execute` now enforces `Agent(<type>)` deny rules and `requiredMcpServers` gating (fork-subagent routing remains unported — no such feature exists in Gopher) | `TOOL-04` |

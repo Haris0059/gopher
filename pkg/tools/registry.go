@@ -9,27 +9,43 @@ import (
 
 // ToolRegistry holds registered tools keyed by name.
 type ToolRegistry struct {
-	mu    sync.RWMutex
-	tools map[string]Tool
+	mu      sync.RWMutex
+	tools   map[string]Tool
+	aliases map[string]string // alias name -> canonical Name()
 }
 
 // NewRegistry creates an empty tool registry.
 func NewRegistry() *ToolRegistry {
-	return &ToolRegistry{tools: make(map[string]Tool)}
+	return &ToolRegistry{tools: make(map[string]Tool), aliases: make(map[string]string)}
 }
 
-// Register adds a tool to the registry.
+// Register adds a tool to the registry, indexing any Aliases() it declares
+// (Source: Tool.ts:432 — aliases) so Get resolves both the canonical name
+// and its aliases to the same tool. An alias that collides with another
+// tool's canonical name is skipped — canonical names always win.
 func (r *ToolRegistry) Register(t Tool) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.tools[t.Name()] = t
+	for _, alias := range GetAliases(t) {
+		if _, isCanonical := r.tools[alias]; !isCanonical {
+			r.aliases[alias] = t.Name()
+		}
+	}
 }
 
-// Get returns a tool by name, or nil if not found.
+// Get returns a tool by its canonical name or a registered alias, or nil if
+// not found.
 func (r *ToolRegistry) Get(name string) Tool {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	return r.tools[name]
+	if t, ok := r.tools[name]; ok {
+		return t
+	}
+	if canonical, ok := r.aliases[name]; ok {
+		return r.tools[canonical]
+	}
+	return nil
 }
 
 // All returns all registered tools, sorted by name for prompt cache stability.

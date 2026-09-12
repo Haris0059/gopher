@@ -203,14 +203,14 @@ const (
 // Tools not listed use DefaultMaxResultSizeChars. Infinity means never persist.
 var maxResultSizeByTool = map[string]int{
 	"Bash":             30_000,  // BashTool.tsx:424
-	"Read":             -1,     // Infinity — FileReadTool.ts:342
-	"Grep":             30_000, // GrepTool.ts
-	"Glob":             30_000, // GlobTool.ts
+	"Read":             -1,      // Infinity — FileReadTool.ts:342
+	"Grep":             30_000,  // GrepTool.ts
+	"Glob":             30_000,  // GlobTool.ts
 	"Agent":            100_000, // AgentTool.tsx
 	"ListMcpResources": 100_000, // ListMcpResourcesTool.ts:53
 	"TaskOutput":       100_000, // TaskOutputTool.tsx:147
 	"TeamDelete":       100_000, // TeamDeleteTool.ts:35
-	"Brief":            100_000, // BriefTool.ts:141
+	"SendUserMessage":  100_000, // BriefTool.ts:141 — MaxResultSizeChars() on BriefTool is authoritative; kept for table accuracy
 	"RemoteTrigger":    100_000, // RemoteTriggerTool.ts:49
 }
 

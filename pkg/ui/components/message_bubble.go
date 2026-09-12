@@ -9,6 +9,7 @@ import (
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/tools"
 	"github.com/Haris0059/gopher/pkg/ui/theme"
+	"github.com/Haris0059/gopher/pkg/util"
 )
 
 // MessageBubble renders a single message (user or assistant) with
@@ -259,6 +260,8 @@ func (mb *MessageBubble) renderToolResultBlock(block message.ContentBlock) strin
 		switch d := block.Display.(type) {
 		case tools.DiffDisplay:
 			return mb.renderDiffDisplay(content, d, cs)
+		case tools.BriefDisplay:
+			return mb.renderBriefDisplay(d, cs)
 		}
 	}
 
@@ -291,6 +294,35 @@ func (mb *MessageBubble) renderToolResultBlock(block message.ContentBlock) strin
 	}
 
 	return strings.Join(resultLines, "\n")
+}
+
+// renderBriefDisplay renders the markdown message sent via SendUserMessage
+// (legacy "Brief"), followed by an attachment list. Default (plain) view
+// only — the transcript/brief-only chat-label modes from UI.tsx are not yet
+// wired since Gopher's TUI has no equivalent view distinction today.
+// Source: tools/BriefTool/UI.tsx — renderToolResultMessage
+func (mb *MessageBubble) renderBriefDisplay(disp tools.BriefDisplay, cs theme.ColorScheme) string {
+	dimStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
+
+	var out []string
+	if disp.Message != "" {
+		out = append(out, mb.renderTextBlock(disp.Message))
+	}
+	for _, att := range disp.Attachments {
+		kind := "[file]"
+		if att.IsImage {
+			kind = "[image]"
+		}
+		line := dimStyle.Render(fmt.Sprintf("› %s %s (%s)", kind, att.Path, formatAttachmentSize(att.Size)))
+		out = append(out, line)
+	}
+	return strings.Join(out, "\n")
+}
+
+// formatAttachmentSize adapts util.FormatFileSize's int-bytes signature to
+// the int64 sizes os.Stat returns.
+func formatAttachmentSize(bytes int64) string {
+	return util.FormatFileSize(int(bytes))
 }
 
 // renderDiffResult renders a colored unified-diff block from an edit/write

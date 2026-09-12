@@ -9,10 +9,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"sort"
 	"regexp"
 	"runtime"
 	"runtime/pprof"
+	"sort"
 	"strings"
 	"time"
 
@@ -22,12 +22,13 @@ import (
 
 	"github.com/Haris0059/gopher/pkg/auth"
 	"github.com/Haris0059/gopher/pkg/compact"
-	"github.com/Haris0059/gopher/pkg/keybindings"
 	appcontext "github.com/Haris0059/gopher/pkg/context"
 	"github.com/Haris0059/gopher/pkg/hooks"
+	"github.com/Haris0059/gopher/pkg/keybindings"
 	"github.com/Haris0059/gopher/pkg/mcp"
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/Haris0059/gopher/pkg/tools"
 )
 
 // ---------------------------------------------------------------------------
@@ -767,7 +768,6 @@ func (d *Dispatcher) HelpText() string {
 	return b.String()
 }
 
-
 // ---------------------------------------------------------------------------
 // T224: createMovedToPluginCommand factory
 // Source: src/commands/createMovedToPluginCommand.ts
@@ -828,19 +828,19 @@ func CreateMovedToPluginCommand(opts MovedToPluginOptions) CommandRegistration {
 type AddDirResultType string
 
 const (
-	AddDirSuccess                AddDirResultType = "success"
-	AddDirEmptyPath              AddDirResultType = "emptyPath"
-	AddDirPathNotFound           AddDirResultType = "pathNotFound"
-	AddDirNotADirectory          AddDirResultType = "notADirectory"
-	AddDirAlreadyInWorkingDir    AddDirResultType = "alreadyInWorkingDirectory"
+	AddDirSuccess             AddDirResultType = "success"
+	AddDirEmptyPath           AddDirResultType = "emptyPath"
+	AddDirPathNotFound        AddDirResultType = "pathNotFound"
+	AddDirNotADirectory       AddDirResultType = "notADirectory"
+	AddDirAlreadyInWorkingDir AddDirResultType = "alreadyInWorkingDirectory"
 )
 
 // AddDirResult is the outcome of validating a directory for the workspace.
 type AddDirResult struct {
-	ResultType   AddDirResultType
-	AbsolutePath string
+	ResultType    AddDirResultType
+	AbsolutePath  string
 	DirectoryPath string
-	WorkingDir   string
+	WorkingDir    string
 }
 
 // ValidateDirectoryForWorkspace validates a path for use as a working directory.
@@ -3387,8 +3387,8 @@ func (d *Dispatcher) registerDefaults() {
 		Type:        CommandTypeLocal,
 		Source:      "builtin",
 		Handler: newBriefHandler(
-			func() bool { return false },
-			func(b bool) {},
+			tools.GetUserMsgOptIn,
+			tools.SetUserMsgOptIn,
 		),
 	})
 
@@ -4022,11 +4022,11 @@ If there are no comments, return "No comments found."`,
 
 	// T292: /tag — tag session (ant-only)
 	d.RegisterCommand(CommandRegistration{
-		Name:     "tag",
+		Name:        "tag",
 		Description: "Tag a session for internal tracking",
-		Type:     CommandTypeLocal,
-		IsHidden: true,
-		Source:   "builtin",
+		Type:        CommandTypeLocal,
+		IsHidden:    true,
+		Source:      "builtin",
 		Handler: func(args string) tea.Cmd {
 			return func() tea.Msg {
 				tag := strings.TrimSpace(args)

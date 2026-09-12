@@ -15,13 +15,13 @@ func registryGoldenPath() string {
 }
 
 type ToolRegistry struct {
-	AlwaysAvailableTools     []string            `json:"always_available_tools"`
-	ConditionallyAvailable   map[string]string   `json:"conditionally_available_tools"`
-	DeferredTools            []string            `json:"deferred_tools"`
-	NeverDeferredTools       []string            `json:"never_deferred_tools"`
-	SimpleModeTools          []string            `json:"simple_mode_tools"`
-	RegistrationOrderFirst5  []string            `json:"registration_order_first_5"`
-	NormalizationPipeline    []string            `json:"message_normalization_pipeline"`
+	AlwaysAvailableTools    []string          `json:"always_available_tools"`
+	ConditionallyAvailable  map[string]string `json:"conditionally_available_tools"`
+	DeferredTools           []string          `json:"deferred_tools"`
+	NeverDeferredTools      []string          `json:"never_deferred_tools"`
+	SimpleModeTools         []string          `json:"simple_mode_tools"`
+	RegistrationOrderFirst5 []string          `json:"registration_order_first_5"`
+	NormalizationPipeline   []string          `json:"message_normalization_pipeline"`
 }
 
 func loadRegistry(t *testing.T) *ToolRegistry {
@@ -151,7 +151,7 @@ func TestDeferredTools(t *testing.T) {
 func TestNeverDeferredTools(t *testing.T) {
 	reg := loadRegistry(t)
 
-	neverDeferred := []string{"Agent", "Bash", "Read", "Edit", "Write", "Glob", "Grep", "AskUserQuestion", "Skill", "Brief"}
+	neverDeferred := []string{"Agent", "Bash", "Read", "Edit", "Write", "Glob", "Grep", "AskUserQuestion", "Skill", "SendUserMessage"}
 	for _, name := range neverDeferred {
 		name := name
 		t.Run(fmt.Sprintf("never_deferred_%s", name), func(t *testing.T) {

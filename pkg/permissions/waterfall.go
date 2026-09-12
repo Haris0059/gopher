@@ -110,7 +110,7 @@ func isFileOrReadOnlyTool(name string) bool {
 	case "Edit", "Write", "Read", "Glob", "Grep", "LS", "WebFetch", "WebSearch",
 		"NotebookEdit", "ToolSearch", "AskUserQuestion", "EnterPlanMode", "ExitPlanMode",
 		"TaskCreate", "TaskList", "TaskGet", "TaskUpdate", "TaskStop", "TaskOutput",
-		"Sleep", "LSP", "SendMessage", "Brief", "SyntheticOutput", "Skill",
+		"Sleep", "LSP", "SendMessage", "Brief", "SendUserMessage", "SyntheticOutput", "Skill",
 		"CronCreate", "CronDelete", "CronList", "ListMcpResources", "ReadMcpResource",
 		"TodoWrite", "TodoRead", "Config", "Agent":
 		return true
@@ -125,7 +125,7 @@ func isReadOnlyToolName(name string) bool {
 		"AskUserQuestion", "EnterPlanMode", "ExitPlanMode",
 		"TaskCreate", "TaskList", "TaskGet", "TaskUpdate", "TaskStop", "TaskOutput",
 		"Sleep", "LSP", "ListMcpResources", "ReadMcpResource",
-		"TodoWrite", "TodoRead", "Config", "Brief", "SyntheticOutput", "Skill",
+		"TodoWrite", "TodoRead", "Config", "Brief", "SendUserMessage", "SyntheticOutput", "Skill",
 		"CronCreate", "CronDelete", "CronList", "SendMessage", "Agent":
 		return true
 	}

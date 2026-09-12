@@ -92,7 +92,7 @@ are TODO no-ops. `pkg/plugins/builtin.go` and `types.go` are real.
 
 | ID | Task | Est | Depends on |
 |---|---|---|---|
-| TOOL-01 | `pkg/tools/brief.go` (39 LOC) — replace echo-only `send`/`receive` with real cross-session storage | 3 | — |
+| ~~TOOL-01~~ | ~~`pkg/tools/brief.go` (39 LOC) — replace echo-only `send`/`receive` with real cross-session storage~~ Done — the old wording was based on the stub's own invented docstring; the reference `BriefTool` has no cross-session storage at all. It is `SendUserMessage` (legacy alias `Brief`): the model's user-facing output channel in brief-only mode. Ported the real `{message, attachments?, status}` schema, attachment validate/resolve (`BriefTool/attachments.ts`, minus the unrelated bridge-upload leg), the `Message delivered to user.` result, `IsEnabled()` gating on Kairos/opt-in (`pkg/tools/brief_state.go`), the proactive system-prompt section, alias resolution in `ToolRegistry`, and a `BriefDisplay` TUI renderer | 3 | — |
 | TOOL-02 | `pkg/tools/repltool.go` (73 LOC) — replace one-shot `<lang> -c <cmd>` with a persistent REPL session (process kept alive, stdin/stdout piped across calls) | 4 | — |
 | TOOL-03 | Gate `TestingPermission` tool registration on test mode (it's currently registered unconditionally in `RegisterDefaults`, unlike the TS reference) | 0.5 | — |
 | ~~TOOL-04~~ | ~~`pkg/tools/agent.go:61` — build `agentListSection` from loaded agent definitions instead of the static placeholder string~~ Done — `Prompt()` now renders the real agent list via `BuildAgentListSection`/`skills.LoadAllAgents`, and `Execute` resolves `subagent_type` against agent definitions (system prompt, model, maxTurns, tool scoping) instead of hardcoding a generic sub-agent | 1 | ~~TEST-02~~ unblocked |

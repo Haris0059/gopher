@@ -89,7 +89,8 @@ func RegisterDefaults(registry *ToolRegistry) *PlanState {
 	// Synthetic output (internal use)
 	registry.Register(&SyntheticOutputTool{})
 
-	// Brief (context sharing between sessions)
+	// SendUserMessage / legacy "Brief" — sends a message to the user;
+	// gated on brief-only mode via BriefEnabled()
 	registry.Register(&BriefTool{})
 
 	// MCP auth tools are created per-server by CreateMcpAuthTool when an

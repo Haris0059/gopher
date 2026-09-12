@@ -7,7 +7,7 @@
     "Read", "Edit", "Write", "NotebookEdit",
     "WebFetch", "TodoWrite", "WebSearch", "TaskStop",
     "AskUserQuestion", "Skill", "EnterPlanMode",
-    "SendMessage", "Brief", "ListMcpResources", "ReadMcpResource"
+    "SendMessage", "SendUserMessage", "ListMcpResources", "ReadMcpResource"
   ],
 
   "conditionally_available_tools": {
@@ -45,7 +45,7 @@
 
   "never_deferred_tools": [
     "Agent", "Bash", "Read", "Edit", "Write",
-    "Glob", "Grep", "AskUserQuestion", "Skill", "Brief"
+    "Glob", "Grep", "AskUserQuestion", "Skill", "SendUserMessage"
   ],
 
   "simple_mode_tools": ["Bash", "Read", "Edit"],
