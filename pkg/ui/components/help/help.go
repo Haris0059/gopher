@@ -304,7 +304,7 @@ func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMe
 		return lipgloss.NewStyle().Faint(true).Render(emptyMessage)
 	}
 
-	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(t.Colors().Accent))
+	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(theme.White))
 	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(focusColor))
 	descStyle := lipgloss.NewStyle().Faint(true)
 	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(focusColor))
