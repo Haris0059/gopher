@@ -55,6 +55,15 @@ type ColorScheme struct {
 	// AccentMuted is a low-contrast accent for subtle highlights.
 	AccentMuted string
 
+	// Suggestion is the text color for a focused/highlighted list item
+	// (e.g. the cursor row in a selectable list).
+	// Source: utils/theme.ts — `suggestion`.
+	Suggestion string
+	// ProfessionalBlue is the fixed accent used by the HelpV2 tab bar and
+	// pane border — the same hex in every non-ANSI reference theme.
+	// Source: utils/theme.ts — `professionalBlue`.
+	ProfessionalBlue string
+
 	// --- Semantic status colors ---------------------------------------------
 
 	// Success is for positive outcomes (pass, created, completed).

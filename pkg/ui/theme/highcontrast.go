@@ -56,6 +56,11 @@ func (h *highContrastTheme) Colors() ColorScheme {
 		Accent:      Cyan300,
 		AccentMuted: Cyan600,
 
+		// No high-contrast reference value exists (ANSI themes use
+		// 'ansi:blueBright'); chosen to stay bright/distinct on black.
+		Suggestion:       "#5f87ff",
+		ProfessionalBlue: "#87afff",
+
 		// Semantic — high-saturation, distinguishable under color blindness
 		Success:      "#00ff87", // Bright green — distinct hue from error
 		SuccessMuted: Green700,
@@ -69,7 +74,7 @@ func (h *highContrastTheme) Colors() ColorScheme {
 		// Diff
 		DiffAdded:   "#00ff87",
 		DiffRemoved: "#ff5f5f",
-		DiffContext:  Gray300,
+		DiffContext: Gray300,
 
 		// Spinner
 		Spinner: Cyan300,

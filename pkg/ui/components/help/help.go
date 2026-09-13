@@ -20,9 +20,6 @@ import (
 // docsURL is printed in the footer, matching the "For more help:" line.
 const docsURL = "https://github.com/Haris0059/gopher"
 
-// focusColor highlights the command list row currently under the cursor.
-const focusColor = "#a9b8f9"
-
 // HelpDismissedMsg signals the help screen was closed.
 type HelpDismissedMsg struct{}
 
@@ -237,13 +234,14 @@ func (m Model) View() string {
 }
 
 // renderHeader renders "Help  General   Commands   Custom commands" with
-// the active tab shown as a blue block, matching design-system/Tabs.tsx.
+// the active tab shown as a blue block, matching design-system/Tabs.tsx
+// (Tabs color="professionalBlue" + inverseText).
 func (m Model) renderHeader(t theme.Theme) string {
 	cs := t.Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Accent))
 	activeStyle := lipgloss.NewStyle().Bold(true).
-		Background(lipgloss.Color(cs.Accent)).
-		Foreground(lipgloss.Color(theme.Black))
+		Background(lipgloss.Color(cs.ProfessionalBlue)).
+		Foreground(lipgloss.Color(cs.TextInverse))
 
 	parts := []string{titleStyle.Render("Help")}
 	for i, title := range tabTitles {
@@ -306,10 +304,11 @@ func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMe
 		return lipgloss.NewStyle().Faint(true).Render(emptyMessage)
 	}
 
+	cs := t.Colors()
 	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(theme.White))
-	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(focusColor))
+	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Suggestion))
 	descStyle := lipgloss.NewStyle().Faint(true)
-	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(focusColor))
+	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Suggestion))
 	arrowStyle := lipgloss.NewStyle().Faint(true)
 
 	vc := m.visibleCount()

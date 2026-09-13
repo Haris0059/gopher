@@ -47,6 +47,11 @@ func (d *darkTheme) Colors() ColorScheme {
 		Accent:      Cyan300,
 		AccentMuted: Cyan700,
 
+		// Source: utils/theme.ts darkTheme — suggestion: rgb(177,185,249),
+		// professionalBlue: rgb(106,155,204).
+		Suggestion:       "#b1b9f9",
+		ProfessionalBlue: "#6a9bcc",
+
 		// Semantic
 		Success:      Green400,
 		SuccessMuted: Green700,
@@ -60,7 +65,7 @@ func (d *darkTheme) Colors() ColorScheme {
 		// Diff
 		DiffAdded:   Green400,
 		DiffRemoved: Red400,
-		DiffContext:  Gray400,
+		DiffContext: Gray400,
 
 		// Spinner
 		Spinner: Cyan300,

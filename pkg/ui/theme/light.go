@@ -47,6 +47,11 @@ func (l *lightTheme) Colors() ColorScheme {
 		Accent:      Cyan700,
 		AccentMuted: Cyan50,
 
+		// Source: utils/theme.ts lightTheme — suggestion: rgb(87,105,247),
+		// professionalBlue: rgb(106,155,204).
+		Suggestion:       "#5769f7",
+		ProfessionalBlue: "#6a9bcc",
+
 		// Semantic
 		Success:      Green600,
 		SuccessMuted: Green100,
@@ -60,7 +65,7 @@ func (l *lightTheme) Colors() ColorScheme {
 		// Diff
 		DiffAdded:   Green600,
 		DiffRemoved: Red600,
-		DiffContext:  Gray600,
+		DiffContext: Gray600,
 
 		// Spinner
 		Spinner: Blue400,
