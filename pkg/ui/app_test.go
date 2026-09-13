@@ -393,9 +393,12 @@ func TestAppModelSlashCommandHelp(t *testing.T) {
 	_, cmd := app.Update(components.SubmitMsg{Text: "/help"})
 	msg := cmd()
 	app.Update(msg)
-	// Help should add a message to conversation
-	if app.conversation.MessageCount() != 1 {
-		t.Errorf("Expected 1 help message, got %d", app.conversation.MessageCount())
+	// Help opens the interactive HelpV2 overlay instead of adding a transcript message.
+	if !app.showHelp || app.helpModel == nil {
+		t.Error("Expected /help to open the help overlay")
+	}
+	if app.conversation.MessageCount() != 0 {
+		t.Errorf("Expected 0 conversation messages, got %d", app.conversation.MessageCount())
 	}
 }
 

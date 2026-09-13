@@ -1,16 +1,24 @@
 // Package help provides the interactive help screen (HelpV2).
 // Source: components/HelpV2/HelpV2.tsx + General.tsx + Commands.tsx
 //
-// Two-tab help screen: General (keyboard shortcuts) and Commands (slash commands).
+// Three-tab help screen: General (blurb + keyboard shortcuts), Commands
+// (built-in slash commands), and Custom commands (user/project/skill
+// commands discovered on disk).
 package help
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
+
+// docsURL is printed in the footer, matching the "For more help:" line.
+const docsURL = "https://github.com/Haris0059/gopher"
 
 // HelpDismissedMsg signals the help screen was closed.
 type HelpDismissedMsg struct{}
@@ -19,36 +27,78 @@ type HelpDismissedMsg struct{}
 type CommandInfo struct {
 	Name        string
 	Description string
-	IsHidden    bool
+	// Source identifies where the command came from: "builtin", "user",
+	// "project", "skill", "bundled", etc. Builtin commands populate the
+	// Commands tab; everything else populates Custom commands.
+	Source string
+	// IsHidden controls whether the command is hidden from the listing.
+	IsHidden bool
+}
+
+// FormatDescriptionWithSource returns the description suffixed with its
+// origin, matching commands.ts:730 formatDescriptionWithSource — builtin
+// commands are shown plain, everything else gets a "(source)" suffix.
+func FormatDescriptionWithSource(c CommandInfo) string {
+	switch c.Source {
+	case "", "builtin":
+		return c.Description
+	default:
+		return fmt.Sprintf("%s (%s)", c.Description, c.Source)
+	}
 }
 
 // Tab identifies which help tab is active.
 type Tab int
 
 const (
-	TabGeneral  Tab = iota
+	TabGeneral Tab = iota
 	TabCommands
+	TabCustomCommands
 )
+
+var tabTitles = [...]string{"General", "Commands", "Custom commands"}
 
 // Model is the interactive help screen.
 type Model struct {
 	tab      Tab
-	commands []CommandInfo
-	scroll   int
-	width    int
-	height   int
+	builtins []CommandInfo
+	customs  []CommandInfo
+
+	// headerFocused is true while Tab/←/→ cycle tabs; false once ↓ has
+	// moved focus into a command list, mirroring useTabHeaderFocus.
+	headerFocused bool
+	cursor        int // focused row within the active list, when list-focused
+	scroll        int // index of the first visible row
+
+	width  int
+	height int
 }
 
-// New creates a help screen with the given commands.
+// New creates a help screen from the full merged command set. Hidden
+// commands are dropped; the rest are partitioned into builtins (Source ==
+// "builtin") and everything else (Custom commands), each sorted by name.
 func New(commands []CommandInfo, width, height int) Model {
-	// Filter hidden commands
-	var visible []CommandInfo
+	var builtins, customs []CommandInfo
 	for _, c := range commands {
-		if !c.IsHidden {
-			visible = append(visible, c)
+		if c.IsHidden {
+			continue
+		}
+		if c.Source == "" || c.Source == "builtin" {
+			builtins = append(builtins, c)
+		} else {
+			customs = append(customs, c)
 		}
 	}
-	return Model{commands: visible, width: width, height: height}
+	sort.Slice(builtins, func(i, j int) bool { return builtins[i].Name < builtins[j].Name })
+	sort.Slice(customs, func(i, j int) bool { return customs[i].Name < customs[j].Name })
+
+	return Model{
+		builtins:      builtins,
+		customs:       customs,
+		headerFocused: true,
+		width:         width,
+		height:        height,
+	}
 }
 
 func (m Model) Init() tea.Cmd { return nil }
@@ -61,123 +111,227 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 	case tea.KeyPressMsg:
 		switch msg.Code {
-		case tea.KeyEscape, 'q':
+		case tea.KeyEscape:
 			return m, func() tea.Msg { return HelpDismissedMsg{} }
-		case tea.KeyTab:
-			if m.tab == TabGeneral {
-				m.tab = TabCommands
-			} else {
-				m.tab = TabGeneral
-			}
-			m.scroll = 0
-		case tea.KeyUp, 'k':
-			if m.scroll > 0 {
-				m.scroll--
-			}
-		case tea.KeyDown, 'j':
-			m.scroll++
+		case tea.KeyTab, tea.KeyRight:
+			m.nextTab()
+		case tea.KeyLeft:
+			m.prevTab()
+		case tea.KeyDown:
+			m.moveDown()
+		case tea.KeyUp:
+			m.moveUp()
 		}
 	}
 	return m, nil
 }
 
+func (m *Model) nextTab() {
+	m.tab = (m.tab + 1) % Tab(len(tabTitles))
+	m.resetListFocus()
+}
+
+func (m *Model) prevTab() {
+	m.tab = (m.tab - 1 + Tab(len(tabTitles))) % Tab(len(tabTitles))
+	m.resetListFocus()
+}
+
+func (m *Model) resetListFocus() {
+	m.headerFocused = true
+	m.cursor = 0
+	m.scroll = 0
+}
+
+func (m *Model) moveDown() {
+	list := m.activeList()
+	if list == nil {
+		return
+	}
+	if m.headerFocused {
+		if len(list) == 0 {
+			return
+		}
+		m.headerFocused = false
+		m.cursor = 0
+		m.ensureVisible()
+		return
+	}
+	if m.cursor < len(list)-1 {
+		m.cursor++
+		m.ensureVisible()
+	}
+}
+
+func (m *Model) moveUp() {
+	list := m.activeList()
+	if list == nil || m.headerFocused {
+		return
+	}
+	if m.cursor == 0 {
+		m.headerFocused = true
+		return
+	}
+	m.cursor--
+	m.ensureVisible()
+}
+
+// activeList returns the command list backing the current tab, or nil for
+// the General tab.
+func (m *Model) activeList() []CommandInfo {
+	switch m.tab {
+	case TabCommands:
+		return m.builtins
+	case TabCustomCommands:
+		return m.customs
+	default:
+		return nil
+	}
+}
+
+// visibleCount returns how many list rows fit, mirroring HelpV2.tsx's
+// maxHeight = floor(rows/2); Commands.tsx's visibleCount = max(1,
+// floor((maxHeight-10)/2)).
+func (m *Model) visibleCount() int {
+	maxHeight := m.height / 2
+	n := (maxHeight - 10) / 2
+	if n < 1 {
+		n = 1
+	}
+	return n
+}
+
+func (m *Model) ensureVisible() {
+	vc := m.visibleCount()
+	if m.cursor < m.scroll {
+		m.scroll = m.cursor
+	}
+	if m.cursor >= m.scroll+vc {
+		m.scroll = m.cursor - vc + 1
+	}
+}
+
 func (m Model) View() string {
-	titleStyle := lipgloss.NewStyle().Bold(true)
-	tabStyle := lipgloss.NewStyle().Padding(0, 2)
-	activeTab := lipgloss.NewStyle().Bold(true).Underline(true).Padding(0, 2)
-	dimStyle := lipgloss.NewStyle().Faint(true)
-
+	t := theme.Current()
 	var sb strings.Builder
 
-	// Title
-	sb.WriteString(titleStyle.Render("Help"))
+	sb.WriteString(m.renderHeader(t))
 	sb.WriteString("\n\n")
 
-	// Tabs
-	generalTab := tabStyle.Render("General")
-	commandsTab := tabStyle.Render("Commands")
-	if m.tab == TabGeneral {
-		generalTab = activeTab.Render("General")
-	} else {
-		commandsTab = activeTab.Render("Commands")
-	}
-	sb.WriteString(generalTab + " " + commandsTab)
-	sb.WriteString("\n\n")
-
-	// Content
-	if m.tab == TabGeneral {
-		sb.WriteString(m.viewGeneral())
-	} else {
-		sb.WriteString(m.viewCommands())
+	switch m.tab {
+	case TabGeneral:
+		sb.WriteString(m.viewGeneral(t))
+	case TabCommands:
+		sb.WriteString(m.viewCommandList(t, m.builtins, "Browse default commands", ""))
+	case TabCustomCommands:
+		sb.WriteString(m.viewCommandList(t, m.customs, "Browse custom commands", "No custom commands found"))
 	}
 
 	sb.WriteString("\n")
-	sb.WriteString(dimStyle.Render("Tab to switch, ↑/↓ to scroll, Escape to close"))
-	return sb.String()
-}
-
-func (m Model) viewGeneral() string {
-	shortcuts := []struct {
-		key  string
-		desc string
-	}{
-		{"Enter", "Send message"},
-		{"Escape", "Cancel current operation / interrupt"},
-		{"Ctrl+C (×2)", "Exit Gopher"},
-		{"Ctrl+R", "Search command history"},
-		{"Ctrl+O", "Toggle transcript view"},
-		{"Ctrl+T", "View tasks"},
-		{"Ctrl+B", "Background current task"},
-		{"↑/↓", "Navigate command history"},
-		{"Tab", "Accept file suggestion"},
-		{"@file", "Reference a file in your prompt"},
-		{"/command", "Run a slash command"},
-	}
-
-	keyStyle := lipgloss.NewStyle().Bold(true).Width(16)
-	var sb strings.Builder
-	sb.WriteString(lipgloss.NewStyle().Bold(true).Render("Keyboard Shortcuts"))
-	sb.WriteString("\n\n")
-
-	for _, s := range shortcuts {
-		sb.WriteString("  " + keyStyle.Render(s.key) + s.desc + "\n")
-	}
-
+	sb.WriteString(fmt.Sprintf("For more help: %s\n", docsURL))
 	sb.WriteString("\n")
-	sb.WriteString(lipgloss.NewStyle().Bold(true).Render("Tips"))
-	sb.WriteString("\n\n")
-	sb.WriteString("  • Create a CLAUDE.md file to give Claude project context\n")
-	sb.WriteString("  • Use /doctor to diagnose configuration issues\n")
-	sb.WriteString("  • Use /compact to reduce context window usage\n")
-	sb.WriteString("  • Use /help for this screen\n")
-
+	sb.WriteString(lipgloss.NewStyle().Faint(true).Italic(true).Render("Esc to cancel"))
 	return sb.String()
 }
 
-func (m Model) viewCommands() string {
-	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("12"))
+// renderHeader renders "Help  General   Commands   Custom commands" with
+// the active tab shown as an inverse block, matching design-system/Tabs.tsx.
+func (m Model) renderHeader(t theme.Theme) string {
+	cs := t.Colors()
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Accent))
+	activeStyle := lipgloss.NewStyle().Bold(true).Reverse(true)
+
+	parts := []string{titleStyle.Render("Help")}
+	for i, title := range tabTitles {
+		s := lipgloss.NewStyle()
+		if Tab(i) == m.tab {
+			s = activeStyle
+		}
+		parts = append(parts, s.Render(" "+title+" "))
+	}
+	return strings.Join(parts, " ")
+}
+
+// viewGeneral renders the intro blurb and a shortcut grid. Only shortcuts
+// gopher actually implements are listed.
+func (m Model) viewGeneral(t theme.Theme) string {
+	dim := lipgloss.NewStyle().Faint(true)
+	bold := lipgloss.NewStyle().Bold(true)
+
+	var sb strings.Builder
+	sb.WriteString("Gopher understands your codebase, makes edits with your permission, and executes commands — right from your terminal.\n\n")
+	sb.WriteString(bold.Render("Shortcuts"))
+	sb.WriteString("\n")
+
+	col1 := []string{
+		"/ for commands",
+		"@ for file paths",
+		"/btw for side question",
+	}
+	col2 := []string{
+		"ctrl + t to toggle tasks",
+		"/keybindings to customize",
+	}
+
+	col1Style := dim.Width(24)
+	col2Style := dim
+	rows := len(col1)
+	if len(col2) > rows {
+		rows = len(col2)
+	}
+	var lines []string
+	for i := 0; i < rows; i++ {
+		c1 := ""
+		if i < len(col1) {
+			c1 = col1[i]
+		}
+		c2 := ""
+		if i < len(col2) {
+			c2 = col2[i]
+		}
+		lines = append(lines, lipgloss.JoinHorizontal(lipgloss.Top, col1Style.Render(c1), col2Style.Render(c2)))
+	}
+	sb.WriteString(strings.Join(lines, "\n"))
+	return sb.String()
+}
+
+// viewCommandList renders a scrollable list of commands: gutter (cursor /
+// scroll indicator), "/name", and a dimmed description on the next line.
+func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMessage string) string {
+	if len(list) == 0 && emptyMessage != "" {
+		return lipgloss.NewStyle().Faint(true).Render(emptyMessage)
+	}
+
+	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(t.Colors().Accent))
 	descStyle := lipgloss.NewStyle().Faint(true)
+	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(t.Colors().Accent))
+	arrowStyle := lipgloss.NewStyle().Faint(true)
+
+	vc := m.visibleCount()
+	start := m.scroll
+	if start > len(list) {
+		start = len(list)
+	}
+	end := start + vc
+	if end > len(list) {
+		end = len(list)
+	}
 
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("%d commands available:\n\n", len(m.commands)))
+	sb.WriteString(title)
+	sb.WriteString("\n\n")
 
-	maxShow := 15
-	start := m.scroll
-	if start > len(m.commands) {
-		start = len(m.commands)
-	}
-	end := start + maxShow
-	if end > len(m.commands) {
-		end = len(m.commands)
-	}
-
-	for _, cmd := range m.commands[start:end] {
-		sb.WriteString("  " + nameStyle.Render("/"+cmd.Name))
-		sb.WriteString("  " + descStyle.Render(cmd.Description) + "\n")
-	}
-
-	if end < len(m.commands) {
-		sb.WriteString(fmt.Sprintf("\n  ... and %d more (scroll down)\n", len(m.commands)-end))
+	for i := start; i < end; i++ {
+		cmd := list[i]
+		gutter := "  "
+		if !m.headerFocused && i == m.cursor {
+			gutter = cursorStyle.Render("❯") + " "
+		} else if i == start && start > 0 {
+			gutter = arrowStyle.Render("↑") + " "
+		} else if i == end-1 && end < len(list) {
+			gutter = arrowStyle.Render("↓") + " "
+		}
+		sb.WriteString(gutter + nameStyle.Render("/"+cmd.Name) + "\n")
+		sb.WriteString("    " + descStyle.Render(FormatDescriptionWithSource(cmd)) + "\n")
 	}
 
 	return sb.String()

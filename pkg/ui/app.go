@@ -19,6 +19,7 @@ import (
 	"github.com/Haris0059/gopher/pkg/session"
 	"github.com/Haris0059/gopher/pkg/ui/commands"
 	"github.com/Haris0059/gopher/pkg/ui/components"
+	"github.com/Haris0059/gopher/pkg/ui/components/help"
 	"github.com/Haris0059/gopher/pkg/ui/core"
 	"github.com/Haris0059/gopher/pkg/ui/hooks"
 	bridgehooks "github.com/Haris0059/gopher/pkg/ui/hooks/bridge"
@@ -232,6 +233,10 @@ type AppModel struct {
 	// Resume screen (modal overlay)
 	showResume  bool
 	resumeModel *screens.ResumeModel
+
+	// Help screen (rendered inline below the prompt, not a full-screen overlay)
+	showHelp  bool
+	helpModel *help.Model
 
 	// Permission prompt state
 	// Source: interactiveHandler.ts — permission prompt overlay
@@ -459,6 +464,26 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	// When the help screen is active, delegate all messages to it.
+	if a.showHelp && a.helpModel != nil {
+		switch msg := msg.(type) {
+		case tea.WindowSizeMsg:
+			a.width = msg.Width
+			a.height = msg.Height
+			m, _ := a.helpModel.Update(msg)
+			a.helpModel = &m
+			return a, nil
+		case help.HelpDismissedMsg:
+			a.showHelp = false
+			a.helpModel = nil
+			return a, nil
+		default:
+			m, cmd := a.helpModel.Update(msg)
+			a.helpModel = &m
+			return a, cmd
+		}
+	}
+
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		return a.handleResize(msg)
@@ -604,13 +629,7 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return a.handleThinkingToggle()
 
 	case commands.ShowHelpMsg:
-		helpText := a.dispatcher.HelpText()
-		helpMsg := message.Message{
-			Role:    message.RoleAssistant,
-			Content: []message.ContentBlock{{Type: message.ContentText, Text: helpText}},
-		}
-		a.conversation.AddMessage(helpMsg)
-		return a, nil
+		return a.handleShowHelp()
 
 	case commands.CommandResult:
 		if msg.Error != nil {
@@ -713,6 +732,11 @@ func (a *AppModel) View() tea.View {
 		sections = append(sections, a.slashInput.View().Content)
 	}
 
+	// Help screen, rendered directly below the input when active.
+	if a.showHelp && a.helpModel != nil {
+		sections = append(sections, a.helpModel.View())
+	}
+
 	// T399: File suggestion autocomplete, rendered below input when @-mention active.
 	if fileSuggestView := a.renderFileSuggestions(); fileSuggestView != "" {
 		sections = append(sections, fileSuggestView)
@@ -751,6 +775,66 @@ func (a *AppModel) handleShowDoctor() (*AppModel, tea.Cmd) {
 		a.doctorModel.Update(tea.WindowSizeMsg{Width: a.width, Height: a.height})
 	}
 	return a, nil
+}
+
+// handleShowHelp opens the /help screen. Builtins come from the dispatcher
+// (the source of truth for what's registered and enabled); custom commands
+// (user/project/skill) come from the same discovery used by slash-command
+// autocomplete.
+func (a *AppModel) handleShowHelp() (*AppModel, tea.Cmd) {
+	m := help.New(a.collectHelpCommands(), a.width, a.height)
+	a.helpModel = &m
+	a.showHelp = true
+	if a.width > 0 && a.height > 0 {
+		nm, _ := a.helpModel.Update(tea.WindowSizeMsg{Width: a.width, Height: a.height})
+		a.helpModel = &nm
+	}
+	return a, nil
+}
+
+// collectHelpCommands merges the dispatcher's builtin registrations with the
+// on-disk user/project/skill commands into the shape the help screen wants.
+func (a *AppModel) collectHelpCommands() []help.CommandInfo {
+	var out []help.CommandInfo
+
+	if a.dispatcher != nil {
+		for _, reg := range a.dispatcher.Registrations() {
+			if reg.IsHidden {
+				continue
+			}
+			if reg.IsEnabled != nil && !reg.IsEnabled() {
+				continue
+			}
+			out = append(out, help.CommandInfo{
+				Name:        reg.Name,
+				Description: reg.Description,
+				Source:      "builtin",
+			})
+		}
+	}
+
+	cwd := ""
+	if a.session != nil {
+		cwd = a.session.CWD
+	}
+	for _, sc := range components.LoadSlashCommands(cwd) {
+		if sc.Source == "" || sc.Source == "builtin" {
+			continue
+		}
+		if sc.IsHidden {
+			continue
+		}
+		if sc.IsEnabled != nil && !sc.IsEnabled() {
+			continue
+		}
+		out = append(out, help.CommandInfo{
+			Name:        strings.TrimPrefix(sc.Name, "/"),
+			Description: sc.Description,
+			Source:      sc.Source,
+		})
+	}
+
+	return out
 }
 
 func (a *AppModel) handleResize(msg tea.WindowSizeMsg) (*AppModel, tea.Cmd) {

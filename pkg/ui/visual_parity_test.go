@@ -1540,15 +1540,18 @@ func TestParity_CommandResultRouting(t *testing.T) {
 		}
 	})
 
-	// 2. ShowHelpMsg → adds message to conversation
+	// 2. ShowHelpMsg → opens the interactive help overlay, no transcript message
 	t.Run("help", func(t *testing.T) {
 		config := session.DefaultConfig()
 		sess := session.New(config, "/tmp")
 		app := NewAppModel(sess, nil)
 		countBefore := app.conversation.MessageCount()
 		app.Update(commands.ShowHelpMsg{})
-		if app.conversation.MessageCount() != countBefore+1 {
-			t.Errorf("ShowHelpMsg should add 1 message, got %d→%d", countBefore, app.conversation.MessageCount())
+		if !app.showHelp || app.helpModel == nil {
+			t.Error("ShowHelpMsg should open the help overlay")
+		}
+		if app.conversation.MessageCount() != countBefore {
+			t.Errorf("ShowHelpMsg should not add a transcript message, got %d→%d", countBefore, app.conversation.MessageCount())
 		}
 	})
 
