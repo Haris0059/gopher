@@ -237,11 +237,13 @@ func (m Model) View() string {
 }
 
 // renderHeader renders "Help  General   Commands   Custom commands" with
-// the active tab shown as an inverse block, matching design-system/Tabs.tsx.
+// the active tab shown as a blue block, matching design-system/Tabs.tsx.
 func (m Model) renderHeader(t theme.Theme) string {
 	cs := t.Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Accent))
-	activeStyle := lipgloss.NewStyle().Bold(true).Reverse(true)
+	activeStyle := lipgloss.NewStyle().Bold(true).
+		Background(lipgloss.Color(theme.AccentBlue)).
+		Foreground(lipgloss.Color(theme.Black))
 
 	parts := []string{titleStyle.Render("Help")}
 	for i, title := range tabTitles {

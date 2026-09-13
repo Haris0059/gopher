@@ -46,7 +46,7 @@ import (
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.034"
+const Version = "0.3.035"
 
 // Model alias mappings
 var modelAliases = map[string]string{
