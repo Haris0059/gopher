@@ -12,7 +12,7 @@ import (
 
 // Version is injected at build time or set by caller.
 // Patch segment is the count of Haris0059's commits on this project.
-var Version = "0.3.035"
+var Version = "0.3.036"
 
 // Warning is a diagnostic warning with a suggested fix.
 // Source: Doctor.tsx — DiagnosticInfo.warnings

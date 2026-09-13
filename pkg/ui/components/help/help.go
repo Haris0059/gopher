@@ -242,7 +242,7 @@ func (m Model) renderHeader(t theme.Theme) string {
 	cs := t.Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Accent))
 	activeStyle := lipgloss.NewStyle().Bold(true).
-		Background(lipgloss.Color(theme.AccentBlue)).
+		Background(lipgloss.Color(cs.Accent)).
 		Foreground(lipgloss.Color(theme.Black))
 
 	parts := []string{titleStyle.Render("Help")}
