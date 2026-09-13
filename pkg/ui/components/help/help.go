@@ -20,6 +20,9 @@ import (
 // docsURL is printed in the footer, matching the "For more help:" line.
 const docsURL = "https://github.com/Haris0059/gopher"
 
+// focusColor highlights the command list row currently under the cursor.
+const focusColor = "#a9b8f9"
+
 // HelpDismissedMsg signals the help screen was closed.
 type HelpDismissedMsg struct{}
 
@@ -302,8 +305,9 @@ func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMe
 	}
 
 	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(t.Colors().Accent))
+	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(focusColor))
 	descStyle := lipgloss.NewStyle().Faint(true)
-	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(t.Colors().Accent))
+	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(focusColor))
 	arrowStyle := lipgloss.NewStyle().Faint(true)
 
 	vc := m.visibleCount()
@@ -322,15 +326,20 @@ func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMe
 
 	for i := start; i < end; i++ {
 		cmd := list[i]
+		focused := !m.headerFocused && i == m.cursor
 		gutter := "  "
-		if !m.headerFocused && i == m.cursor {
+		if focused {
 			gutter = cursorStyle.Render("❯") + " "
 		} else if i == start && start > 0 {
 			gutter = arrowStyle.Render("↑") + " "
 		} else if i == end-1 && end < len(list) {
 			gutter = arrowStyle.Render("↓") + " "
 		}
-		sb.WriteString(gutter + nameStyle.Render("/"+cmd.Name) + "\n")
+		name := nameStyle
+		if focused {
+			name = focusedNameStyle
+		}
+		sb.WriteString(gutter + name.Render("/"+cmd.Name) + "\n")
 		sb.WriteString("    " + descStyle.Render(FormatDescriptionWithSource(cmd)) + "\n")
 	}
 
