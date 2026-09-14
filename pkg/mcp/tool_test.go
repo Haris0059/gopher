@@ -167,16 +167,16 @@ func TestClassifyMCPToolForCollapse(t *testing.T) {
 		isSearch bool
 		isRead   bool
 	}{
-		{"search_code", true, false},        // GitHub search
-		{"searchCode", true, false},         // camelCase normalized
-		{"search-code", true, false},        // kebab-case normalized
-		{"get_file_contents", false, true},  // GitHub read
-		{"getFileContents", false, true},    // camelCase
-		{"send_message", false, false},      // not classified
+		{"search_code", true, false},         // GitHub search
+		{"searchCode", true, false},          // camelCase normalized
+		{"search-code", true, false},         // kebab-case normalized
+		{"get_file_contents", false, true},   // GitHub read
+		{"getFileContents", false, true},     // camelCase
+		{"send_message", false, false},       // not classified
 		{"slack_search_public", true, false}, // Slack search
-		{"git_status", false, true},         // Git read
-		{"kubectl_get", false, true},        // k8s read
-		{"unknown_tool", false, false},      // unknown → conservative
+		{"git_status", false, true},          // Git read
+		{"kubectl_get", false, true},         // k8s read
+		{"unknown_tool", false, false},       // unknown → conservative
 	}
 
 	for _, tt := range tests {

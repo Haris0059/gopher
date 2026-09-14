@@ -9,11 +9,11 @@ import (
 
 // SettingsSync periodically checks for remote settings changes.
 type SettingsSync struct {
-	mu          sync.Mutex
-	lastSync    time.Time
-	interval    time.Duration
-	enabled     bool
-	onUpdate    func() // called when settings change
+	mu       sync.Mutex
+	lastSync time.Time
+	interval time.Duration
+	enabled  bool
+	onUpdate func() // called when settings change
 }
 
 // NewSettingsSync creates a settings sync manager.

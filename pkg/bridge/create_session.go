@@ -41,7 +41,7 @@ type GitSource struct {
 
 // GitOutcome describes the expected git outcome of a session.
 type GitOutcome struct {
-	Type    string        `json:"type"`
+	Type    string         `json:"type"`
 	GitInfo GitOutcomeInfo `json:"git_info"`
 }
 
@@ -143,10 +143,10 @@ func (c *sessionClient) resolveOrg() (string, bool) {
 
 func (c *sessionClient) headers(accessToken, orgUUID string) map[string]string {
 	return map[string]string{
-		"Authorization":        "Bearer " + accessToken,
-		"Content-Type":         "application/json",
-		"anthropic-beta":       SessionsBetaHeader,
-		"x-organization-uuid":  orgUUID,
+		"Authorization":       "Bearer " + accessToken,
+		"Content-Type":        "application/json",
+		"anthropic-beta":      SessionsBetaHeader,
+		"x-organization-uuid": orgUUID,
 	}
 }
 
@@ -577,4 +577,3 @@ func (c *sessionClient) UpdateBridgeSessionTitle(ctx context.Context, sessionID,
 	c.debug(msg)
 	return fmt.Errorf("%s", msg)
 }
-

@@ -3,8 +3,8 @@ package layout
 import (
 	"strings"
 
-	tea "charm.land/bubbletea/v2"
 	"charm.land/bubbles/v2/viewport"
+	tea "charm.land/bubbletea/v2"
 )
 
 // Source: ink/components/ScrollBox.tsx

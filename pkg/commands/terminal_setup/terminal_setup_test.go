@@ -81,9 +81,9 @@ func TestCheck_NativeTerminal(t *testing.T) {
 
 func TestRender(t *testing.T) {
 	result := SetupResult{
-		Terminal:    TerminalVSCode,
+		Terminal:   TerminalVSCode,
 		NeedsSetup: true,
-		Message:     "VS Code needs Shift+Enter keybinding",
+		Message:    "VS Code needs Shift+Enter keybinding",
 	}
 	got := Render(result)
 	if !strings.Contains(got, "Terminal Setup") {

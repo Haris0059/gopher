@@ -24,10 +24,10 @@ import (
 
 // FrameRate controls render frequency to avoid excessive terminal writes.
 type FrameRate struct {
-	mu       sync.Mutex
-	interval time.Duration
+	mu         sync.Mutex
+	interval   time.Duration
 	lastRender time.Time
-	dirty    bool
+	dirty      bool
 }
 
 // NewFrameRate creates a frame rate controller.

@@ -16,7 +16,7 @@ import (
 const (
 	esc       = "\x1b"
 	bel       = "\x07"
-	oscPrefix = esc + "]" // ESC ]
+	oscPrefix = esc + "]"  // ESC ]
 	st        = esc + "\\" // String Terminator
 
 	// OSC command numbers
@@ -46,7 +46,7 @@ const (
 
 // TerminalNotifier sends terminal notifications via escape sequences.
 type TerminalNotifier struct {
-	w      io.Writer
+	w       io.Writer
 	isKitty bool
 	isTmux  bool
 }

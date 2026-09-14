@@ -45,17 +45,17 @@ const (
 type CommandType string
 
 const (
-	CmdIdle           CommandType = "idle"
-	CmdCount          CommandType = "count"
-	CmdOperator       CommandType = "operator"
-	CmdOperatorCount  CommandType = "operatorCount"
-	CmdOperatorFind   CommandType = "operatorFind"
+	CmdIdle            CommandType = "idle"
+	CmdCount           CommandType = "count"
+	CmdOperator        CommandType = "operator"
+	CmdOperatorCount   CommandType = "operatorCount"
+	CmdOperatorFind    CommandType = "operatorFind"
 	CmdOperatorTextObj CommandType = "operatorTextObj"
-	CmdFind           CommandType = "find"
-	CmdG              CommandType = "g"
-	CmdOperatorG      CommandType = "operatorG"
-	CmdReplace        CommandType = "replace"
-	CmdIndent         CommandType = "indent"
+	CmdFind            CommandType = "find"
+	CmdG               CommandType = "g"
+	CmdOperatorG       CommandType = "operatorG"
+	CmdReplace         CommandType = "replace"
+	CmdIndent          CommandType = "indent"
 )
 
 // CommandState tracks what input NORMAL mode is waiting for.

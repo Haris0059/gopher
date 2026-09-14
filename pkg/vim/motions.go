@@ -407,7 +407,7 @@ func isPunctuation(r rune) bool {
 }
 
 // IsVimWordChar is exported for text objects to use.
-func IsVimWordChar(r rune) bool  { return isWordChar(r) }
+func IsVimWordChar(r rune) bool { return isWordChar(r) }
 
 // IsVimWhitespace is exported for text objects to use.
 func IsVimWhitespace(r rune) bool { return isWhitespace(r) }

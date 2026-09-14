@@ -36,40 +36,40 @@ type APIQueryEvent struct {
 // APIErrorEvent holds metadata logged when an API request fails.
 // Source: logging.ts:235-396 — logAPIError params
 type APIErrorEvent struct {
-	Error                       string
-	ErrorType                   APIErrorType
-	Model                       string
-	MessageCount                int
-	MessageTokens               int
-	DurationMs                  int64
-	DurationMsIncludingRetries  int64
-	Attempt                     int
-	RequestID                   string
-	ClientRequestID             string
-	DidFallBackToNonStreaming    bool
-	QuerySource                 string
-	FastMode                    bool
+	Error                      string
+	ErrorType                  APIErrorType
+	Model                      string
+	MessageCount               int
+	MessageTokens              int
+	DurationMs                 int64
+	DurationMsIncludingRetries int64
+	Attempt                    int
+	RequestID                  string
+	ClientRequestID            string
+	DidFallBackToNonStreaming  bool
+	QuerySource                string
+	FastMode                   bool
 }
 
 // APISuccessEvent holds metadata logged when an API request succeeds.
 // Source: logging.ts:398-577 — logAPISuccess params
 type APISuccessEvent struct {
-	Model                       string
-	PreNormalizedModel          string
-	MessageCount                int
-	MessageTokens               int
-	Usage                       NonNullableUsage
-	DurationMs                  int64
-	DurationMsIncludingRetries  int64
-	Attempt                     int
-	TTFTMs                      *int64 // time to first token, nil if unknown
-	RequestID                   string
-	StopReason                  *StopReason
-	CostUSD                     float64
-	DidFallBackToNonStreaming    bool
-	QuerySource                 string
-	GlobalCacheStrategy         GlobalCacheStrategy
-	FastMode                    bool
+	Model                      string
+	PreNormalizedModel         string
+	MessageCount               int
+	MessageTokens              int
+	Usage                      NonNullableUsage
+	DurationMs                 int64
+	DurationMsIncludingRetries int64
+	Attempt                    int
+	TTFTMs                     *int64 // time to first token, nil if unknown
+	RequestID                  string
+	StopReason                 *StopReason
+	CostUSD                    float64
+	DidFallBackToNonStreaming  bool
+	QuerySource                string
+	GlobalCacheStrategy        GlobalCacheStrategy
+	FastMode                   bool
 }
 
 // LogAPIQuery logs a structured event at the start of an API request.

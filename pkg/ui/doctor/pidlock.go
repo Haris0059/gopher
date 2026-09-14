@@ -19,10 +19,10 @@ type LockInfo struct {
 // VersionLockInfo aggregates PID lock state for /doctor display.
 // Source: Doctor.tsx — VersionLockInfo type
 type VersionLockInfo struct {
-	Enabled            bool
-	Locks              []LockInfo
-	LocksDir           string
-	StaleLocksCleaned  int
+	Enabled           bool
+	Locks             []LockInfo
+	LocksDir          string
+	StaleLocksCleaned int
 }
 
 // RenderPIDLocks renders the Version Locks section.

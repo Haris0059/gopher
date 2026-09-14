@@ -62,14 +62,14 @@ func TestIsVersionAtLeast(t *testing.T) {
 		version, min string
 		want         bool
 	}{
-		{"1.1.2396", "1.1.2396", true},  // equal
-		{"1.2.0", "1.1.2396", true},     // minor higher
-		{"2.0.0", "1.1.2396", true},     // major higher
-		{"1.1.2395", "1.1.2396", false}, // one below
-		{"1.0.0", "1.1.2396", false},    // minor lower
-		{"0.9.0", "1.1.2396", false},    // major lower
-		{"1.1.2397", "1.1.2396", true},  // one above
-		{"1.1", "1.1.2396", false},      // fewer parts
+		{"1.1.2396", "1.1.2396", true},   // equal
+		{"1.2.0", "1.1.2396", true},      // minor higher
+		{"2.0.0", "1.1.2396", true},      // major higher
+		{"1.1.2395", "1.1.2396", false},  // one below
+		{"1.0.0", "1.1.2396", false},     // minor lower
+		{"0.9.0", "1.1.2396", false},     // major lower
+		{"1.1.2397", "1.1.2396", true},   // one above
+		{"1.1", "1.1.2396", false},       // fewer parts
 		{"1.1.2396.1", "1.1.2396", true}, // more parts (equal prefix)
 	}
 	for _, tt := range tests {

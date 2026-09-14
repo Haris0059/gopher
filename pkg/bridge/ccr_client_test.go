@@ -280,7 +280,7 @@ func TestInitialize_MissingEpoch(t *testing.T) {
 
 func TestReportDelivery_BatchPost(t *testing.T) {
 	var (
-		mu          sync.Mutex
+		mu           sync.Mutex
 		deliverySeen int
 	)
 

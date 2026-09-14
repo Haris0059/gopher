@@ -37,12 +37,12 @@ const (
 // FileInfo describes a discovered CLAUDE.md file.
 // Source: claudemd.ts — MemoryFileInfo
 type FileInfo struct {
-	Path       string
-	Content    string
-	Type       MemoryType
-	CharCount  int
-	IsLarge    bool // > MaxCharacterCount
-	Source     string // "managed", "user", "project", "local"
+	Path      string
+	Content   string
+	Type      MemoryType
+	CharCount int
+	IsLarge   bool   // > MaxCharacterCount
+	Source    string // "managed", "user", "project", "local"
 }
 
 // DiscoverFiles finds all CLAUDE.md files from cwd up to root.

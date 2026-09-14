@@ -294,11 +294,11 @@ func TestHybridTransport_DefaultSelectsV2(t *testing.T) {
 // exported types and URL patterns work end-to-end as wired in main.go.
 func TestGetTransportForUrl_FactorySelectionIntegration(t *testing.T) {
 	tests := []struct {
-		name      string
-		ccrV2     string
-		postV2    string
-		rawURL    string
-		wantKind  bridge.TransportKind
+		name       string
+		ccrV2      string
+		postV2     string
+		rawURL     string
+		wantKind   bridge.TransportKind
 		wantScheme string
 	}{
 		{
@@ -493,10 +493,10 @@ func TestWebSocketTransport_SelectedByDefault(t *testing.T) {
 
 	// Construct via the same path as main.go — NewWebSocketTransport + V1 adapter.
 	ws := bridge.NewWebSocketTransport(bridge.WebSocketTransportOpts{
-		URL:       sel.URL,
-		Headers:   sel.Headers,
-		SessionID: sel.SessionID,
-		IsBridge:  true,
+		URL:           sel.URL,
+		Headers:       sel.Headers,
+		SessionID:     sel.SessionID,
+		IsBridge:      true,
 		AutoReconnect: func() *bool { b := false; return &b }(),
 	})
 	transport := bridge.NewV1ReplTransport(ws)

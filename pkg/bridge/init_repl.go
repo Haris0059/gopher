@@ -16,9 +16,9 @@ import (
 // InitReplBridgeHandle represents the result of a successful REPL bridge init.
 // Wraps the underlying ReplBridge with the metadata needed by callers.
 type InitReplBridgeHandle struct {
-	Bridge    *ReplBridge
-	OrgUUID   string
-	BaseURL   string
+	Bridge  *ReplBridge
+	OrgUUID string
+	BaseURL string
 }
 
 // ---------------------------------------------------------------------------
@@ -120,11 +120,11 @@ const deadTokenThreshold = 3
 // ---------------------------------------------------------------------------
 
 const (
-	skipNotEnabled          = "[bridge:repl] Skipping: bridge not enabled"
-	skipNoOAuth             = "[bridge:repl] Skipping: no OAuth tokens"
-	skipPolicyDenied        = "[bridge:repl] Skipping: allow_remote_control policy not allowed"
-	skipOAuthExpired        = "[bridge:repl] Skipping: OAuth token expired and refresh failed (re-login required)"
-	skipNoOrgUUID           = "[bridge:repl] Skipping: no org UUID"
+	skipNotEnabled   = "[bridge:repl] Skipping: bridge not enabled"
+	skipNoOAuth      = "[bridge:repl] Skipping: no OAuth tokens"
+	skipPolicyDenied = "[bridge:repl] Skipping: allow_remote_control policy not allowed"
+	skipOAuthExpired = "[bridge:repl] Skipping: OAuth token expired and refresh failed (re-login required)"
+	skipNoOrgUUID    = "[bridge:repl] Skipping: no org UUID"
 )
 
 // skipCrossProcessBackoff returns the formatted cross-process backoff message.
@@ -142,9 +142,9 @@ func skipVersionTooOld(versionError string) string {
 // ---------------------------------------------------------------------------
 
 const (
-	stateDetailLogin         = "/login"
-	stateDetailPolicyDenied  = "disabled by your organization's policy"
-	stateDetailUpdateNeeded  = "run `claude update` to upgrade"
+	stateDetailLogin        = "/login"
+	stateDetailPolicyDenied = "disabled by your organization's policy"
+	stateDetailUpdateNeeded = "run `claude update` to upgrade"
 )
 
 // ---------------------------------------------------------------------------

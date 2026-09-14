@@ -562,11 +562,11 @@ type PrStatusPoller struct {
 	state   *PrStatusState
 	fetcher PrStatusFetcher
 
-	disabled          bool
-	lastFetch         time.Time
-	lastInteraction   time.Time
-	stopCh            chan struct{}
-	stopped           bool
+	disabled        bool
+	lastFetch       time.Time
+	lastInteraction time.Time
+	stopCh          chan struct{}
+	stopped         bool
 }
 
 // NewPrStatusPoller creates a poller that uses the given fetcher.
@@ -660,10 +660,10 @@ func (p *PrStatusPoller) poll(ctx context.Context) {
 
 // IDEDiffRequest contains the parameters needed to open a diff in an IDE.
 type IDEDiffRequest struct {
-	FilePath    string
-	OldContent  string
-	NewContent  string
-	TabName     string
+	FilePath   string
+	OldContent string
+	NewContent string
+	TabName    string
 }
 
 // IDEDiffResult describes the outcome of showing a diff in the IDE.
@@ -741,7 +741,7 @@ func splitLines(s string) []string {
 type editOp int
 
 const (
-	opEqual  editOp = iota
+	opEqual editOp = iota
 	opInsert
 	opDelete
 )

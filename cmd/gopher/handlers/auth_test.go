@@ -376,7 +376,7 @@ func TestAuthLogin_OAuthFlowSSLError(t *testing.T) {
 
 func TestGetSSLErrorHint(t *testing.T) {
 	tests := []struct {
-		err    string
+		err     string
 		hasHint bool
 	}{
 		{"x509: certificate signed by unknown authority", true},

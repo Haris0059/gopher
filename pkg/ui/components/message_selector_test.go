@@ -73,7 +73,7 @@ func TestMessageSelector_Cancel(t *testing.T) {
 
 func TestMessageSelector_BackFromAction(t *testing.T) {
 	m := NewMessageSelector(makeTestEntries())
-	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter}) // phase 1
+	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter})  // phase 1
 	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEscape}) // back
 	if m.phase != 0 {
 		t.Error("escape in action phase should go back to message list")

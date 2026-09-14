@@ -13,12 +13,12 @@ import (
 // Used to display real-time LLM responses as they arrive.
 type StreamingText struct {
 	buffer      strings.Builder
-	cursorTick  int           // Counter for cursor animation (0-3 cycles)
-	isStreaming bool          // True while receiving deltas
-	theme       theme.Theme   // Theme for cursor styling
-	width       int           // Available width for rendering
-	lastTick    time.Time     // Track last tick time
-	tickCounter int           // Count ticks to control blink rate
+	cursorTick  int         // Counter for cursor animation (0-3 cycles)
+	isStreaming bool        // True while receiving deltas
+	theme       theme.Theme // Theme for cursor styling
+	width       int         // Available width for rendering
+	lastTick    time.Time   // Track last tick time
+	tickCounter int         // Count ticks to control blink rate
 }
 
 // NewStreamingText creates a new StreamingText buffer.

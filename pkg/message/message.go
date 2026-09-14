@@ -15,11 +15,11 @@ const (
 type ContentBlockType string
 
 const (
-	ContentText              ContentBlockType = "text"
-	ContentToolUse           ContentBlockType = "tool_use"
-	ContentToolResult        ContentBlockType = "tool_result"
-	ContentThinking          ContentBlockType = "thinking"
-	ContentRedactedThinking  ContentBlockType = "redacted_thinking"
+	ContentText             ContentBlockType = "text"
+	ContentToolUse          ContentBlockType = "tool_use"
+	ContentToolResult       ContentBlockType = "tool_result"
+	ContentThinking         ContentBlockType = "thinking"
+	ContentRedactedThinking ContentBlockType = "redacted_thinking"
 )
 
 // ContentBlock is a tagged union. Go lacks sum types, so we use a struct with a Type discriminator.

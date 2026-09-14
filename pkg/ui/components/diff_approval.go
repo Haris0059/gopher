@@ -26,14 +26,14 @@ type ApprovalResponseMsg struct {
 
 // DiffApprovalDialog shows a diff with approve/reject controls.
 type DiffApprovalDialog struct {
-	diff      *DiffViewer
-	toolName  string
-	toolID    string
-	result    ApprovalResult
-	theme     theme.Theme
-	width     int
-	height    int
-	focused   bool
+	diff       *DiffViewer
+	toolName   string
+	toolID     string
+	result     ApprovalResult
+	theme      theme.Theme
+	width      int
+	height     int
+	focused    bool
 	responseCh chan<- ApprovalResult
 }
 

@@ -23,7 +23,7 @@ func TestReplBridge_Construction_BinaryWiring(t *testing.T) {
 		OnStateChange: func(state BridgeState, detail string) {
 			stateChanges = append(stateChanges, state)
 		},
-		OnInboundMessage: func(msg SDKMessage) {},
+		OnInboundMessage:     func(msg SDKMessage) {},
 		OnPermissionResponse: func(response SDKMessage) {},
 		OnInterrupt:          func() {},
 		OnSetModel:           func(model string) {},
@@ -157,7 +157,7 @@ func TestReplBridge_SSESequenceNum_Integration(t *testing.T) {
 // TestReplBridge_Teardown verifies graceful shutdown and Done channel closure.
 func TestReplBridge_Teardown(t *testing.T) {
 	rb := NewReplBridge(ReplBridgeConfig{
-		SessionID: "sess-005",
+		SessionID:     "sess-005",
 		OnStateChange: func(state BridgeState, detail string) {},
 		OnDebug:       func(msg string) {},
 	})

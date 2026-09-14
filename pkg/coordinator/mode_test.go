@@ -17,9 +17,13 @@ type capturedEvent struct {
 	metadata analytics.EventMetadata
 }
 
-func (s *captureSink) LogEvent(name string, md analytics.EventMetadata)      { s.events = append(s.events, capturedEvent{name, md}) }
-func (s *captureSink) LogEventAsync(name string, md analytics.EventMetadata) { s.events = append(s.events, capturedEvent{name, md}) }
-func (s *captureSink) Shutdown()                                              {}
+func (s *captureSink) LogEvent(name string, md analytics.EventMetadata) {
+	s.events = append(s.events, capturedEvent{name, md})
+}
+func (s *captureSink) LogEventAsync(name string, md analytics.EventMetadata) {
+	s.events = append(s.events, capturedEvent{name, md})
+}
+func (s *captureSink) Shutdown() {}
 
 func resetEnv(t *testing.T) {
 	t.Helper()

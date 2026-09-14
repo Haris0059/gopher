@@ -20,10 +20,14 @@ type SyntheticOutputTool struct {
 	JSONSchema json.RawMessage
 }
 
-func (t *SyntheticOutputTool) Name() string        { return "SyntheticOutput" }
-func (t *SyntheticOutputTool) Description() string { return "Return structured output in the requested format" }
-func (t *SyntheticOutputTool) IsReadOnly() bool    { return true }
-func (t *SyntheticOutputTool) SearchHint() string  { return "return the final response as structured JSON" }
+func (t *SyntheticOutputTool) Name() string { return "SyntheticOutput" }
+func (t *SyntheticOutputTool) Description() string {
+	return "Return structured output in the requested format"
+}
+func (t *SyntheticOutputTool) IsReadOnly() bool { return true }
+func (t *SyntheticOutputTool) SearchHint() string {
+	return "return the final response as structured JSON"
+}
 func (t *SyntheticOutputTool) MaxResultSizeChars() int { return 100_000 }
 
 // Prompt returns the tool's system prompt instruction.

@@ -1,6 +1,7 @@
 // Package media provides image and media processing utilities.
 // Source: utils/imageResizer.ts, utils/imageValidation.ts, utils/imageStore.ts,
-//         constants/apiLimits.ts (image limits)
+//
+//	constants/apiLimits.ts (image limits)
 package media
 
 import (
@@ -15,7 +16,7 @@ import (
 // API and image size limits matching the TS constants.
 // Source: constants/apiLimits.ts
 const (
-	APIImageMaxBase64Size = 5 * 1024 * 1024         // 5 MB base64 string
+	APIImageMaxBase64Size = 5 * 1024 * 1024               // 5 MB base64 string
 	ImageTargetRawSize    = APIImageMaxBase64Size * 3 / 4 // ~3.75 MB decoded
 	ImageMaxWidth         = 2000
 	ImageMaxHeight        = 2000

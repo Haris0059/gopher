@@ -101,7 +101,7 @@ func TestSettings_DrillDown_ToolList(t *testing.T) {
 
 func TestSettings_Back_FromServer(t *testing.T) {
 	m := NewSettingsModel(testServers())
-	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter}) // to server
+	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter})  // to server
 	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEscape}) // back
 	if m.level != settingsLevelList {
 		t.Errorf("level = %d, should be list", m.level)
@@ -110,8 +110,8 @@ func TestSettings_Back_FromServer(t *testing.T) {
 
 func TestSettings_Back_FromToolList(t *testing.T) {
 	m := NewSettingsModel(testServers())
-	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter}) // to server
-	m, _ = m.Update(tea.KeyPressMsg{Code: 't'})          // to tools
+	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEnter})  // to server
+	m, _ = m.Update(tea.KeyPressMsg{Code: 't'})           // to tools
 	m, _ = m.Update(tea.KeyPressMsg{Code: tea.KeyEscape}) // back to server
 	if m.level != settingsLevelServer {
 		t.Errorf("level = %d, should be server", m.level)

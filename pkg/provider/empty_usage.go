@@ -19,15 +19,15 @@ type CacheCreation struct {
 // NonNullableUsage is the full usage struct with all fields non-nil.
 // Source: emptyUsage.ts:8-22 (NonNullableUsage shape)
 type NonNullableUsage struct {
-	InputTokens              int            `json:"input_tokens"`
-	OutputTokens             int            `json:"output_tokens"`
-	CacheCreationInputTokens int            `json:"cache_creation_input_tokens"`
-	CacheReadInputTokens     int            `json:"cache_read_input_tokens"`
-	ServerToolUse            ServerToolUse  `json:"server_tool_use"`
-	ServiceTier              string         `json:"service_tier"`
-	CacheCreation            CacheCreation  `json:"cache_creation"`
-	InferenceGeo             string         `json:"inference_geo"`
-	Speed                    string         `json:"speed"`
+	InputTokens              int           `json:"input_tokens"`
+	OutputTokens             int           `json:"output_tokens"`
+	CacheCreationInputTokens int           `json:"cache_creation_input_tokens"`
+	CacheReadInputTokens     int           `json:"cache_read_input_tokens"`
+	ServerToolUse            ServerToolUse `json:"server_tool_use"`
+	ServiceTier              string        `json:"service_tier"`
+	CacheCreation            CacheCreation `json:"cache_creation"`
+	InferenceGeo             string        `json:"inference_geo"`
+	Speed                    string        `json:"speed"`
 }
 
 // EmptyUsage returns a zero-initialized NonNullableUsage.

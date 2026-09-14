@@ -58,12 +58,12 @@ func (s *PlanState) IsInPlanMode() bool {
 // ExitPlanModeResult is the structured result from ExitPlanMode.
 // Source: ExitPlanModeV2Tool.ts output schema
 type ExitPlanModeResult struct {
-	Plan                    string `json:"plan,omitempty"`
-	IsAgent                 bool   `json:"isAgent"`
-	FilePath                string `json:"filePath,omitempty"`
-	PlanWasEdited           bool   `json:"planWasEdited,omitempty"`
-	AwaitingLeaderApproval  bool   `json:"awaitingLeaderApproval,omitempty"`
-	RequestID               string `json:"requestId,omitempty"`
+	Plan                   string `json:"plan,omitempty"`
+	IsAgent                bool   `json:"isAgent"`
+	FilePath               string `json:"filePath,omitempty"`
+	PlanWasEdited          bool   `json:"planWasEdited,omitempty"`
+	AwaitingLeaderApproval bool   `json:"awaitingLeaderApproval,omitempty"`
+	RequestID              string `json:"requestId,omitempty"`
 }
 
 // EnterPlanModeTool puts the assistant into planning mode.
@@ -73,7 +73,7 @@ type EnterPlanModeTool struct {
 	currentMode func() string // returns current permission mode
 }
 
-func (t *EnterPlanModeTool) Name() string        { return "EnterPlanMode" }
+func (t *EnterPlanModeTool) Name() string { return "EnterPlanMode" }
 func (t *EnterPlanModeTool) Description() string {
 	return "Enter planning mode to create a plan before making changes. In plan mode, you can only read files and search — no edits or commands."
 }

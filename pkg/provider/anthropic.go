@@ -208,16 +208,16 @@ func (p *AnthropicProvider) readSSEStream(ctx context.Context, resp *http.Respon
 
 	// State accumulated across events for building the final ModelResponse.
 	var (
-		messageID   string
-		model       string
-		inputTokens int
-		stopReason  *StopReason
-		outputTokens int
+		messageID     string
+		model         string
+		inputTokens   int
+		stopReason    *StopReason
+		outputTokens  int
 		contentBlocks []ResponseContent
 		// Track content blocks being built from deltas.
-		blockTexts     = make(map[int]string)
-		blockToolJSON  = make(map[int]string)
-		blockMeta      = make(map[int]contentBlockJSON) // type, id, name
+		blockTexts    = make(map[int]string)
+		blockToolJSON = make(map[int]string)
+		blockMeta     = make(map[int]contentBlockJSON) // type, id, name
 	)
 
 	scanner := bufio.NewScanner(resp.Body)

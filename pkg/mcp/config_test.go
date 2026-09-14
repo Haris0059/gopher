@@ -12,21 +12,43 @@ import (
 
 func TestConfigScopeConstants(t *testing.T) {
 	// Source: services/mcp/types.ts:10-21
-	if ScopeLocal != "local" { t.Error("wrong") }
-	if ScopeUser != "user" { t.Error("wrong") }
-	if ScopeProject != "project" { t.Error("wrong") }
-	if ScopeDynamic != "dynamic" { t.Error("wrong") }
-	if ScopeEnterprise != "enterprise" { t.Error("wrong") }
-	if ScopeManaged != "managed" { t.Error("wrong") }
+	if ScopeLocal != "local" {
+		t.Error("wrong")
+	}
+	if ScopeUser != "user" {
+		t.Error("wrong")
+	}
+	if ScopeProject != "project" {
+		t.Error("wrong")
+	}
+	if ScopeDynamic != "dynamic" {
+		t.Error("wrong")
+	}
+	if ScopeEnterprise != "enterprise" {
+		t.Error("wrong")
+	}
+	if ScopeManaged != "managed" {
+		t.Error("wrong")
+	}
 }
 
 func TestTransportConstants(t *testing.T) {
 	// Source: services/mcp/types.ts:23-25
-	if TransportStdio != "stdio" { t.Error("wrong") }
-	if TransportSSE != "sse" { t.Error("wrong") }
-	if TransportHTTP != "http" { t.Error("wrong") }
-	if TransportWS != "ws" { t.Error("wrong") }
-	if TransportSDK != "sdk" { t.Error("wrong") }
+	if TransportStdio != "stdio" {
+		t.Error("wrong")
+	}
+	if TransportSSE != "sse" {
+		t.Error("wrong")
+	}
+	if TransportHTTP != "http" {
+		t.Error("wrong")
+	}
+	if TransportWS != "ws" {
+		t.Error("wrong")
+	}
+	if TransportSDK != "sdk" {
+		t.Error("wrong")
+	}
 }
 
 func TestServerConfig_IsStdio(t *testing.T) {

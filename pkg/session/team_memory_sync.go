@@ -9,11 +9,11 @@ import (
 
 // TeamMemorySync manages periodic syncing of team memories.
 type TeamMemorySync struct {
-	mu        sync.Mutex
-	teamName  string
-	lastSync  time.Time
-	interval  time.Duration
-	dirty     bool
+	mu       sync.Mutex
+	teamName string
+	lastSync time.Time
+	interval time.Duration
+	dirty    bool
 }
 
 // NewTeamMemorySync creates a sync manager for a team.

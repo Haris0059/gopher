@@ -15,9 +15,9 @@ import (
 // Supports direct messages (to: "name") and broadcast (to: "*").
 // Source: tools/SendMessageTool/SendMessageTool.ts:522-548
 type SendMessageTool struct {
-	Mailbox    *session.Mailbox // nil = not in team mode
-	TeamName   string
-	SenderName string
+	Mailbox     *session.Mailbox // nil = not in team mode
+	TeamName    string
+	SenderName  string
 	SenderColor string
 }
 

@@ -15,8 +15,8 @@ import (
 // ContentBlock represents a single content block in a user message.
 // It is a discriminated union on the Type field.
 type ContentBlock struct {
-	Type   string           `json:"type"`
-	Text   string           `json:"text,omitempty"`
+	Type   string             `json:"type"`
+	Text   string             `json:"text,omitempty"`
 	Source *Base64ImageSource `json:"source,omitempty"`
 }
 

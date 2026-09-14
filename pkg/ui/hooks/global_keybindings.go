@@ -25,15 +25,15 @@ const (
 
 // GlobalKeybindings manages state for the global keybinding handlers.
 type GlobalKeybindings struct {
-	Screen               Screen
-	ExpandedView         ExpandedView
-	ShowAllInTranscript  bool
-	IsBriefOnly          bool
-	HasRunningTeammates  bool
-	BriefFeatureEnabled  bool
-	VirtualScrollActive  bool
-	SearchBarOpen        bool
-	MessageCount         int
+	Screen              Screen
+	ExpandedView        ExpandedView
+	ShowAllInTranscript bool
+	IsBriefOnly         bool
+	HasRunningTeammates bool
+	BriefFeatureEnabled bool
+	VirtualScrollActive bool
+	SearchBarOpen       bool
+	MessageCount        int
 
 	// Callbacks invoked on screen transitions.
 	OnEnterTranscript func()

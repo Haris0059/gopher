@@ -51,12 +51,12 @@ func CSI(parts ...interface{}) string {
 }
 
 // Cursor movement
-func CursorUp(n int) string       { return CSI(n, "A") }
-func CursorDown(n int) string     { return CSI(n, "B") }
-func CursorForward(n int) string  { return CSI(n, "C") }
-func CursorBack(n int) string     { return CSI(n, "D") }
+func CursorUp(n int) string              { return CSI(n, "A") }
+func CursorDown(n int) string            { return CSI(n, "B") }
+func CursorForward(n int) string         { return CSI(n, "C") }
+func CursorBack(n int) string            { return CSI(n, "D") }
 func CursorPosition(row, col int) string { return CSI(row, col, "H") }
-func CursorColumn(col int) string { return CSI(col, "G") }
+func CursorColumn(col int) string        { return CSI(col, "G") }
 
 // Cursor visibility
 var (
@@ -66,12 +66,12 @@ var (
 
 // Screen operations
 var (
-	ClearScreen       = CSI("2J")    // Clear entire screen
-	ClearScreenBelow  = CSI("0J")    // Clear from cursor to end
-	ClearScreenAbove  = CSI("1J")    // Clear from start to cursor
-	ClearLine         = CSI("2K")    // Clear entire line
-	ClearLineRight    = CSI("0K")    // Clear from cursor to end of line
-	ClearLineLeft     = CSI("1K")    // Clear from start to cursor
+	ClearScreen      = CSI("2J") // Clear entire screen
+	ClearScreenBelow = CSI("0J") // Clear from cursor to end
+	ClearScreenAbove = CSI("1J") // Clear from start to cursor
+	ClearLine        = CSI("2K") // Clear entire line
+	ClearLineRight   = CSI("0K") // Clear from cursor to end of line
+	ClearLineLeft    = CSI("1K") // Clear from start to cursor
 )
 
 // Scroll
@@ -88,8 +88,8 @@ var (
 
 // Mouse tracking
 var (
-	EnableMouseTracking    = CSI("?1000h") + CSI("?1002h") + CSI("?1003h") + CSI("?1006h")
-	DisableMouseTracking   = CSI("?1006l") + CSI("?1003l") + CSI("?1002l") + CSI("?1000l")
+	EnableMouseTracking  = CSI("?1000h") + CSI("?1002h") + CSI("?1003h") + CSI("?1006h")
+	DisableMouseTracking = CSI("?1006l") + CSI("?1003l") + CSI("?1002l") + CSI("?1000l")
 )
 
 // Focus reporting
@@ -123,11 +123,11 @@ func OSC(parts ...interface{}) string {
 
 // OSC command numbers
 const (
-	OSCSetTitle    = 0  // Set window title
-	OSCHyperlink   = 8  // Hyperlink
-	OSCITerm2      = 9  // iTerm2 proprietary
-	OSCKitty       = 99 // Kitty notification
-	OSCGhostty     = 777 // Ghostty notification
+	OSCSetTitle  = 0   // Set window title
+	OSCHyperlink = 8   // Hyperlink
+	OSCITerm2    = 9   // iTerm2 proprietary
+	OSCKitty     = 99  // Kitty notification
+	OSCGhostty   = 777 // Ghostty notification
 )
 
 // SetTitle sets the terminal window title.
@@ -147,14 +147,14 @@ func Hyperlink(url, text string) string {
 
 // SGR constants
 const (
-	SGRReset     = 0
-	SGRBold      = 1
-	SGRDim       = 2
-	SGRItalic    = 3
-	SGRUnderline = 4
-	SGRBlink     = 5
-	SGRInverse   = 7
-	SGRHidden    = 8
+	SGRReset         = 0
+	SGRBold          = 1
+	SGRDim           = 2
+	SGRItalic        = 3
+	SGRUnderline     = 4
+	SGRBlink         = 5
+	SGRInverse       = 7
+	SGRHidden        = 8
 	SGRStrikethrough = 9
 
 	// Foreground colors (30-37, 90-97)

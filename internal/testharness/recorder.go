@@ -20,16 +20,16 @@ type RecordedTurn struct {
 
 // RecordedSession is a complete session trace for replay.
 type RecordedSession struct {
-	Version   string         `json:"version"`
-	Source    string         `json:"source"` // "ts" or "go"
-	Turns     []RecordedTurn `json:"turns"`
+	Version string         `json:"version"`
+	Source  string         `json:"source"` // "ts" or "go"
+	Turns   []RecordedTurn `json:"turns"`
 }
 
 // RecordingProvider wraps a real provider and logs all interactions.
 type RecordingProvider struct {
-	inner  provider.ModelProvider
-	mu     sync.Mutex
-	turns  []RecordedTurn
+	inner provider.ModelProvider
+	mu    sync.Mutex
+	turns []RecordedTurn
 }
 
 // NewRecordingProvider creates a provider that records all interactions.

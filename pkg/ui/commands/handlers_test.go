@@ -1074,15 +1074,15 @@ func TestNewCommandsRegisteredInDefaults(t *testing.T) {
 
 func TestClear_FullChain(t *testing.T) {
 	s := &session.SessionState{
-		ID:              "old-id",
-		Messages:        []message.Message{message.UserMessage("hello")},
-		TurnCount:       5,
-		TotalCostUSD:    1.23,
-		TotalInputTokens: 1000,
+		ID:                "old-id",
+		Messages:          []message.Message{message.UserMessage("hello")},
+		TurnCount:         5,
+		TotalCostUSD:      1.23,
+		TotalInputTokens:  1000,
 		HasExitedPlanMode: true,
-		PlanSlugCache:   map[string]string{"a": "b"},
-		InvokedSkills:   map[string]bool{"x": true},
-		CWD:             "/some/path",
+		PlanSlugCache:     map[string]string{"a": "b"},
+		InvokedSkills:     map[string]bool{"x": true},
+		CWD:               "/some/path",
 	}
 	planCleaned := false
 	postClearCalled := false
@@ -3357,7 +3357,6 @@ func TestModel_SwitchOpus(t *testing.T) {
 		t.Errorf("expected model 'opus', got %q", sm.Model)
 	}
 }
-
 
 func TestModel_NoArgsOpensModelPicker(t *testing.T) {
 	d := NewDispatcher()

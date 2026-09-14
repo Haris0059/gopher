@@ -140,8 +140,8 @@ func contextNames() []string {
 // CheckDuplicates finds duplicate key bindings within the same context.
 func CheckDuplicates(bindings []ParsedBinding) []Warning {
 	type key struct {
-		ctx     Context
-		keyStr  string
+		ctx    Context
+		keyStr string
 	}
 	seen := make(map[key]string) // key → first action
 	var warnings []Warning

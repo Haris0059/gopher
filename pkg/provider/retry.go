@@ -45,12 +45,12 @@ type RetryContext struct {
 // RetryOptions configures the retry loop.
 // Source: withRetry.ts:127-143
 type RetryOptions struct {
-	MaxRetries                   int
-	Model                        string
-	FallbackModel                string
-	QuerySource                  QuerySource
-	BaseDelay                    time.Duration // override BaseDelayMs for testing
-	InitialConsecutive529Errors  int
+	MaxRetries                  int
+	Model                       string
+	FallbackModel               string
+	QuerySource                 QuerySource
+	BaseDelay                   time.Duration // override BaseDelayMs for testing
+	InitialConsecutive529Errors int
 }
 
 // CannotRetryError is returned when retries are exhausted or the error is non-retryable.

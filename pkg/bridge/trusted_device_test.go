@@ -66,13 +66,13 @@ func blockingGateOff(_ string) (bool, error) { return false, nil }
 
 func baseDeps(kr *memKeyring) TrustedDeviceDeps {
 	return TrustedDeviceDeps{
-		Keyring:             kr,
-		GetFeatureValueBool: gateOn,
-		CheckGateBlocking:   blockingGateOn,
-		GetAccessToken:      func() (string, bool) { return "test-oauth-token", true },
-		GetBaseAPIURL:       func() string { return "https://api.example.com" },
+		Keyring:                kr,
+		GetFeatureValueBool:    gateOn,
+		CheckGateBlocking:      blockingGateOn,
+		GetAccessToken:         func() (string, bool) { return "test-oauth-token", true },
+		GetBaseAPIURL:          func() string { return "https://api.example.com" },
 		IsEssentialTrafficOnly: func() bool { return false },
-		Hostname:            "test-host",
+		Hostname:               "test-host",
 	}
 }
 

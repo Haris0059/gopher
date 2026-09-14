@@ -11,11 +11,11 @@ import (
 // ModelCosts holds per-million-token pricing for a model.
 // Source: utils/modelCost.ts — ModelCosts type
 type ModelCosts struct {
-	InputTokens           float64 // Cost per million input tokens
-	OutputTokens          float64 // Cost per million output tokens
+	InputTokens            float64 // Cost per million input tokens
+	OutputTokens           float64 // Cost per million output tokens
 	PromptCacheWriteTokens float64 // Cache creation cost per Mtok
 	PromptCacheReadTokens  float64 // Cache read cost per Mtok
-	WebSearchRequests     float64 // Cost per web search request
+	WebSearchRequests      float64 // Cost per web search request
 }
 
 // Standard pricing tiers.
@@ -24,61 +24,61 @@ type ModelCosts struct {
 // CostTier3_15 is Sonnet pricing: $3 input / $15 output per Mtok.
 // Source: modelCost.ts — COST_TIER_3_15
 var CostTier3_15 = ModelCosts{
-	InputTokens:           3,
-	OutputTokens:          15,
+	InputTokens:            3,
+	OutputTokens:           15,
 	PromptCacheWriteTokens: 3.75,
 	PromptCacheReadTokens:  0.3,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // CostTier15_75 is Opus 4/4.1 pricing: $15 input / $75 output per Mtok.
 // Source: modelCost.ts — COST_TIER_15_75
 var CostTier15_75 = ModelCosts{
-	InputTokens:           15,
-	OutputTokens:          75,
+	InputTokens:            15,
+	OutputTokens:           75,
 	PromptCacheWriteTokens: 18.75,
 	PromptCacheReadTokens:  1.5,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // CostTier5_25 is Opus 4.5/4.6 pricing: $5 input / $25 output per Mtok.
 // Source: modelCost.ts — COST_TIER_5_25
 var CostTier5_25 = ModelCosts{
-	InputTokens:           5,
-	OutputTokens:          25,
+	InputTokens:            5,
+	OutputTokens:           25,
 	PromptCacheWriteTokens: 6.25,
 	PromptCacheReadTokens:  0.5,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // CostTier30_150 is fast mode Opus 4.6 pricing: $30 input / $150 output per Mtok.
 // Source: modelCost.ts — COST_TIER_30_150
 var CostTier30_150 = ModelCosts{
-	InputTokens:           30,
-	OutputTokens:          150,
+	InputTokens:            30,
+	OutputTokens:           150,
 	PromptCacheWriteTokens: 37.5,
 	PromptCacheReadTokens:  3,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // CostHaiku35 is Haiku 3.5 pricing: $0.80 input / $4 output per Mtok.
 // Source: modelCost.ts — COST_HAIKU_35
 var CostHaiku35 = ModelCosts{
-	InputTokens:           0.8,
-	OutputTokens:          4,
+	InputTokens:            0.8,
+	OutputTokens:           4,
 	PromptCacheWriteTokens: 1,
 	PromptCacheReadTokens:  0.08,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // CostHaiku45 is Haiku 4.5 pricing: $1 input / $5 output per Mtok.
 // Source: modelCost.ts — COST_HAIKU_45
 var CostHaiku45 = ModelCosts{
-	InputTokens:           1,
-	OutputTokens:          5,
+	InputTokens:            1,
+	OutputTokens:           5,
 	PromptCacheWriteTokens: 1.25,
 	PromptCacheReadTokens:  0.1,
-	WebSearchRequests:     0.01,
+	WebSearchRequests:      0.01,
 }
 
 // ModelCostsMap maps canonical model names to their pricing.

@@ -53,9 +53,9 @@ func TestErrorDisplayViewEmpty(t *testing.T) {
 func TestErrorDisplayViewError(t *testing.T) {
 	ed := NewErrorDisplay(theme.Current())
 	ed.AddError(ErrorInfo{
-		Type:     ErrorTypeNetwork,
-		Severity: SeverityError,
-		Message:  "connection refused",
+		Type:        ErrorTypeNetwork,
+		Severity:    SeverityError,
+		Message:     "connection refused",
 		Suggestions: []string{"Check network"},
 	})
 	view := ed.View()

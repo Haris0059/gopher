@@ -12,10 +12,10 @@ func TestGetSemverPart(t *testing.T) {
 		{"1.2.3-beta.1", "1.2.3"},
 		{"1.2.3+build123", "1.2.3"},
 		{"1.2.3-rc.1+meta", "1.2.3"},
-		{"1.0", "1.0.0"},   // loose: missing patch
-		{"2", "2.0.0"},     // loose: missing minor+patch
-		{"", ""},           // empty
-		{"abc", ""},        // non-numeric
+		{"1.0", "1.0.0"}, // loose: missing patch
+		{"2", "2.0.0"},   // loose: missing minor+patch
+		{"", ""},         // empty
+		{"abc", ""},      // non-numeric
 	}
 	for _, tt := range tests {
 		got := getSemverPart(tt.input)

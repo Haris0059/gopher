@@ -15,19 +15,19 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/goccy/go-yaml"
 	"github.com/Haris0059/gopher/pkg/config"
+	"github.com/goccy/go-yaml"
 )
 
 // OutputStyleConfig describes a single output style loaded from disk or built-in.
 // Source: constants/outputStyles.ts — OutputStyleConfig
 type OutputStyleConfig struct {
-	Name                  string              `json:"name"`
-	Description           string              `json:"description"`
-	Prompt                string              `json:"prompt"`
-	Source                config.SettingSource `json:"source"`
-	KeepCodingInstructions *bool              `json:"keepCodingInstructions,omitempty"`
-	ForceForPlugin        bool                `json:"forceForPlugin,omitempty"`
+	Name                   string               `json:"name"`
+	Description            string               `json:"description"`
+	Prompt                 string               `json:"prompt"`
+	Source                 config.SettingSource `json:"source"`
+	KeepCodingInstructions *bool                `json:"keepCodingInstructions,omitempty"`
+	ForceForPlugin         bool                 `json:"forceForPlugin,omitempty"`
 }
 
 // MarkdownFile is a parsed .md file with frontmatter and content.

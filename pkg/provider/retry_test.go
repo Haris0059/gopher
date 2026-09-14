@@ -106,7 +106,6 @@ func TestShouldRetryHeader(t *testing.T) {
 	})
 }
 
-
 func TestWithRetry_SuccessOnFirstAttempt(t *testing.T) {
 	result, err := WithRetry(context.Background(), func(attempt int, ctx RetryContext) (*http.Response, error) {
 		return &http.Response{StatusCode: 200}, nil
@@ -359,10 +358,10 @@ func TestWithRetry_ShouldRetryHeaderFalseVetoes(t *testing.T) {
 	_, err := WithRetry(context.Background(), func(attempt int, ctx RetryContext) (*http.Response, error) {
 		atomic.AddInt32(&attempts, 1)
 		return nil, &APIError{
-			StatusCode:       429,
-			Message:          "rate limited",
-			Type:             ErrRateLimit,
-			Retryable:        true,
+			StatusCode:        429,
+			Message:           "rate limited",
+			Type:              ErrRateLimit,
+			Retryable:         true,
 			ShouldRetryHeader: "false",
 		}
 	}, RetryOptions{

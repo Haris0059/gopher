@@ -49,7 +49,7 @@ var permanentCloseCodes = map[int]bool{
 type wsState int
 
 const (
-	wsStateClosed     wsState = iota
+	wsStateClosed wsState = iota
 	wsStateConnecting
 	wsStateConnected
 )

@@ -12,10 +12,10 @@ import (
 // SessionFileInfo holds stat information for a session JSONL file.
 // Source: sessionStorage.ts:4526-4569
 type SessionFileInfo struct {
-	Path      string
-	ModTime   time.Time
+	Path       string
+	ModTime    time.Time
 	CreateTime time.Time
-	Size      int64
+	Size       int64
 }
 
 // GetSessionFilesWithMtime returns session JSONL files in a project directory
@@ -49,10 +49,10 @@ func GetSessionFilesWithMtime(projectDir string) (map[string]SessionFileInfo, er
 		}
 
 		result[base] = SessionFileInfo{
-			Path:      filePath,
-			ModTime:   info.ModTime(),
+			Path:       filePath,
+			ModTime:    info.ModTime(),
 			CreateTime: info.ModTime(), // Go os.FileInfo doesn't expose birth time portably; use ModTime as fallback
-			Size:      info.Size(),
+			Size:       info.Size(),
 		}
 	}
 

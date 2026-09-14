@@ -21,11 +21,11 @@ import (
 // FocusManager tracks which component currently has focus.
 // In Ink, this walks a DOM tree. In Go, components register by ID.
 type FocusManager struct {
-	mu          sync.RWMutex
-	active      string   // ID of the focused component
-	stack       []string // focus history for restore-on-unmount
-	maxStack    int
-	tabOrder    []string // ordered list of focusable component IDs
+	mu       sync.RWMutex
+	active   string   // ID of the focused component
+	stack    []string // focus history for restore-on-unmount
+	maxStack int
+	tabOrder []string // ordered list of focusable component IDs
 }
 
 // NewFocusManager creates a focus manager.

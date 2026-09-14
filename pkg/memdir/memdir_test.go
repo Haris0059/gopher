@@ -133,7 +133,7 @@ func TestTruncateEntrypointContent_BothLimits(t *testing.T) {
 func TestTruncateEntrypointContent_ByteTruncCutsAtNewline(t *testing.T) {
 	// Ensure byte truncation doesn't cut mid-line: cuts at last newline
 	// before the byte cap.
-	line := strings.Repeat("y", 5000) // 5KB per line
+	line := strings.Repeat("y", 5000)                                           // 5KB per line
 	content := strings.Join([]string{line, line, line, line, line, line}, "\n") // 6 lines ~30KB
 	result := TruncateEntrypointContent(content)
 

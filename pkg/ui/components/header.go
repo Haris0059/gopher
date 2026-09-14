@@ -29,8 +29,8 @@ type Header struct {
 // NewHeader creates a new header component.
 func NewHeader(t theme.Theme) *Header {
 	return &Header{
-		theme: t,
-		width: 80,
+		theme:  t,
+		width:  80,
 		height: 1,
 	}
 }

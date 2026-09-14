@@ -14,7 +14,7 @@ import (
 
 // McpAuthOutput describes the result of an auth attempt.
 type McpAuthOutput struct {
-	Status  string `json:"status"`  // "auth_url", "unsupported", "error"
+	Status  string `json:"status"` // "auth_url", "unsupported", "error"
 	Message string `json:"message"`
 	AuthURL string `json:"authUrl,omitempty"`
 }

@@ -37,11 +37,11 @@ const (
 type PermissionUpdateType string
 
 const (
-	UpdateAddRules         PermissionUpdateType = "addRules"
-	UpdateReplaceRules     PermissionUpdateType = "replaceRules"
-	UpdateRemoveRules      PermissionUpdateType = "removeRules"
-	UpdateSetMode          PermissionUpdateType = "setMode"
-	UpdateAddDirectories   PermissionUpdateType = "addDirectories"
+	UpdateAddRules          PermissionUpdateType = "addRules"
+	UpdateReplaceRules      PermissionUpdateType = "replaceRules"
+	UpdateRemoveRules       PermissionUpdateType = "removeRules"
+	UpdateSetMode           PermissionUpdateType = "setMode"
+	UpdateAddDirectories    PermissionUpdateType = "addDirectories"
 	UpdateRemoveDirectories PermissionUpdateType = "removeDirectories"
 )
 
@@ -49,8 +49,8 @@ const (
 // Source: PermissionUpdateSchema.ts:42-78
 type PermissionUpdate struct {
 	Type        PermissionUpdateType        `json:"type"`
-	Rules       []string                    `json:"rules,omitempty"`       // rule strings for add/replace/remove
-	Behavior    PermissionBehavior          `json:"behavior,omitempty"`    // allow/deny/ask
+	Rules       []string                    `json:"rules,omitempty"`    // rule strings for add/replace/remove
+	Behavior    PermissionBehavior          `json:"behavior,omitempty"` // allow/deny/ask
 	Destination PermissionUpdateDestination `json:"destination"`
 	Mode        string                      `json:"mode,omitempty"`        // for setMode
 	Directories []string                    `json:"directories,omitempty"` // for add/removeDirectories
@@ -59,30 +59,30 @@ type PermissionUpdate struct {
 // PermissionsConfig is the permissions block in settings.json.
 // Source: settings/types.ts — PermissionsSchema
 type PermissionsConfig struct {
-	Allow                []string `json:"allow,omitempty"`
-	Deny                 []string `json:"deny,omitempty"`
-	Ask                  []string `json:"ask,omitempty"`
-	DefaultMode          string   `json:"defaultMode,omitempty"`
+	Allow                 []string `json:"allow,omitempty"`
+	Deny                  []string `json:"deny,omitempty"`
+	Ask                   []string `json:"ask,omitempty"`
+	DefaultMode           string   `json:"defaultMode,omitempty"`
 	AdditionalDirectories []string `json:"additionalDirectories,omitempty"`
 }
 
 // ToolPermissionContext holds the runtime permission state with rules from multiple sources.
 // Source: Tool.ts — ToolPermissionContext
 type ToolPermissionContext struct {
-	Mode                        string
-	AlwaysAllowRules            map[PermissionUpdateDestination][]string
-	AlwaysDenyRules             map[PermissionUpdateDestination][]string
-	AlwaysAskRules              map[PermissionUpdateDestination][]string
+	Mode                         string
+	AlwaysAllowRules             map[PermissionUpdateDestination][]string
+	AlwaysDenyRules              map[PermissionUpdateDestination][]string
+	AlwaysAskRules               map[PermissionUpdateDestination][]string
 	AdditionalWorkingDirectories map[string]string // path → source
 }
 
 // NewToolPermissionContext creates a fresh permission context.
 func NewToolPermissionContext(mode string) *ToolPermissionContext {
 	return &ToolPermissionContext{
-		Mode:                        mode,
-		AlwaysAllowRules:            make(map[PermissionUpdateDestination][]string),
-		AlwaysDenyRules:             make(map[PermissionUpdateDestination][]string),
-		AlwaysAskRules:              make(map[PermissionUpdateDestination][]string),
+		Mode:                         mode,
+		AlwaysAllowRules:             make(map[PermissionUpdateDestination][]string),
+		AlwaysDenyRules:              make(map[PermissionUpdateDestination][]string),
+		AlwaysAskRules:               make(map[PermissionUpdateDestination][]string),
 		AdditionalWorkingDirectories: make(map[string]string),
 	}
 }

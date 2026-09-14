@@ -14,13 +14,13 @@ import (
 
 // MCPClient manages a connection to an MCP server process.
 type MCPClient struct {
-	cmd      *exec.Cmd
-	stdin    io.WriteCloser
-	stdout   *bufio.Reader
-	writeMu  sync.Mutex // guards stdin writes
-	pendMu   sync.Mutex // guards pending map
-	nextID   atomic.Int64
-	pending  map[int64]chan *jsonRPCResponse
+	cmd     *exec.Cmd
+	stdin   io.WriteCloser
+	stdout  *bufio.Reader
+	writeMu sync.Mutex // guards stdin writes
+	pendMu  sync.Mutex // guards pending map
+	nextID  atomic.Int64
+	pending map[int64]chan *jsonRPCResponse
 }
 
 // ServerConfig is defined in config.go with full transport support.

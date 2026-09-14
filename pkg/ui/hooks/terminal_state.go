@@ -20,9 +20,9 @@ import (
 type FocusState string
 
 const (
-	FocusUnknown  FocusState = "unknown"  // no focus events received yet
-	FocusFocused  FocusState = "focused"  // terminal has focus
-	FocusBlurred  FocusState = "blurred"  // terminal lost focus
+	FocusUnknown FocusState = "unknown" // no focus events received yet
+	FocusFocused FocusState = "focused" // terminal has focus
+	FocusBlurred FocusState = "blurred" // terminal lost focus
 )
 
 // FocusTracker tracks terminal focus state via tea.FocusMsg/tea.BlurMsg.

@@ -318,7 +318,6 @@ func CheckFastModeEvent(event FastModeEvent) *Notification {
 	return nil
 }
 
-
 // ---------------------------------------------------------------------------
 // Manager — collects startup notification checks and dispatches results.
 // ---------------------------------------------------------------------------
@@ -399,9 +398,9 @@ func formatDuration(d time.Duration) string {
 
 // MigrationConfig holds timestamps for model migrations from global config.
 type MigrationConfig struct {
-	Sonnet45To46Timestamp     *time.Time
-	OpusProTimestamp           *time.Time
-	LegacyOpusTimestamp       *time.Time
+	Sonnet45To46Timestamp *time.Time
+	OpusProTimestamp      *time.Time
+	LegacyOpusTimestamp   *time.Time
 }
 
 // CheckModelMigrations returns notifications for any model migrations that

@@ -265,11 +265,11 @@ func WriteResult(result *RunResult, outDir string) error {
 
 	// Write result metadata
 	meta := map[string]interface{}{
-		"scenario":  result.Scenario.Name,
-		"category":  result.Scenario.Category,
+		"scenario":    result.Scenario.Name,
+		"category":    result.Scenario.Category,
 		"duration_ms": result.Duration.Milliseconds(),
-		"snapshots": len(result.Snapshots),
-		"success":   result.Error == nil,
+		"snapshots":   len(result.Snapshots),
+		"success":     result.Error == nil,
 	}
 	if result.Error != nil {
 		meta["error"] = result.Error.Error()

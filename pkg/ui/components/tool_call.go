@@ -13,9 +13,9 @@ import (
 type ToolCallState string
 
 const (
-	ToolCallPending   ToolCallState = "pending"
-	ToolCallComplete  ToolCallState = "complete"
-	ToolCallError     ToolCallState = "error"
+	ToolCallPending  ToolCallState = "pending"
+	ToolCallComplete ToolCallState = "complete"
+	ToolCallError    ToolCallState = "error"
 )
 
 // ToolCallDisplay shows the status of a tool execution.
@@ -41,11 +41,11 @@ type ToolCallDisplay struct {
 // NewToolCallDisplay creates a new tool call display.
 func NewToolCallDisplay(id, name string, t theme.Theme) *ToolCallDisplay {
 	return &ToolCallDisplay{
-		id:     id,
-		name:   name,
-		state:  ToolCallPending,
-		theme:  t,
-		width:  80,
+		id:    id,
+		name:  name,
+		state: ToolCallPending,
+		theme: t,
+		width: 80,
 	}
 }
 

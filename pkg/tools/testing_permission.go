@@ -13,8 +13,8 @@ import (
 type TestingPermissionTool struct{}
 
 func (t *TestingPermissionTool) Name() string        { return "TestingPermission" }
-func (t *TestingPermissionTool) Description() string  { return "Test tool for permission validation" }
-func (t *TestingPermissionTool) IsReadOnly() bool     { return false }
+func (t *TestingPermissionTool) Description() string { return "Test tool for permission validation" }
+func (t *TestingPermissionTool) IsReadOnly() bool    { return false }
 func (t *TestingPermissionTool) InputSchema() json.RawMessage {
 	return json.RawMessage(`{"type":"object","properties":{"action":{"type":"string"}},"required":["action"]}`)
 }

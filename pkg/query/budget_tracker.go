@@ -56,14 +56,14 @@ func NewBudgetTracker() *BudgetTracker {
 // Source: query/tokenBudget.ts:22-41
 // T58: TokenBudgetDecision union + completion event shape
 type BudgetDecision struct {
-	Action            BudgetAction
-	NudgeMessage      string // only for Continue
-	ContinuationCount int
-	Pct               int
-	TurnTokens        int
-	Budget            int
+	Action             BudgetAction
+	NudgeMessage       string // only for Continue
+	ContinuationCount  int
+	Pct                int
+	TurnTokens         int
+	Budget             int
 	DiminishingReturns bool  // only for Stop
-	DurationMs        int64 // only for Stop
+	DurationMs         int64 // only for Stop
 }
 
 // CheckTokenBudget decides whether to continue or stop based on token budget.

@@ -141,7 +141,7 @@ func TestTurnDiffTracker_AccumulatesEdits(t *testing.T) {
 	fileDiff, ok := turns[0].Files["main.go"]
 	require.True(t, ok)
 	assert.Equal(t, 2, fileDiff.LinesAdded)   // "+added line" + "+another add"
-	assert.Equal(t, 1, fileDiff.LinesRemoved)  // "-removed line"
+	assert.Equal(t, 1, fileDiff.LinesRemoved) // "-removed line"
 	assert.Len(t, fileDiff.Hunks, 2)
 
 	assert.Equal(t, 1, turns[0].Stats.FilesChanged)

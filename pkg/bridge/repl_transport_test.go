@@ -811,13 +811,13 @@ type mockV1Delegate struct {
 	stateLabel string
 }
 
-func (m *mockV1Delegate) Write(msg StdoutMessage) error            { return nil }
-func (m *mockV1Delegate) WriteBatch(msgs []StdoutMessage) error    { return nil }
-func (m *mockV1Delegate) Close()                                   {}
-func (m *mockV1Delegate) IsConnectedStatus() bool                  { return true }
-func (m *mockV1Delegate) GetStateLabel() string                    { return m.stateLabel }
-func (m *mockV1Delegate) SetOnData(cb func(data string))           {}
-func (m *mockV1Delegate) SetOnClose(cb func(closeCode int))        {}
-func (m *mockV1Delegate) SetOnConnect(cb func())                   {}
-func (m *mockV1Delegate) Connect()                                 {}
-func (m *mockV1Delegate) DroppedBatchCount() int64                 { return 0 }
+func (m *mockV1Delegate) Write(msg StdoutMessage) error         { return nil }
+func (m *mockV1Delegate) WriteBatch(msgs []StdoutMessage) error { return nil }
+func (m *mockV1Delegate) Close()                                {}
+func (m *mockV1Delegate) IsConnectedStatus() bool               { return true }
+func (m *mockV1Delegate) GetStateLabel() string                 { return m.stateLabel }
+func (m *mockV1Delegate) SetOnData(cb func(data string))        {}
+func (m *mockV1Delegate) SetOnClose(cb func(closeCode int))     {}
+func (m *mockV1Delegate) SetOnConnect(cb func())                {}
+func (m *mockV1Delegate) Connect()                              {}
+func (m *mockV1Delegate) DroppedBatchCount() int64              { return 0 }

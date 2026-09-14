@@ -74,7 +74,9 @@ func (t *ExitWorktreeTool) IsReadOnly() bool    { return false }
 // IsDestructive returns true when the action is "remove" (irreversible).
 // Source: ExitWorktreeTool.ts:168-170
 func (t *ExitWorktreeTool) IsDestructive(input json.RawMessage) bool {
-	var params struct{ Action string `json:"action"` }
+	var params struct {
+		Action string `json:"action"`
+	}
 	json.Unmarshal(input, &params)
 	// Default action is remove, which is destructive
 	return params.Action == "" || params.Action == "remove"

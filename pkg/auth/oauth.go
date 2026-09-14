@@ -378,12 +378,12 @@ type OAuthProfileAccount struct {
 
 // OAuthProfileOrganization holds organization info from the profile response.
 type OAuthProfileOrganization struct {
-	UUID                    string  `json:"uuid"`
-	OrganizationType        string  `json:"organization_type,omitempty"`
-	RateLimitTier           *string `json:"rate_limit_tier,omitempty"`
-	HasExtraUsageEnabled    *bool   `json:"has_extra_usage_enabled,omitempty"`
-	BillingType             *string `json:"billing_type,omitempty"`
-	SubscriptionCreatedAt   string  `json:"subscription_created_at,omitempty"`
+	UUID                  string  `json:"uuid"`
+	OrganizationType      string  `json:"organization_type,omitempty"`
+	RateLimitTier         *string `json:"rate_limit_tier,omitempty"`
+	HasExtraUsageEnabled  *bool   `json:"has_extra_usage_enabled,omitempty"`
+	BillingType           *string `json:"billing_type,omitempty"`
+	SubscriptionCreatedAt string  `json:"subscription_created_at,omitempty"`
 }
 
 // OAuthProfileResponse is the response from the profile endpoints.

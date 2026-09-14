@@ -15,17 +15,17 @@ import (
 type SandboxType string
 
 const (
-	SandboxNone      SandboxType = "none"
-	SandboxSeatbelt  SandboxType = "seatbelt"  // macOS sandbox-exec
+	SandboxNone       SandboxType = "none"
+	SandboxSeatbelt   SandboxType = "seatbelt"   // macOS sandbox-exec
 	SandboxBubblewrap SandboxType = "bubblewrap" // Linux bwrap
 )
 
 // SandboxConfig controls what the sandbox allows.
 type SandboxConfig struct {
-	AllowNetwork    bool
-	AllowedPaths    []string // Read-write access
-	ReadOnlyPaths   []string // Read-only access
-	WorkingDir      string
+	AllowNetwork  bool
+	AllowedPaths  []string // Read-write access
+	ReadOnlyPaths []string // Read-only access
+	WorkingDir    string
 }
 
 // DetectSandbox returns the available sandbox type for the current platform.

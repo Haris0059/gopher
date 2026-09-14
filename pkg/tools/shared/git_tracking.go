@@ -12,9 +12,9 @@ import (
 type CommitKind string
 
 const (
-	CommitKindCommit      CommitKind = "committed"
-	CommitKindAmended     CommitKind = "amended"
-	CommitKindCherryPick  CommitKind = "cherry-picked"
+	CommitKindCommit     CommitKind = "committed"
+	CommitKindAmended    CommitKind = "amended"
+	CommitKindCherryPick CommitKind = "cherry-picked"
 )
 
 // BranchAction classifies a branch integration.

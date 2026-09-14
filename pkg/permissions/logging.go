@@ -17,8 +17,8 @@ type PermissionLogger interface {
 // noopLogger silently discards all events.
 type noopLogger struct{}
 
-func (*noopLogger) LogDecision(DecisionRecord)                      {}
-func (*noopLogger) LogCancelled(string, string, string)             {}
+func (*noopLogger) LogDecision(DecisionRecord)          {}
+func (*noopLogger) LogCancelled(string, string, string) {}
 
 // SourceToString converts an ApprovalSource or RejectionSource to a
 // human-readable label used in analytics and OTel events.
@@ -140,9 +140,9 @@ func (l *SlogLogger) LogCancelled(toolName, toolUseID, messageID string) {
 
 // CollectingLogger captures decisions in a slice for testing.
 type CollectingLogger struct {
-	mu         sync.Mutex
-	Decisions  []DecisionRecord
-	Cancelled  []string // toolUseIDs
+	mu        sync.Mutex
+	Decisions []DecisionRecord
+	Cancelled []string // toolUseIDs
 }
 
 func (l *CollectingLogger) LogDecision(r DecisionRecord) {

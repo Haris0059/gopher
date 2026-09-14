@@ -145,18 +145,18 @@ type SSETransport struct {
 
 	state atomic.Int32 // sseTransportState
 
-	mu            sync.Mutex
-	onDataCb      func(data string)
-	onCloseCb     func(closeCode int)
-	onEventCb     func(event StreamClientEvent)
-	headers       map[string]string
+	mu        sync.Mutex
+	onDataCb  func(data string)
+	onCloseCb func(closeCode int)
+	onEventCb func(event StreamClientEvent)
+	headers   map[string]string
 
 	lastSeqNum atomic.Int64
 
 	// Reconnection state (guarded by mu).
-	reconnectAttempts   int
-	reconnectStartTime  time.Time
-	reconnectCancel     context.CancelFunc
+	reconnectAttempts  int
+	reconnectStartTime time.Time
+	reconnectCancel    context.CancelFunc
 
 	// Liveness timer (guarded by livenessMu).
 	livenessMu    sync.Mutex

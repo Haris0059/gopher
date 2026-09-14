@@ -36,9 +36,9 @@ const TitleMaxLen = 80
 // initial/cap/give-up timers so a transient DNS blip doesn't reset the budget
 // for a sustained 429 stream (and vice versa).
 type BackoffConfig struct {
-	ConnInitialMS   int // first delay for connection errors (ms)
-	ConnCapMS       int // max delay for connection errors (ms)
-	ConnGiveUpMS    int // total elapsed before giving up on connection errors (ms)
+	ConnInitialMS    int // first delay for connection errors (ms)
+	ConnCapMS        int // max delay for connection errors (ms)
+	ConnGiveUpMS     int // total elapsed before giving up on connection errors (ms)
 	GeneralInitialMS int // first delay for general (non-connection) errors (ms)
 	GeneralCapMS     int // max delay for general errors (ms)
 	GeneralGiveUpMS  int // total elapsed before giving up on general errors (ms)
@@ -51,9 +51,9 @@ type BackoffConfig struct {
 
 // DefaultBackoff matches the TS DEFAULT_BACKOFF constants.
 var DefaultBackoff = BackoffConfig{
-	ConnInitialMS:   2_000,
-	ConnCapMS:       120_000,  // 2 minutes
-	ConnGiveUpMS:    600_000,  // 10 minutes
+	ConnInitialMS:    2_000,
+	ConnCapMS:        120_000, // 2 minutes
+	ConnGiveUpMS:     600_000, // 10 minutes
 	GeneralInitialMS: 500,
 	GeneralCapMS:     30_000,
 	GeneralGiveUpMS:  600_000, // 10 minutes
@@ -144,13 +144,13 @@ type BridgeOrchestrator struct {
 	// Sleep is an injectable sleep for testing. Defaults to time.Sleep.
 	Sleep func(d time.Duration)
 
-	mu              sync.Mutex
-	running         bool
-	cancel          context.CancelFunc
-	activeSessions  map[string]*SessionHandle
-	sessionWorkIDs  map[string]string
+	mu               sync.Mutex
+	running          bool
+	cancel           context.CancelFunc
+	activeSessions   map[string]*SessionHandle
+	sessionWorkIDs   map[string]string
 	completedWorkIDs map[string]struct{}
-	done            chan struct{}
+	done             chan struct{}
 }
 
 // NewBridgeOrchestrator creates an orchestrator with default backoff and
@@ -256,11 +256,11 @@ func (o *BridgeOrchestrator) Stop() {
 
 func (o *BridgeOrchestrator) pollLoop(ctx context.Context) error {
 	var (
-		connBackoff      int
-		generalBackoff   int
-		connErrorStart   *time.Time
+		connBackoff       int
+		generalBackoff    int
+		connErrorStart    *time.Time
 		generalErrorStart *time.Time
-		lastPollErrTime  *time.Time
+		lastPollErrTime   *time.Time
 	)
 
 	o.debug(fmt.Sprintf("[bridge:orchestrator] Starting poll loop spawnMode=%s maxSessions=%d environmentId=%s",

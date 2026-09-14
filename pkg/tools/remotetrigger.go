@@ -24,8 +24,8 @@ func (t *RemoteTriggerTool) Name() string { return "RemoteTrigger" }
 func (t *RemoteTriggerTool) Description() string {
 	return "Manage scheduled remote Claude Code agents (triggers) via the claude.ai CCR API"
 }
-func (t *RemoteTriggerTool) IsReadOnly() bool   { return false }
-func (t *RemoteTriggerTool) SearchHint() string  { return "manage scheduled remote agent triggers" }
+func (t *RemoteTriggerTool) IsReadOnly() bool        { return false }
+func (t *RemoteTriggerTool) SearchHint() string      { return "manage scheduled remote agent triggers" }
 func (t *RemoteTriggerTool) MaxResultSizeChars() int { return 100_000 }
 
 // Prompt returns the tool's system prompt.

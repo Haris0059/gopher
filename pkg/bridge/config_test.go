@@ -83,7 +83,7 @@ func TestBridgeTokenOverride_NoUserType(t *testing.T) {
 
 func TestBridgeBaseURLOverride_AntWithURL(t *testing.T) {
 	setEnvs(t, map[string]string{
-		envUserType:     userTypeAnt,
+		envUserType:      userTypeAnt,
 		envBridgeBaseURL: "https://dev.example.com",
 	})
 
@@ -109,7 +109,7 @@ func TestBridgeBaseURLOverride_AntWithoutURL(t *testing.T) {
 
 func TestBridgeBaseURLOverride_NonAntIgnoresURL(t *testing.T) {
 	setEnvs(t, map[string]string{
-		envUserType:     "external",
+		envUserType:      "external",
 		envBridgeBaseURL: "https://dev.example.com",
 	})
 
@@ -174,7 +174,7 @@ func TestBridgeAccessToken_NilDeps(t *testing.T) {
 
 func TestBridgeBaseURL_OverrideWins(t *testing.T) {
 	setEnvs(t, map[string]string{
-		envUserType:     userTypeAnt,
+		envUserType:      userTypeAnt,
 		envBridgeBaseURL: "https://dev-api.example.com",
 	})
 	deps := stubDeps("", false, "https://prod.example.com")

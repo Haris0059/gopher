@@ -269,7 +269,7 @@ type testRenderComponent struct {
 	text string
 }
 
-func (t *testRenderComponent) Init() tea.Cmd     { return nil }
+func (t *testRenderComponent) Init() tea.Cmd                       { return nil }
 func (t *testRenderComponent) Update(tea.Msg) (tea.Model, tea.Cmd) { return t, nil }
-func (t *testRenderComponent) View() tea.View    { return tea.NewView(t.text) }
-func (t *testRenderComponent) SetSize(int, int)  {}
+func (t *testRenderComponent) View() tea.View                      { return tea.NewView(t.text) }
+func (t *testRenderComponent) SetSize(int, int)                    {}

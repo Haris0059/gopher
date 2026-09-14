@@ -113,8 +113,8 @@ type BridgeAPIClientConfig struct {
 // ---------------------------------------------------------------------------
 
 type bridgeAPIClient struct {
-	cfg                  BridgeAPIClientConfig
-	httpClient           *retryablehttp.Client
+	cfg                   BridgeAPIClientConfig
+	httpClient            *retryablehttp.Client
 	consecutiveEmptyPolls int
 }
 
@@ -140,11 +140,11 @@ func (c *bridgeAPIClient) debug(msg string) {
 
 func (c *bridgeAPIClient) headers(token string) map[string]string {
 	h := map[string]string{
-		"Authorization":                  "Bearer " + token,
-		"Content-Type":                   "application/json",
-		"anthropic-version":              AnthropicVersion,
-		"anthropic-beta":                 BetaHeader,
-		"x-environment-runner-version":   c.cfg.RunnerVersion,
+		"Authorization":                "Bearer " + token,
+		"Content-Type":                 "application/json",
+		"anthropic-version":            AnthropicVersion,
+		"anthropic-beta":               BetaHeader,
+		"x-environment-runner-version": c.cfg.RunnerVersion,
 	}
 	if c.cfg.GetTrustedDeviceToken != nil {
 		if dt := c.cfg.GetTrustedDeviceToken(); dt != "" {

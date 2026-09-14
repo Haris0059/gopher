@@ -25,10 +25,10 @@ var ErrAPIKeyHelperInvalid = errors.New("API key helper did not return a valid k
 type KeySource string
 
 const (
-	KeySourceEnv       KeySource = "env"
-	KeySourceConfig    KeySource = "config"
-	KeySourceHelper    KeySource = "apiKeyHelper"
-	KeySourceNone      KeySource = ""
+	KeySourceEnv    KeySource = "env"
+	KeySourceConfig KeySource = "config"
+	KeySourceHelper KeySource = "apiKeyHelper"
+	KeySourceNone   KeySource = ""
 )
 
 // KeyResult is returned by the key provider function.

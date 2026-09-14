@@ -142,10 +142,10 @@ func IsVSCodeRemoteSSH() bool {
 
 // SetupResult describes the outcome of terminal setup.
 type SetupResult struct {
-	Terminal    Terminal
-	Message     string
+	Terminal   Terminal
+	Message    string
 	NeedsSetup bool
-	IsNative    bool
+	IsNative   bool
 }
 
 // Check analyzes the current terminal and returns setup information.
@@ -169,9 +169,9 @@ func Check() SetupResult {
 	}
 
 	return SetupResult{
-		Terminal:    term,
+		Terminal:   term,
 		NeedsSetup: true,
-		Message:     setupInstructions(term),
+		Message:    setupInstructions(term),
 	}
 }
 

@@ -34,10 +34,10 @@ const maxSafeInteger = 1<<53 - 1
 // RemoteCredentials holds the response from POST /v1/code/sessions/{id}/bridge.
 // The JWT is opaque -- do not decode.
 type RemoteCredentials struct {
-	WorkerJWT  string `json:"worker_jwt"`
-	APIBaseURL string `json:"api_base_url"`
-	ExpiresIn  int    `json:"expires_in"`
-	WorkerEpoch int64 `json:"worker_epoch"`
+	WorkerJWT   string `json:"worker_jwt"`
+	APIBaseURL  string `json:"api_base_url"`
+	ExpiresIn   int    `json:"expires_in"`
+	WorkerEpoch int64  `json:"worker_epoch"`
 }
 
 // ---------------------------------------------------------------------------
@@ -72,8 +72,8 @@ func (c *CodeSessionClient) debug(msg string) {
 
 func codeSessionOAuthHeaders(accessToken string) map[string]string {
 	return map[string]string{
-		"Authorization":    "Bearer " + accessToken,
-		"Content-Type":     "application/json",
+		"Authorization":     "Bearer " + accessToken,
+		"Content-Type":      "application/json",
 		"anthropic-version": codeSessionAnthropicVersion,
 	}
 }

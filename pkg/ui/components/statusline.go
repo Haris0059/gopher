@@ -13,7 +13,7 @@ import (
 type StatusMode int
 
 const (
-	ModeIdle        StatusMode = iota
+	ModeIdle StatusMode = iota
 	ModeStreaming
 	ModeToolRunning
 )
@@ -34,12 +34,12 @@ type TokenUpdateMsg struct {
 
 // StatusLine renders the bottom status bar with model, tokens, cost, and mode.
 type StatusLine struct {
-	session *session.SessionState
-	mode       StatusMode
-	width      int
-	height     int
-	focused    bool
-	ctrlCHint  bool // Show "Press Ctrl-C again to exit"
+	session   *session.SessionState
+	mode      StatusMode
+	width     int
+	height    int
+	focused   bool
+	ctrlCHint bool // Show "Press Ctrl-C again to exit"
 
 	inputTokens  int
 	outputTokens int

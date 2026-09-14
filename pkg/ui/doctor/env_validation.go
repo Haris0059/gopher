@@ -20,9 +20,9 @@ type EnvBound struct {
 
 // EnvValidationResult holds a single env-var out-of-bounds finding.
 type EnvValidationResult struct {
-	Name    string
-	Value   int
-	Issue   string // e.g. "exceeds upper limit of 1000000"
+	Name  string
+	Value int
+	Issue string // e.g. "exceeds upper limit of 1000000"
 }
 
 // DefaultEnvBounds returns the standard env-var bounds checked by /doctor.

@@ -32,13 +32,13 @@ var AgentColors = []AgentColorName{
 // TeammateContext is the runtime context for an in-process teammate.
 // Source: utils/teammateContext.ts:22-39
 type TeammateContext struct {
-	AgentID          string         `json:"agentId"`          // e.g., "researcher@my-team"
-	AgentName        string         `json:"agentName"`        // e.g., "researcher"
+	AgentID          string         `json:"agentId"`   // e.g., "researcher@my-team"
+	AgentName        string         `json:"agentName"` // e.g., "researcher"
 	TeamName         string         `json:"teamName"`
 	Color            AgentColorName `json:"color,omitempty"`
 	PlanModeRequired bool           `json:"planModeRequired"`
 	ParentSessionID  string         `json:"parentSessionId"`
-	IsInProcess      bool           `json:"isInProcess"`      // always true
+	IsInProcess      bool           `json:"isInProcess"` // always true
 }
 
 // CreateTeammateContext creates a TeammateContext from spawn configuration.

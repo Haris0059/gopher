@@ -100,8 +100,8 @@ type BridgeDebug struct {
 	level   LogLevel
 	buf     []LogEntry
 	bufSize int
-	pos     int   // next write position in the ring
-	count   int   // total entries written (for distinguishing empty vs full)
+	pos     int // next write position in the ring
+	count   int // total entries written (for distinguishing empty vs full)
 	logger  *slog.Logger
 	now     func() time.Time // injectable clock for tests
 }

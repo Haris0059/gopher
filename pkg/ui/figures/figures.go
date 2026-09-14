@@ -53,7 +53,7 @@ const (
 
 	// Bridge status indicators.
 	BridgeReadyIndicator  = "\u00B7\u2714\uFE0E\u00B7" // ·✔︎·
-	BridgeFailedIndicator = "\u00D7"                     // ×
+	BridgeFailedIndicator = "\u00D7"                   // ×
 )
 
 // BridgeSpinnerFrames are the animation frames for the bridge connection spinner.

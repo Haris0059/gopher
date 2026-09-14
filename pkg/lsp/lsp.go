@@ -28,16 +28,16 @@ import (
 
 // Client communicates with a single LSP server process via JSON-RPC stdio.
 type Client struct {
-	cmd       *exec.Cmd
-	stdin     io.WriteCloser
-	stdout    *bufio.Reader
-	writeMu   sync.Mutex
-	pendMu    sync.Mutex
-	nextID    atomic.Int64
-	pending   map[int64]chan *jsonRPCResponse
-	caps      json.RawMessage // server capabilities from initialize response
-	initDone  bool
-	stopping  bool
+	cmd      *exec.Cmd
+	stdin    io.WriteCloser
+	stdout   *bufio.Reader
+	writeMu  sync.Mutex
+	pendMu   sync.Mutex
+	nextID   atomic.Int64
+	pending  map[int64]chan *jsonRPCResponse
+	caps     json.RawMessage // server capabilities from initialize response
+	initDone bool
+	stopping bool
 }
 
 // NewClient spawns an LSP server process and initializes the connection.

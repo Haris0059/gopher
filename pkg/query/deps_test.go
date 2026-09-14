@@ -167,7 +167,9 @@ func (s *stubProvider) Name() string { return "stub" }
 // fullDeps returns a QueryDeps with all fields populated (for Validate tests).
 func fullDeps() QueryDeps {
 	return QueryDeps{
-		CallModel:    func(_ context.Context, _ provider.ModelRequest) (<-chan provider.StreamResult, error) { return nil, nil },
+		CallModel: func(_ context.Context, _ provider.ModelRequest) (<-chan provider.StreamResult, error) {
+			return nil, nil
+		},
 		Microcompact: func(s string) string { return s },
 		Autocompact:  func(m []message.Message, k int) ([]message.Message, int) { return m, 0 },
 		UUID:         func() string { return "fake" },

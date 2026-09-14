@@ -101,18 +101,18 @@ func TestEnvLessBridgeConfigJSONKeys(t *testing.T) {
 
 func TestValidateEnvLessBridgeConfig_ValidInput(t *testing.T) {
 	input := EnvLessBridgeConfig{
-		InitRetryMaxAttempts:       5,
-		InitRetryBaseDelayMS:       200,
-		InitRetryJitterFraction:    0.5,
-		InitRetryMaxDelayMS:        2000,
-		HTTPTimeoutMS:              5000,
-		UUIDDedupBufferSize:        500,
-		HeartbeatIntervalMS:        10_000,
-		HeartbeatJitterFraction:    0.3,
-		TokenRefreshBufferMS:       60_000,
-		TeardownArchiveTimeoutMS:   1000,
-		ConnectTimeoutMS:           30_000,
-		MinVersion:                 "1.2.3",
+		InitRetryMaxAttempts:        5,
+		InitRetryBaseDelayMS:        200,
+		InitRetryJitterFraction:     0.5,
+		InitRetryMaxDelayMS:         2000,
+		HTTPTimeoutMS:               5000,
+		UUIDDedupBufferSize:         500,
+		HeartbeatIntervalMS:         10_000,
+		HeartbeatJitterFraction:     0.3,
+		TokenRefreshBufferMS:        60_000,
+		TeardownArchiveTimeoutMS:    1000,
+		ConnectTimeoutMS:            30_000,
+		MinVersion:                  "1.2.3",
 		ShouldShowAppUpgradeMessage: true,
 	}
 
@@ -224,18 +224,18 @@ func TestValidateEnvLessBridgeConfig_BoundaryPass(t *testing.T) {
 
 func TestEnvLessBridgeConfigJSONRoundTrip(t *testing.T) {
 	orig := EnvLessBridgeConfig{
-		InitRetryMaxAttempts:       5,
-		InitRetryBaseDelayMS:       250,
-		InitRetryJitterFraction:    0.3,
-		InitRetryMaxDelayMS:        3000,
-		HTTPTimeoutMS:              8000,
-		UUIDDedupBufferSize:        1000,
-		HeartbeatIntervalMS:        15_000,
-		HeartbeatJitterFraction:    0.2,
-		TokenRefreshBufferMS:       120_000,
-		TeardownArchiveTimeoutMS:   1200,
-		ConnectTimeoutMS:           20_000,
-		MinVersion:                 "1.0.0",
+		InitRetryMaxAttempts:        5,
+		InitRetryBaseDelayMS:        250,
+		InitRetryJitterFraction:     0.3,
+		InitRetryMaxDelayMS:         3000,
+		HTTPTimeoutMS:               8000,
+		UUIDDedupBufferSize:         1000,
+		HeartbeatIntervalMS:         15_000,
+		HeartbeatJitterFraction:     0.2,
+		TokenRefreshBufferMS:        120_000,
+		TeardownArchiveTimeoutMS:    1200,
+		ConnectTimeoutMS:            20_000,
+		MinVersion:                  "1.0.0",
 		ShouldShowAppUpgradeMessage: true,
 	}
 

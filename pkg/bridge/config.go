@@ -9,10 +9,10 @@ import "os"
 // ---------------------------------------------------------------------------
 
 const (
-	envUserType             = "USER_TYPE"
-	envBridgeOAuthToken     = "CLAUDE_BRIDGE_OAUTH_TOKEN"
-	envBridgeBaseURL        = "CLAUDE_BRIDGE_BASE_URL"
-	userTypeAnt             = "ant"
+	envUserType         = "USER_TYPE"
+	envBridgeOAuthToken = "CLAUDE_BRIDGE_OAUTH_TOKEN"
+	envBridgeBaseURL    = "CLAUDE_BRIDGE_BASE_URL"
+	userTypeAnt         = "ant"
 )
 
 // AccessTokenFunc is a function that returns the OAuth access token from the

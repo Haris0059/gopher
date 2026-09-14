@@ -23,14 +23,30 @@ func TestAgentColors(t *testing.T) {
 
 func TestAgentColorConstants(t *testing.T) {
 	// Source: agentColorManager.ts:3-13
-	if ColorRed != "red" { t.Error("wrong") }
-	if ColorBlue != "blue" { t.Error("wrong") }
-	if ColorGreen != "green" { t.Error("wrong") }
-	if ColorYellow != "yellow" { t.Error("wrong") }
-	if ColorPurple != "purple" { t.Error("wrong") }
-	if ColorOrange != "orange" { t.Error("wrong") }
-	if ColorPink != "pink" { t.Error("wrong") }
-	if ColorCyan != "cyan" { t.Error("wrong") }
+	if ColorRed != "red" {
+		t.Error("wrong")
+	}
+	if ColorBlue != "blue" {
+		t.Error("wrong")
+	}
+	if ColorGreen != "green" {
+		t.Error("wrong")
+	}
+	if ColorYellow != "yellow" {
+		t.Error("wrong")
+	}
+	if ColorPurple != "purple" {
+		t.Error("wrong")
+	}
+	if ColorOrange != "orange" {
+		t.Error("wrong")
+	}
+	if ColorPink != "pink" {
+		t.Error("wrong")
+	}
+	if ColorCyan != "cyan" {
+		t.Error("wrong")
+	}
 }
 
 func TestTeammateColorManager_RoundRobin(t *testing.T) {

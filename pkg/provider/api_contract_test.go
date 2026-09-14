@@ -53,11 +53,11 @@ func loadJSONL(t *testing.T, name string) []map[string]interface{} {
 // TestRequestFormats validates the structure of API request golden files.
 func TestRequestFormats(t *testing.T) {
 	requests := []struct {
-		file          string
-		hasSystem     bool
-		hasTools      bool
-		messageCount  int
-		firstRole     string
+		file         string
+		hasSystem    bool
+		hasTools     bool
+		messageCount int
+		firstRole    string
 	}{
 		{"request_text_only.json", true, false, 1, "user"},
 		{"request_with_tools.json", true, true, 1, "user"},

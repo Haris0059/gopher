@@ -282,15 +282,15 @@ func TestBridgeConfigJSON(t *testing.T) {
 
 func TestBridgeConfigOmitsOptionalFields(t *testing.T) {
 	orig := BridgeConfig{
-		Dir:           "/tmp",
-		MachineName:   "m",
-		Branch:        "main",
-		MaxSessions:   1,
-		SpawnMode:     SpawnModeSingleSession,
-		BridgeID:      "b",
-		WorkerType:    "claude_code",
-		EnvironmentID: "e",
-		APIBaseURL:    "https://api.example.com",
+		Dir:               "/tmp",
+		MachineName:       "m",
+		Branch:            "main",
+		MaxSessions:       1,
+		SpawnMode:         SpawnModeSingleSession,
+		BridgeID:          "b",
+		WorkerType:        "claude_code",
+		EnvironmentID:     "e",
+		APIBaseURL:        "https://api.example.com",
 		SessionIngressURL: "https://ingress.example.com",
 	}
 

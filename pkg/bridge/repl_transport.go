@@ -148,12 +148,12 @@ type v2ReplTransport struct {
 	onCloseCb   func(closeCode int)
 	onConnectCb func()
 
-	epoch          int64
-	initialized    atomic.Bool
-	closed         atomic.Bool
-	lastSeqNum     atomic.Int64
-	cancelSSE      context.CancelFunc
-	heartbeatStop  chan struct{}
+	epoch         int64
+	initialized   atomic.Bool
+	closed        atomic.Bool
+	lastSeqNum    atomic.Int64
+	cancelSSE     context.CancelFunc
+	heartbeatStop chan struct{}
 
 	log func(string)
 }
@@ -598,19 +598,19 @@ func (t *v1ReplTransport) WriteMessage(_ context.Context, msg StdoutMessage) err
 func (t *v1ReplTransport) WriteBatch(_ context.Context, msgs []StdoutMessage) error {
 	return t.delegate.WriteBatch(msgs)
 }
-func (t *v1ReplTransport) Close()                         { t.delegate.Close() }
-func (t *v1ReplTransport) IsConnected() bool              { return t.delegate.IsConnectedStatus() }
-func (t *v1ReplTransport) StateLabel() string             { return t.delegate.GetStateLabel() }
-func (t *v1ReplTransport) SetOnData(cb func(string))      { t.delegate.SetOnData(cb) }
-func (t *v1ReplTransport) SetOnClose(cb func(int))        { t.delegate.SetOnClose(cb) }
-func (t *v1ReplTransport) SetOnConnect(cb func())         { t.delegate.SetOnConnect(cb) }
-func (t *v1ReplTransport) Connect()                       { t.delegate.Connect() }
-func (t *v1ReplTransport) LastSequenceNum() int64         { return 0 }
-func (t *v1ReplTransport) DroppedBatchCount() int64       { return t.delegate.DroppedBatchCount() }
-func (t *v1ReplTransport) ReportState(SessionState)       {}
-func (t *v1ReplTransport) ReportMetadata(map[string]any)  {}
-func (t *v1ReplTransport) ReportDelivery(string, string)  {}
-func (t *v1ReplTransport) Flush() error                   { return nil }
+func (t *v1ReplTransport) Close()                        { t.delegate.Close() }
+func (t *v1ReplTransport) IsConnected() bool             { return t.delegate.IsConnectedStatus() }
+func (t *v1ReplTransport) StateLabel() string            { return t.delegate.GetStateLabel() }
+func (t *v1ReplTransport) SetOnData(cb func(string))     { t.delegate.SetOnData(cb) }
+func (t *v1ReplTransport) SetOnClose(cb func(int))       { t.delegate.SetOnClose(cb) }
+func (t *v1ReplTransport) SetOnConnect(cb func())        { t.delegate.SetOnConnect(cb) }
+func (t *v1ReplTransport) Connect()                      { t.delegate.Connect() }
+func (t *v1ReplTransport) LastSequenceNum() int64        { return 0 }
+func (t *v1ReplTransport) DroppedBatchCount() int64      { return t.delegate.DroppedBatchCount() }
+func (t *v1ReplTransport) ReportState(SessionState)      {}
+func (t *v1ReplTransport) ReportMetadata(map[string]any) {}
+func (t *v1ReplTransport) ReportDelivery(string, string) {}
+func (t *v1ReplTransport) Flush() error                  { return nil }
 
 // ---------------------------------------------------------------------------
 // SSE adapter — wraps SSETransport in the ReplBridgeTransport interface
@@ -677,9 +677,9 @@ func (t *sseReplTransport) Connect() {
 	}()
 }
 
-func (t *sseReplTransport) LastSequenceNum() int64         { return t.delegate.GetLastSequenceNum() }
-func (t *sseReplTransport) DroppedBatchCount() int64       { return 0 }
-func (t *sseReplTransport) ReportState(SessionState)       {}
-func (t *sseReplTransport) ReportMetadata(map[string]any)  {}
-func (t *sseReplTransport) ReportDelivery(string, string)  {}
-func (t *sseReplTransport) Flush() error                   { return nil }
+func (t *sseReplTransport) LastSequenceNum() int64        { return t.delegate.GetLastSequenceNum() }
+func (t *sseReplTransport) DroppedBatchCount() int64      { return 0 }
+func (t *sseReplTransport) ReportState(SessionState)      {}
+func (t *sseReplTransport) ReportMetadata(map[string]any) {}
+func (t *sseReplTransport) ReportDelivery(string, string) {}
+func (t *sseReplTransport) Flush() error                  { return nil }

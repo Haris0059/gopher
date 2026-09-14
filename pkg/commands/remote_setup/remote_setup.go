@@ -21,14 +21,14 @@ import (
 type Step string
 
 const (
-	StepChecking     Step = "checking"
-	StepNotSignedIn  Step = "not_signed_in"
-	StepNoGhCLI      Step = "no_gh_cli"
-	StepNoGhAuth     Step = "no_gh_auth"
-	StepConfirm      Step = "confirm"
-	StepUploading    Step = "uploading"
-	StepSuccess      Step = "success"
-	StepError        Step = "error"
+	StepChecking    Step = "checking"
+	StepNotSignedIn Step = "not_signed_in"
+	StepNoGhCLI     Step = "no_gh_cli"
+	StepNoGhAuth    Step = "no_gh_auth"
+	StepConfirm     Step = "confirm"
+	StepUploading   Step = "uploading"
+	StepSuccess     Step = "success"
+	StepError       Step = "error"
 )
 
 // CodeWebURL is the URL for Claude Code on the web.
@@ -41,10 +41,10 @@ type DoneMsg struct {
 
 // Model is the web-setup wizard bubbletea model.
 type Model struct {
-	step      Step
-	message   string
-	cursor    int
-	ghToken   string // redacted after display
+	step    Step
+	message string
+	cursor  int
+	ghToken string // redacted after display
 }
 
 // New creates the web-setup wizard.

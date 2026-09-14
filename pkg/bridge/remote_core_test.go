@@ -80,18 +80,18 @@ func TestRemoteBridgeCore_NewWithRemoteConfig(t *testing.T) {
 	t.Parallel()
 
 	remote := EnvLessBridgeConfig{
-		InitRetryMaxAttempts:       2,
-		InitRetryBaseDelayMS:       200,
-		InitRetryJitterFraction:    0.1,
-		InitRetryMaxDelayMS:        2000,
-		HTTPTimeoutMS:              5000,
-		UUIDDedupBufferSize:        500,
-		HeartbeatIntervalMS:        10_000,
-		HeartbeatJitterFraction:    0.2,
-		TokenRefreshBufferMS:       60_000,
-		TeardownArchiveTimeoutMS:   1000,
-		ConnectTimeoutMS:           10_000,
-		MinVersion:                 "1.0.0",
+		InitRetryMaxAttempts:        2,
+		InitRetryBaseDelayMS:        200,
+		InitRetryJitterFraction:     0.1,
+		InitRetryMaxDelayMS:         2000,
+		HTTPTimeoutMS:               5000,
+		UUIDDedupBufferSize:         500,
+		HeartbeatIntervalMS:         10_000,
+		HeartbeatJitterFraction:     0.2,
+		TokenRefreshBufferMS:        60_000,
+		TeardownArchiveTimeoutMS:    1000,
+		ConnectTimeoutMS:            10_000,
+		MinVersion:                  "1.0.0",
 		ShouldShowAppUpgradeMessage: false,
 	}
 
@@ -321,10 +321,10 @@ func TestMergeConfigs(t *testing.T) {
 		SpawnMode:   SpawnModeWorktree,
 	}
 	remote := EnvLessBridgeConfig{
-		ConnectTimeoutMS:    20_000,
-		HeartbeatIntervalMS: 15_000,
-		HTTPTimeoutMS:       8_000,
-		TokenRefreshBufferMS: 120_000,
+		ConnectTimeoutMS:         20_000,
+		HeartbeatIntervalMS:      15_000,
+		HTTPTimeoutMS:            8_000,
+		TokenRefreshBufferMS:     120_000,
 		TeardownArchiveTimeoutMS: 1500,
 	}
 

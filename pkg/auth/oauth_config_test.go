@@ -91,20 +91,20 @@ func TestProdOAuthConfig(t *testing.T) {
 	cfg := ProdOAuthConfig
 
 	checks := map[string]struct{ got, want string }{
-		"BaseAPIURL":          {cfg.BaseAPIURL, "https://api.anthropic.com"},
-		"ConsoleAuthorizeURL": {cfg.ConsoleAuthorizeURL, "https://platform.claude.com/oauth/authorize"},
+		"BaseAPIURL":           {cfg.BaseAPIURL, "https://api.anthropic.com"},
+		"ConsoleAuthorizeURL":  {cfg.ConsoleAuthorizeURL, "https://platform.claude.com/oauth/authorize"},
 		"ClaudeAIAuthorizeURL": {cfg.ClaudeAIAuthorizeURL, "https://claude.com/cai/oauth/authorize"},
-		"ClaudeAIOrigin":      {cfg.ClaudeAIOrigin, "https://claude.ai"},
-		"TokenURL":            {cfg.TokenURL, "https://platform.claude.com/v1/oauth/token"},
-		"APIKeyURL":           {cfg.APIKeyURL, "https://api.anthropic.com/api/oauth/claude_cli/create_api_key"},
-		"RolesURL":            {cfg.RolesURL, "https://api.anthropic.com/api/oauth/claude_cli/roles"},
-		"ConsoleSuccessURL":   {cfg.ConsoleSuccessURL, "https://platform.claude.com/buy_credits?returnUrl=/oauth/code/success%3Fapp%3Dclaude-code"},
-		"ClaudeAISuccessURL":  {cfg.ClaudeAISuccessURL, "https://platform.claude.com/oauth/code/success?app=claude-code"},
-		"ManualRedirectURL":   {cfg.ManualRedirectURL, "https://platform.claude.com/oauth/code/callback"},
-		"ClientID":            {cfg.ClientID, "9d1c250a-e61b-44d9-88ed-5944d1962f5e"},
-		"OAuthFileSuffix":     {cfg.OAuthFileSuffix, ""},
-		"MCPProxyURL":         {cfg.MCPProxyURL, "https://mcp-proxy.anthropic.com"},
-		"MCPProxyPath":        {cfg.MCPProxyPath, "/v1/mcp/{server_id}"},
+		"ClaudeAIOrigin":       {cfg.ClaudeAIOrigin, "https://claude.ai"},
+		"TokenURL":             {cfg.TokenURL, "https://platform.claude.com/v1/oauth/token"},
+		"APIKeyURL":            {cfg.APIKeyURL, "https://api.anthropic.com/api/oauth/claude_cli/create_api_key"},
+		"RolesURL":             {cfg.RolesURL, "https://api.anthropic.com/api/oauth/claude_cli/roles"},
+		"ConsoleSuccessURL":    {cfg.ConsoleSuccessURL, "https://platform.claude.com/buy_credits?returnUrl=/oauth/code/success%3Fapp%3Dclaude-code"},
+		"ClaudeAISuccessURL":   {cfg.ClaudeAISuccessURL, "https://platform.claude.com/oauth/code/success?app=claude-code"},
+		"ManualRedirectURL":    {cfg.ManualRedirectURL, "https://platform.claude.com/oauth/code/callback"},
+		"ClientID":             {cfg.ClientID, "9d1c250a-e61b-44d9-88ed-5944d1962f5e"},
+		"OAuthFileSuffix":      {cfg.OAuthFileSuffix, ""},
+		"MCPProxyURL":          {cfg.MCPProxyURL, "https://mcp-proxy.anthropic.com"},
+		"MCPProxyPath":         {cfg.MCPProxyPath, "/v1/mcp/{server_id}"},
 	}
 	for name, c := range checks {
 		if c.got != c.want {

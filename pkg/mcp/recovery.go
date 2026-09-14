@@ -12,22 +12,22 @@ import (
 // Source: services/mcp/useManageMCPConnections.ts:88-90
 const (
 	MaxReconnectAttempts = 5
-	InitialBackoffMs    = 1000
-	MaxBackoffMs        = 30000
+	InitialBackoffMs     = 1000
+	MaxBackoffMs         = 30000
 )
 
 // Error handling constants.
 // Source: services/mcp/client.ts:1228, 457, 463
 const (
-	MaxErrorsBeforeReconnect = 3   // Source: client.ts:1228
+	MaxErrorsBeforeReconnect = 3     // Source: client.ts:1228
 	MCPConnectionTimeoutMs   = 30000 // Source: client.ts:457
 	MCPRequestTimeoutMs      = 60000 // Source: client.ts:463
 )
 
 // JSON-RPC error codes from MCP spec.
 const (
-	JSONRPCSessionNotFound   = -32001 // Source: client.ts:200-204
-	JSONRPCConnectionClosed  = -32000 // Source: client.ts:1236
+	JSONRPCSessionNotFound  = -32001 // Source: client.ts:200-204
+	JSONRPCConnectionClosed = -32000 // Source: client.ts:1236
 )
 
 // McpSessionExpiredError is returned when an MCP session is no longer valid.
@@ -90,10 +90,10 @@ const (
 
 // ReconnectResult captures the outcome of a reconnection attempt.
 type ReconnectResult struct {
-	Success  bool
-	Attempt  int
-	State    ConnectionState
-	Error    error
+	Success bool
+	Attempt int
+	State   ConnectionState
+	Error   error
 }
 
 // Reconnect attempts to reconnect an MCP server with exponential backoff.

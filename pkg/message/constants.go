@@ -50,11 +50,11 @@ const (
 // SyntheticMessages is the set of message texts that are synthetic (not from the model).
 // Source: utils/messages.ts:302-308
 var SyntheticMessages = map[string]bool{
-	InterruptMessage:        true,
+	InterruptMessage:           true,
 	InterruptMessageForToolUse: true,
-	CancelMessage:           true,
-	RejectMessage:           true,
-	NoResponseRequested:     true,
+	CancelMessage:              true,
+	RejectMessage:              true,
+	NoResponseRequested:        true,
 }
 
 // AutoRejectMessage builds a rejection message for auto-mode denials.

@@ -698,9 +698,9 @@ func TestClassifyHTTPError_403_OAuthOrgNotAllowed(t *testing.T) {
 func TestUserFacingMessage(t *testing.T) {
 	// Source: errors.ts — UserFacingMessage maps error types to display strings
 	tests := []struct {
-		name    string
-		err     *APIError
-		want    string
+		name string
+		err  *APIError
+		want string
 	}{
 		{
 			"rate_limit",

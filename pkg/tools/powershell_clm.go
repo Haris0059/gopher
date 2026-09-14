@@ -7,8 +7,9 @@ import "strings"
 //
 // SECURITY: 'adsi', 'adsisearcher', 'wmi', 'wmiclass', 'wmisearcher', 'cimsession'
 // are REMOVED. These types perform NETWORK BINDS when cast:
-//   [adsi]'LDAP://evil.com/...'  -> connects to LDAP server
-//   [wmi]'\\evil-host\root\cimv2:Win32_Process.Handle="1"' -> remote WMI
+//
+//	[adsi]'LDAP://evil.com/...'  -> connects to LDAP server
+//	[wmi]'\\evil-host\root\cimv2:Win32_Process.Handle="1"' -> remote WMI
 //
 // Source: clmTypes.ts:18-188 — CLM_ALLOWED_TYPES
 var CLMAllowedTypes = func() map[string]bool {
@@ -103,12 +104,12 @@ var CLMRemovedTypes = map[string]bool{
 	"wmi": true, "wmiclass": true, "wmisearcher": true,
 	"cimsession": true,
 	// FQ equivalents
-	"system.directoryservices.directoryentry":                     true,
-	"system.directoryservices.directorysearcher":                  true,
-	"system.management.managementobject":                          true,
-	"system.management.managementclass":                           true,
-	"system.management.managementobjectsearcher":                  true,
-	"microsoft.management.infrastructure.cimsession":              true,
+	"system.directoryservices.directoryentry":        true,
+	"system.directoryservices.directorysearcher":     true,
+	"system.management.managementobject":             true,
+	"system.management.managementclass":              true,
+	"system.management.managementobjectsearcher":     true,
+	"microsoft.management.infrastructure.cimsession": true,
 }
 
 // NormalizePSTypeName normalizes a PS type name from AST.

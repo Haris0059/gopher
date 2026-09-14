@@ -15,35 +15,35 @@ import (
 // EnvLessBridgeConfig is the timing/behavior config for the env-less (v2)
 // bridge. All fields have snake_case JSON tags matching the TS wire format.
 type EnvLessBridgeConfig struct {
-	InitRetryMaxAttempts       int     `json:"init_retry_max_attempts"`
-	InitRetryBaseDelayMS       int     `json:"init_retry_base_delay_ms"`
-	InitRetryJitterFraction    float64 `json:"init_retry_jitter_fraction"`
-	InitRetryMaxDelayMS        int     `json:"init_retry_max_delay_ms"`
-	HTTPTimeoutMS              int     `json:"http_timeout_ms"`
-	UUIDDedupBufferSize        int     `json:"uuid_dedup_buffer_size"`
-	HeartbeatIntervalMS        int     `json:"heartbeat_interval_ms"`
-	HeartbeatJitterFraction    float64 `json:"heartbeat_jitter_fraction"`
-	TokenRefreshBufferMS       int     `json:"token_refresh_buffer_ms"`
-	TeardownArchiveTimeoutMS   int     `json:"teardown_archive_timeout_ms"`
-	ConnectTimeoutMS           int     `json:"connect_timeout_ms"`
-	MinVersion                 string  `json:"min_version"`
-	ShouldShowAppUpgradeMessage bool   `json:"should_show_app_upgrade_message"`
+	InitRetryMaxAttempts        int     `json:"init_retry_max_attempts"`
+	InitRetryBaseDelayMS        int     `json:"init_retry_base_delay_ms"`
+	InitRetryJitterFraction     float64 `json:"init_retry_jitter_fraction"`
+	InitRetryMaxDelayMS         int     `json:"init_retry_max_delay_ms"`
+	HTTPTimeoutMS               int     `json:"http_timeout_ms"`
+	UUIDDedupBufferSize         int     `json:"uuid_dedup_buffer_size"`
+	HeartbeatIntervalMS         int     `json:"heartbeat_interval_ms"`
+	HeartbeatJitterFraction     float64 `json:"heartbeat_jitter_fraction"`
+	TokenRefreshBufferMS        int     `json:"token_refresh_buffer_ms"`
+	TeardownArchiveTimeoutMS    int     `json:"teardown_archive_timeout_ms"`
+	ConnectTimeoutMS            int     `json:"connect_timeout_ms"`
+	MinVersion                  string  `json:"min_version"`
+	ShouldShowAppUpgradeMessage bool    `json:"should_show_app_upgrade_message"`
 }
 
 // DefaultEnvLessBridgeConfig matches the TS DEFAULT_ENV_LESS_BRIDGE_CONFIG.
 var DefaultEnvLessBridgeConfig = EnvLessBridgeConfig{
-	InitRetryMaxAttempts:       3,
-	InitRetryBaseDelayMS:       500,
-	InitRetryJitterFraction:    0.25,
-	InitRetryMaxDelayMS:        4000,
-	HTTPTimeoutMS:              10_000,
-	UUIDDedupBufferSize:        2000,
-	HeartbeatIntervalMS:        20_000,
-	HeartbeatJitterFraction:    0.1,
-	TokenRefreshBufferMS:       300_000,
-	TeardownArchiveTimeoutMS:   1500,
-	ConnectTimeoutMS:           15_000,
-	MinVersion:                 "0.0.0",
+	InitRetryMaxAttempts:        3,
+	InitRetryBaseDelayMS:        500,
+	InitRetryJitterFraction:     0.25,
+	InitRetryMaxDelayMS:         4000,
+	HTTPTimeoutMS:               10_000,
+	UUIDDedupBufferSize:         2000,
+	HeartbeatIntervalMS:         20_000,
+	HeartbeatJitterFraction:     0.1,
+	TokenRefreshBufferMS:        300_000,
+	TeardownArchiveTimeoutMS:    1500,
+	ConnectTimeoutMS:            15_000,
+	MinVersion:                  "0.0.0",
 	ShouldShowAppUpgradeMessage: false,
 }
 

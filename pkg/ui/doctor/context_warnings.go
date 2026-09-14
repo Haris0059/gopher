@@ -17,9 +17,9 @@ type ContextWarning struct {
 
 // ContextWarnings aggregates all context-related warnings for /doctor.
 type ContextWarnings struct {
-	ClaudeMDWarning        *ContextWarning // large CLAUDE.md files
-	AgentWarning           *ContextWarning // agents consuming context
-	MCPWarning             *ContextWarning // MCP servers consuming context
+	ClaudeMDWarning         *ContextWarning // large CLAUDE.md files
+	AgentWarning            *ContextWarning // agents consuming context
+	MCPWarning              *ContextWarning // MCP servers consuming context
 	UnreachableRulesWarning *ContextWarning // permission rules that can never match
 }
 

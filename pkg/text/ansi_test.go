@@ -13,11 +13,11 @@ func TestDisplayWidth(t *testing.T) {
 		{"hello", 5},
 		{"", 0},
 		{"abc", 3},
-		{"\x1b[31mred\x1b[0m", 3},                   // ANSI stripped
-		{"日本語", 6},                                    // CJK = width 2 each
-		{"a日b", 4},                                    // mixed
-		{"\x1b[1;32mhi\x1b[0m", 2},                   // bold green
-		{"tab\there", 7},                               // tab = 0 width (control)
+		{"\x1b[31mred\x1b[0m", 3},  // ANSI stripped
+		{"日本語", 6},                 // CJK = width 2 each
+		{"a日b", 4},                 // mixed
+		{"\x1b[1;32mhi\x1b[0m", 2}, // bold green
+		{"tab\there", 7},           // tab = 0 width (control)
 	}
 	for _, tt := range tests {
 		t.Run(tt.s, func(t *testing.T) {

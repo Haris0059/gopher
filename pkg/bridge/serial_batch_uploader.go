@@ -33,10 +33,10 @@ type SerialBatchUploaderConfig[T any] struct {
 	MaxQueueSize  int // backpressure threshold
 	// Send is the actual upload call. Return nil on success or an error
 	// (optionally *RetryableError) on failure.
-	Send func(ctx context.Context, batch []T) error
-	BaseDelay     time.Duration // base delay for exponential backoff
-	MaxDelay      time.Duration // ceiling for backoff
-	Jitter        time.Duration // random jitter added to retry delay
+	Send      func(ctx context.Context, batch []T) error
+	BaseDelay time.Duration // base delay for exponential backoff
+	MaxDelay  time.Duration // ceiling for backoff
+	Jitter    time.Duration // random jitter added to retry delay
 	// MaxConsecutiveFailures: after this many consecutive failures, drop the
 	// batch and move on. Zero means retry forever.
 	MaxConsecutiveFailures int

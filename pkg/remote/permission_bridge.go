@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Haris0059/gopher/pkg/message"
+	"github.com/google/uuid"
 )
 
 // ---------------------------------------------------------------------------

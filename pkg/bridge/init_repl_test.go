@@ -12,13 +12,13 @@ import (
 
 func happyDeps() InitReplDeps {
 	return InitReplDeps{
-		IsBridgeEnabledBlocking: func() (bool, error) { return true, nil },
-		GetBridgeAccessToken:    func() (string, bool) { return "tok_abc", true },
-		GetBridgeTokenOverride:  func() (string, bool) { return "", false },
+		IsBridgeEnabledBlocking:   func() (bool, error) { return true, nil },
+		GetBridgeAccessToken:      func() (string, bool) { return "tok_abc", true },
+		GetBridgeTokenOverride:    func() (string, bool) { return "", false },
 		WaitForPolicyLimitsToLoad: func() error { return nil },
-		IsPolicyAllowed:         func(key string) bool { return true },
-		GetGlobalConfig:         func() GlobalBridgeConfig { return GlobalBridgeConfig{} },
-		SaveGlobalConfig:        func(cfg GlobalBridgeConfig) {},
+		IsPolicyAllowed:           func(key string) bool { return true },
+		GetGlobalConfig:           func() GlobalBridgeConfig { return GlobalBridgeConfig{} },
+		SaveGlobalConfig:          func(cfg GlobalBridgeConfig) {},
 		GetOAuthTokens: func() *OAuthTokens {
 			exp := int64(9999999999999) // far future
 			return &OAuthTokens{AccessToken: "tok_abc", ExpiresAt: &exp}

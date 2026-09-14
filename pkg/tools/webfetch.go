@@ -19,11 +19,11 @@ import (
 
 // Constants matching TS source exactly.
 const (
-	MaxURLLength         = 2000              // Source: utils.ts:106
-	MaxHTTPContentLength = 10 * 1024 * 1024  // Source: utils.ts:112
-	FetchTimeoutMs       = 60_000            // Source: utils.ts:116
-	MaxRedirects         = 10                // Source: utils.ts:125
-	MaxMarkdownLength    = 100_000           // Source: utils.ts:128
+	MaxURLLength         = 2000             // Source: utils.ts:106
+	MaxHTTPContentLength = 10 * 1024 * 1024 // Source: utils.ts:112
+	FetchTimeoutMs       = 60_000           // Source: utils.ts:116
+	MaxRedirects         = 10               // Source: utils.ts:125
+	MaxMarkdownLength    = 100_000          // Source: utils.ts:128
 )
 
 // WebFetchUserAgent is the User-Agent sent with fetch requests.
@@ -39,10 +39,10 @@ type webFetchInput struct {
 	MaxLength int    `json:"max_length"`
 }
 
-func (t *WebFetchTool) Name() string        { return "WebFetch" }
-func (t *WebFetchTool) Description() string { return "Fetch a URL and return its content as text" }
-func (t *WebFetchTool) IsReadOnly() bool    { return true }
-func (t *WebFetchTool) SearchHint() string  { return "fetch and analyze web page content" }
+func (t *WebFetchTool) Name() string            { return "WebFetch" }
+func (t *WebFetchTool) Description() string     { return "Fetch a URL and return its content as text" }
+func (t *WebFetchTool) IsReadOnly() bool        { return true }
+func (t *WebFetchTool) SearchHint() string      { return "fetch and analyze web page content" }
 func (t *WebFetchTool) MaxResultSizeChars() int { return 100_000 }
 
 // Prompt returns the tool description matching the TS source.

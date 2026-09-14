@@ -42,21 +42,21 @@ func BetaCliInternal() string {
 
 // Beta header constants — Source: constants/betas.ts
 const (
-	BetaClaudeCode          = "claude-code-20250219"              // Source: betas.ts:3
-	BetaInterleavedThinking = "interleaved-thinking-2025-05-14"   // Source: betas.ts:4-5
-	BetaContext1M           = "context-1m-2025-08-07"             // Source: betas.ts:6
-	BetaContextManagement   = "context-management-2025-06-27"     // Source: betas.ts:7
-	BetaStructuredOutputs   = "structured-outputs-2025-12-15"     // Source: betas.ts:8
-	BetaWebSearch           = "web-search-2025-03-05"             // Source: betas.ts:9
-	BetaToolSearch1P        = "advanced-tool-use-2025-11-20"      // Source: betas.ts:13
-	BetaToolSearch3P        = "tool-search-tool-2025-10-19"       // Source: betas.ts:14
-	BetaEffort              = "effort-2025-11-24"                 // Source: betas.ts:15
-	BetaTaskBudgets         = "task-budgets-2026-03-13"           // Source: betas.ts:16
-	BetaPromptCachingScope  = "prompt-caching-scope-2026-01-05"   // Source: betas.ts:17-18
-	BetaFastMode            = "fast-mode-2026-02-01"              // Source: betas.ts:19
-	BetaRedactThinking       = "redact-thinking-2026-02-12"        // Source: betas.ts:20
-	BetaTokenEfficientTools  = "token-efficient-tools-2026-03-28"  // Source: betas.ts:21-22
-	BetaAdvisor              = "advisor-tool-2026-03-01"           // Source: betas.ts:31
+	BetaClaudeCode          = "claude-code-20250219"             // Source: betas.ts:3
+	BetaInterleavedThinking = "interleaved-thinking-2025-05-14"  // Source: betas.ts:4-5
+	BetaContext1M           = "context-1m-2025-08-07"            // Source: betas.ts:6
+	BetaContextManagement   = "context-management-2025-06-27"    // Source: betas.ts:7
+	BetaStructuredOutputs   = "structured-outputs-2025-12-15"    // Source: betas.ts:8
+	BetaWebSearch           = "web-search-2025-03-05"            // Source: betas.ts:9
+	BetaToolSearch1P        = "advanced-tool-use-2025-11-20"     // Source: betas.ts:13
+	BetaToolSearch3P        = "tool-search-tool-2025-10-19"      // Source: betas.ts:14
+	BetaEffort              = "effort-2025-11-24"                // Source: betas.ts:15
+	BetaTaskBudgets         = "task-budgets-2026-03-13"          // Source: betas.ts:16
+	BetaPromptCachingScope  = "prompt-caching-scope-2026-01-05"  // Source: betas.ts:17-18
+	BetaFastMode            = "fast-mode-2026-02-01"             // Source: betas.ts:19
+	BetaRedactThinking      = "redact-thinking-2026-02-12"       // Source: betas.ts:20
+	BetaTokenEfficientTools = "token-efficient-tools-2026-03-28" // Source: betas.ts:21-22
+	BetaAdvisor             = "advisor-tool-2026-03-01"          // Source: betas.ts:31
 )
 
 // BedrockExtraParamsHeaders are betas that go in Bedrock extraBodyParams, not headers.

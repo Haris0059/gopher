@@ -107,10 +107,10 @@ func TestInitAnalytics_Integration(t *testing.T) {
 
 func TestGetGrowthBookClientKey(t *testing.T) {
 	tests := []struct {
-		name              string
-		userType          string
-		enableGBDev       string
-		wantKey           string
+		name        string
+		userType    string
+		enableGBDev string
+		wantKey     string
 	}{
 		{
 			name:        "ant user with dev enabled (1)",

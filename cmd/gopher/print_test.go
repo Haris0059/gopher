@@ -107,13 +107,13 @@ func TestParseOutputFormat_Invalid(t *testing.T) {
 
 func TestValidateHeadlessFlags_AllErrors(t *testing.T) {
 	tests := []struct {
-		name             string
-		cfg              HeadlessConfig
-		hasResume        bool
-		resumeSessionAt  string
-		rewindFiles      string
-		prompt           string
-		wantErr          string
+		name            string
+		cfg             HeadlessConfig
+		hasResume       bool
+		resumeSessionAt string
+		rewindFiles     string
+		prompt          string
+		wantErr         string
 	}{
 		{
 			name:            "resume-session-at without resume",

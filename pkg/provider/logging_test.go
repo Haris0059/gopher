@@ -68,7 +68,7 @@ func TestLogAPIError_WithAllFields(t *testing.T) {
 		Attempt:                    3,
 		RequestID:                  "req-abc",
 		ClientRequestID:            "cli-xyz",
-		DidFallBackToNonStreaming:   true,
+		DidFallBackToNonStreaming:  true,
 		QuerySource:                "user",
 		FastMode:                   false,
 	})

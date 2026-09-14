@@ -184,13 +184,13 @@ func TestAnalyzeContext_OtherBlockTypes(t *testing.T) {
 
 func TestTokenStatsToMetrics_Basic(t *testing.T) {
 	stats := &TokenStats{
-		Total:           1000,
-		HumanMessages:   200,
-		AssistantMessages: 300,
+		Total:               1000,
+		HumanMessages:       200,
+		AssistantMessages:   300,
 		LocalCommandOutputs: 100,
-		Other:           50,
-		ToolRequests:    map[string]int{"Read": 150, "Bash": 100},
-		ToolResults:     map[string]int{"Read": 80, "Bash": 20},
+		Other:               50,
+		ToolRequests:        map[string]int{"Read": 150, "Bash": 100},
+		ToolResults:         map[string]int{"Read": 80, "Bash": 20},
 		DuplicateFileReads: map[string]DuplicateRead{
 			"/tmp/a.go": {Count: 2, Tokens: 40},
 		},

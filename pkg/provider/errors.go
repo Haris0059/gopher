@@ -15,10 +15,10 @@ import (
 // Retry constants matching TS exactly.
 // Source: withRetry.ts:52-55, 96
 const (
-	DefaultMaxRetries      = 10          // Source: withRetry.ts:52
-	Max529Retries          = 3           // Source: withRetry.ts:54
-	BaseDelayMs            = 500         // Source: withRetry.ts:55
-	DefaultMaxDelayMs      = 32000       // Source: withRetry.ts:533
+	DefaultMaxRetries      = 10            // Source: withRetry.ts:52
+	Max529Retries          = 3             // Source: withRetry.ts:54
+	BaseDelayMs            = 500           // Source: withRetry.ts:55
+	DefaultMaxDelayMs      = 32000         // Source: withRetry.ts:533
 	PersistentMaxBackoffMs = 5 * 60 * 1000 // Source: withRetry.ts:96 — 5 min cap
 )
 

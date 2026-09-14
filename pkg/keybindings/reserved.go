@@ -5,9 +5,9 @@ package keybindings
 // ReservedShortcuts are key combinations that cannot be rebound.
 // These are system-level shortcuts that bubbletea/terminal must handle.
 var ReservedShortcuts = map[string]string{
-	"ctrl+c": "Interrupt / cancel",
-	"ctrl+d": "EOF / exit",
-	"ctrl+z": "Suspend process",
+	"ctrl+c":  "Interrupt / cancel",
+	"ctrl+d":  "EOF / exit",
+	"ctrl+z":  "Suspend process",
 	"ctrl+\\": "Quit (SIGQUIT)",
 }
 

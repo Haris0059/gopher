@@ -89,10 +89,10 @@ func TestIsMCPToolName(t *testing.T) {
 
 func TestParseMCPToolName(t *testing.T) {
 	tests := []struct {
-		input      string
-		server     string
-		tool       string
-		ok         bool
+		input  string
+		server string
+		tool   string
+		ok     bool
 	}{
 		{"mcp__myserver__echo", "myserver", "echo", true},
 		{"mcp__claude_ai_Gmail__send_email", "claude_ai_Gmail", "send_email", true},

@@ -3,10 +3,11 @@
 // drains commands one at a time.
 //
 // TS sources: src/hooks/useCommandKeybindings.tsx,
-//             src/hooks/useCommandQueue.ts,
-//             src/hooks/useQueueProcessor.ts,
-//             src/utils/messageQueueManager.ts,
-//             src/utils/queueProcessor.ts
+//
+//	src/hooks/useCommandQueue.ts,
+//	src/hooks/useQueueProcessor.ts,
+//	src/utils/messageQueueManager.ts,
+//	src/utils/queueProcessor.ts
 package commands
 
 import (
@@ -80,8 +81,8 @@ func NewCommandKeybindings(resolver Resolver) *CommandKeybindings {
 		},
 		actionCommands: map[keybindings.Action]string{
 			keybindings.ActionAppToggleTodos:      "/tasks",
-			keybindings.ActionAppToggleTranscript:  "/transcript",
-			keybindings.ActionAppToggleBrief:       "/brief",
+			keybindings.ActionAppToggleTranscript: "/transcript",
+			keybindings.ActionAppToggleBrief:      "/brief",
 		},
 	}
 }

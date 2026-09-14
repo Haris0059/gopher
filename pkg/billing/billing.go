@@ -12,7 +12,7 @@ type RateLimit struct {
 // ExtraUsage represents overage/extra-credit usage information.
 // Source: usage.ts — ExtraUsage type
 type ExtraUsage struct {
-	IsEnabled   bool     `json:"is_enabled"`
+	IsEnabled    bool     `json:"is_enabled"`
 	MonthlyLimit *float64 `json:"monthly_limit"`
 	UsedCredits  *float64 `json:"used_credits"`
 	Utilization  *float64 `json:"utilization"`
@@ -21,12 +21,12 @@ type ExtraUsage struct {
 // Utilization holds all rate-limit dimensions returned by /api/oauth/usage.
 // Source: usage.ts — Utilization type (6 dimensions)
 type Utilization struct {
-	FiveHour         *RateLimit  `json:"five_hour,omitempty"`
-	SevenDay         *RateLimit  `json:"seven_day,omitempty"`
-	SevenDayOAuthApps *RateLimit `json:"seven_day_oauth_apps,omitempty"`
-	SevenDayOpus     *RateLimit  `json:"seven_day_opus,omitempty"`
-	SevenDaySonnet   *RateLimit  `json:"seven_day_sonnet,omitempty"`
-	ExtraUsage       *ExtraUsage `json:"extra_usage,omitempty"`
+	FiveHour          *RateLimit  `json:"five_hour,omitempty"`
+	SevenDay          *RateLimit  `json:"seven_day,omitempty"`
+	SevenDayOAuthApps *RateLimit  `json:"seven_day_oauth_apps,omitempty"`
+	SevenDayOpus      *RateLimit  `json:"seven_day_opus,omitempty"`
+	SevenDaySonnet    *RateLimit  `json:"seven_day_sonnet,omitempty"`
+	ExtraUsage        *ExtraUsage `json:"extra_usage,omitempty"`
 }
 
 // MetricsStatus represents the org-level metrics opt-out state.

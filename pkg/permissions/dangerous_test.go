@@ -115,11 +115,11 @@ func TestStripDangerousPermissions(t *testing.T) {
 	// Source: utils/permissions/permissionSetup.ts:510-553
 
 	rules := []PermissionRuleValue{
-		{ToolName: "Bash", RuleContent: "npm install"},  // safe
-		{ToolName: "Bash", RuleContent: "python:*"},     // dangerous
-		{ToolName: "Read"},                               // safe (not Bash)
-		{ToolName: "Bash"},                               // dangerous (tool-level)
-		{ToolName: "Bash", RuleContent: "git status"},   // safe
+		{ToolName: "Bash", RuleContent: "npm install"}, // safe
+		{ToolName: "Bash", RuleContent: "python:*"},    // dangerous
+		{ToolName: "Read"},                             // safe (not Bash)
+		{ToolName: "Bash"},                             // dangerous (tool-level)
+		{ToolName: "Bash", RuleContent: "git status"},  // safe
 	}
 
 	safe, stripped := StripDangerousPermissions(rules)

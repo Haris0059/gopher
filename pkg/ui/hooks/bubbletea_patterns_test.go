@@ -109,8 +109,8 @@ func TestTabStatus_Clear(t *testing.T) {
 
 func TestTabStatus_NilWriter(t *testing.T) {
 	ts := NewTabStatus(nil)
-	ts.Set(TabStatusBusy)  // should not panic
-	ts.Clear()             // should not panic
+	ts.Set(TabStatusBusy) // should not panic
+	ts.Clear()            // should not panic
 }
 
 func TestTabStatus_Idle(t *testing.T) {

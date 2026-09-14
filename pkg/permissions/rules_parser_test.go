@@ -182,8 +182,8 @@ func TestNormalizeLegacyToolName(t *testing.T) {
 		{"KillShell", "TaskStop"},
 		{"AgentOutputTool", "TaskOutput"},
 		{"BashOutputTool", "TaskOutput"},
-		{"Bash", "Bash"},     // No alias
-		{"Read", "Read"},     // No alias
+		{"Bash", "Bash"},       // No alias
+		{"Read", "Read"},       // No alias
 		{"Unknown", "Unknown"}, // Passthrough
 	}
 	for _, tt := range tests {

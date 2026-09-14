@@ -36,16 +36,16 @@ func IsOneShotBuiltinAgent(agentType string) bool {
 // AgentToolInput is the parsed input for the Agent tool.
 // Source: AgentTool/AgentTool.tsx:82-102
 type AgentToolInput struct {
-	Description    string `json:"description"`
-	Prompt         string `json:"prompt"`
-	SubagentType   string `json:"subagent_type,omitempty"`
-	Model          string `json:"model,omitempty"`
-	RunInBG        bool   `json:"run_in_background,omitempty"`
-	Name           string `json:"name,omitempty"`
-	TeamName       string `json:"team_name,omitempty"`
-	Mode           string `json:"mode,omitempty"`
-	Isolation      string `json:"isolation,omitempty"`
-	CWD            string `json:"cwd,omitempty"`
+	Description  string `json:"description"`
+	Prompt       string `json:"prompt"`
+	SubagentType string `json:"subagent_type,omitempty"`
+	Model        string `json:"model,omitempty"`
+	RunInBG      bool   `json:"run_in_background,omitempty"`
+	Name         string `json:"name,omitempty"`
+	TeamName     string `json:"team_name,omitempty"`
+	Mode         string `json:"mode,omitempty"`
+	Isolation    string `json:"isolation,omitempty"`
+	CWD          string `json:"cwd,omitempty"`
 }
 
 // ValidModelEnums are the allowed short model names.
@@ -122,52 +122,52 @@ func ValidateAgentToolInput(input *AgentToolInput) error {
 // Tool deny/allow lists matching TS constants exactly.
 // Source: constants/tools.ts:36-46
 var AllAgentDisallowedTools = map[string]bool{
-	"TaskOutput":    true, // Source: constants/tools.ts:37
-	"ExitPlanMode":  true, // Source: constants/tools.ts:38
-	"EnterPlanMode": true, // Source: constants/tools.ts:39
-	"Agent":         true, // Source: constants/tools.ts:41 — blocked for non-ant users
+	"TaskOutput":      true, // Source: constants/tools.ts:37
+	"ExitPlanMode":    true, // Source: constants/tools.ts:38
+	"EnterPlanMode":   true, // Source: constants/tools.ts:39
+	"Agent":           true, // Source: constants/tools.ts:41 — blocked for non-ant users
 	"AskUserQuestion": true, // Source: constants/tools.ts:42
-	"TaskStop":      true, // Source: constants/tools.ts:43
+	"TaskStop":        true, // Source: constants/tools.ts:43
 }
 
 // CustomAgentDisallowedTools is the deny list for non-built-in agents.
 // Source: constants/tools.ts:48-50 — superset of AllAgentDisallowedTools
 var CustomAgentDisallowedTools = map[string]bool{
-	"TaskOutput":     true,
-	"ExitPlanMode":   true,
-	"EnterPlanMode":  true,
-	"Agent":          true,
+	"TaskOutput":      true,
+	"ExitPlanMode":    true,
+	"EnterPlanMode":   true,
+	"Agent":           true,
 	"AskUserQuestion": true,
-	"TaskStop":       true,
+	"TaskStop":        true,
 }
 
 // AsyncAgentAllowedTools is the whitelist for background/async agents.
 // Source: constants/tools.ts:55-71
 var AsyncAgentAllowedTools = map[string]bool{
-	"Read":          true, // FILE_READ_TOOL_NAME
-	"WebSearch":     true,
-	"TodoWrite":     true,
-	"Grep":          true,
-	"WebFetch":      true,
-	"Glob":          true,
-	"Bash":          true, // SHELL_TOOL_NAMES
-	"Edit":          true, // FILE_EDIT_TOOL_NAME
-	"Write":         true, // FILE_WRITE_TOOL_NAME
-	"NotebookEdit":  true,
-	"Skill":         true,
+	"Read":            true, // FILE_READ_TOOL_NAME
+	"WebSearch":       true,
+	"TodoWrite":       true,
+	"Grep":            true,
+	"WebFetch":        true,
+	"Glob":            true,
+	"Bash":            true, // SHELL_TOOL_NAMES
+	"Edit":            true, // FILE_EDIT_TOOL_NAME
+	"Write":           true, // FILE_WRITE_TOOL_NAME
+	"NotebookEdit":    true,
+	"Skill":           true,
 	"SyntheticOutput": true,
-	"ToolSearch":    true,
-	"EnterWorktree": true,
-	"ExitWorktree":  true,
+	"ToolSearch":      true,
+	"EnterWorktree":   true,
+	"ExitWorktree":    true,
 }
 
 // InProcessTeammateAllowedTools are extra tools for in-process teammates.
 // Source: constants/tools.ts:77-85
 var InProcessTeammateAllowedTools = map[string]bool{
-	"TaskCreate": true,
-	"TaskGet":    true,
-	"TaskList":   true,
-	"TaskUpdate": true,
+	"TaskCreate":  true,
+	"TaskGet":     true,
+	"TaskList":    true,
+	"TaskUpdate":  true,
 	"SendMessage": true,
 }
 

@@ -126,8 +126,8 @@ func TestHookEventEmitter_AlwaysEmittedEvents(t *testing.T) {
 	})
 
 	e.EmitHookStarted("h1", "hook", "SessionStart") // always emitted
-	e.EmitHookStarted("h2", "hook", "Setup")         // always emitted
-	e.EmitHookStarted("h3", "hook", "PreToolUse")    // NOT emitted (not always-emitted + disabled)
+	e.EmitHookStarted("h2", "hook", "Setup")        // always emitted
+	e.EmitHookStarted("h3", "hook", "PreToolUse")   // NOT emitted (not always-emitted + disabled)
 
 	if len(received) != 2 {
 		t.Errorf("expected 2 events (only always-emitted), got %d", len(received))

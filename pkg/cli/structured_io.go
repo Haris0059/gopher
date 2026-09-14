@@ -40,9 +40,9 @@ type StdinMessage struct {
 	Type string `json:"type"`
 
 	// For type=="user"
-	SessionID       string          `json:"session_id,omitempty"`
-	Message         *UserMessage    `json:"message,omitempty"`
-	ParentToolUseID *string         `json:"parent_tool_use_id,omitempty"`
+	SessionID       string       `json:"session_id,omitempty"`
+	Message         *UserMessage `json:"message,omitempty"`
+	ParentToolUseID *string      `json:"parent_tool_use_id,omitempty"`
 
 	// For type=="control_request"
 	Request *ControlRequestBody `json:"request,omitempty"`
@@ -86,7 +86,7 @@ type StdoutMessage map[string]any
 
 // SDKControlRequest is the outbound control_request envelope.
 type SDKControlRequest struct {
-	Type      string         `json:"type"`       // always "control_request"
+	Type      string         `json:"type"` // always "control_request"
 	RequestID string         `json:"request_id"`
 	Request   map[string]any `json:"request"`
 }
@@ -445,9 +445,9 @@ func (s *StructuredIO) parseFullMessage(raw json.RawMessage) (StdinMessage, bool
 // rejecting the matching pending request.
 func (s *StructuredIO) handleControlResponse(raw json.RawMessage) (StdinMessage, bool) {
 	var resp struct {
-		Type     string               `json:"type"`
-		UUID     string               `json:"uuid,omitempty"`
-		Response ControlResponseBody  `json:"response"`
+		Type     string              `json:"type"`
+		UUID     string              `json:"uuid,omitempty"`
+		Response ControlResponseBody `json:"response"`
 	}
 	if err := json.Unmarshal(raw, &resp); err != nil {
 		s.logger.Error("error parsing control_response", "err", err)

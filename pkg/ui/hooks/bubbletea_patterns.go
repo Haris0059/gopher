@@ -203,10 +203,10 @@ func DefaultCursorPosition() CursorPosition {
 
 // ViewportState tracks the terminal viewport dimensions and scroll position.
 type ViewportState struct {
-	Width       int
-	Height      int
-	ScrollTop   int
-	ScrollLeft  int
+	Width        int
+	Height       int
+	ScrollTop    int
+	ScrollLeft   int
 	IsFullscreen bool
 }
 

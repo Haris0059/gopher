@@ -53,10 +53,10 @@ type SchemaValidationError struct {
 	File         string `json:"file,omitempty"`         // relative file path
 	Path         string `json:"path"`                   // field path in dot notation
 	Message      string `json:"message"`                // human-readable error
-	Expected     string `json:"expected,omitempty"`      // expected value or type
+	Expected     string `json:"expected,omitempty"`     // expected value or type
 	InvalidValue any    `json:"invalidValue,omitempty"` // the actual invalid value
-	Suggestion   string `json:"suggestion,omitempty"`    // fix suggestion
-	DocLink      string `json:"docLink,omitempty"`       // documentation URL
+	Suggestion   string `json:"suggestion,omitempty"`   // fix suggestion
+	DocLink      string `json:"docLink,omitempty"`      // documentation URL
 }
 
 func (e *SchemaValidationError) Error() string {

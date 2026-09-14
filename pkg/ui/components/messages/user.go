@@ -18,11 +18,11 @@ import (
 
 // UserBlockOptions controls how a user content block renders.
 type UserBlockOptions struct {
-	Width       int
-	Verbose     bool
-	ShowDot     bool
-	ToolName    string // for tool_result: which tool produced this
-	IsContinuation bool // previous message was also user
+	Width          int
+	Verbose        bool
+	ShowDot        bool
+	ToolName       string // for tool_result: which tool produced this
+	IsContinuation bool   // previous message was also user
 }
 
 // RenderUserBlock renders a single user content block.
@@ -220,7 +220,7 @@ func RenderUserMessage(msg message.Message, opts UserBlockOptions) string {
 // ---------------------------------------------------------------------------
 
 const (
-	maxDisplayChars  = 10_000
+	maxDisplayChars   = 10_000
 	truncateHeadChars = 2_500
 	truncateTailChars = 2_500
 )

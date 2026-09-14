@@ -41,7 +41,7 @@ func TestFuzzyMatch_PartialFilename(t *testing.T) {
 		{"main", "src/main.go"},
 		{"help", "src/utils/helpers.go"},
 		{"sett", "pkg/config/settings.go"},
-		{"READ", "README.md"},          // case-insensitive
+		{"READ", "README.md"},           // case-insensitive
 		{"mg", "src/main.go"},           // subsequence m..g
 		{"suh", "src/utils/helpers.go"}, // subsequence s..u..h
 	}

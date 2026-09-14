@@ -25,17 +25,26 @@ type stubTransport struct {
 	createdHeaders http.Header
 }
 
-func (s *stubTransport) Connect() error { s.mu.Lock(); s.connectCalled = true; s.mu.Unlock(); return nil }
+func (s *stubTransport) Connect() error {
+	s.mu.Lock()
+	s.connectCalled = true
+	s.mu.Unlock()
+	return nil
+}
 func (s *stubTransport) Write(msg any) error {
 	s.mu.Lock()
 	s.written = append(s.written, msg)
 	s.mu.Unlock()
 	return nil
 }
-func (s *stubTransport) SetOnData(fn func(string))  { s.onData = fn }
-func (s *stubTransport) SetOnClose(fn func())        { s.onClose = fn }
-func (s *stubTransport) Close()                       { s.mu.Lock(); s.closeCalled = true; s.mu.Unlock() }
-func (s *stubTransport) Written() []any               { s.mu.Lock(); defer s.mu.Unlock(); return append([]any(nil), s.written...) }
+func (s *stubTransport) SetOnData(fn func(string)) { s.onData = fn }
+func (s *stubTransport) SetOnClose(fn func())      { s.onClose = fn }
+func (s *stubTransport) Close()                    { s.mu.Lock(); s.closeCalled = true; s.mu.Unlock() }
+func (s *stubTransport) Written() []any {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return append([]any(nil), s.written...)
+}
 
 // ---------------------------------------------------------------------------
 // Test: v1/v2 transport selection based on env
@@ -173,8 +182,8 @@ func TestRemoteIO_HeaderInjection(t *testing.T) {
 			}
 
 			rio, err := NewRemoteIO(RemoteIOConfig{
-				StreamURL: "wss://example.com/sessions/1",
-				TokenSource: func() string { return tt.token },
+				StreamURL:        "wss://example.com/sessions/1",
+				TokenSource:      func() string { return tt.token },
 				TransportFactory: factory,
 				PollConfig:       bridge.DefaultPollConfig,
 			})

@@ -30,13 +30,13 @@ func TestDetectMediaType(t *testing.T) {
 
 func TestDetectMediaTypeFromPath(t *testing.T) {
 	tests := map[string]ImageMediaType{
-		"photo.png":    MediaPNG,
-		"photo.jpg":    MediaJPEG,
-		"photo.jpeg":   MediaJPEG,
-		"anim.gif":     MediaGIF,
-		"modern.webp":  MediaWebP,
-		"doc.pdf":      "",
-		"readme.md":    "",
+		"photo.png":   MediaPNG,
+		"photo.jpg":   MediaJPEG,
+		"photo.jpeg":  MediaJPEG,
+		"anim.gif":    MediaGIF,
+		"modern.webp": MediaWebP,
+		"doc.pdf":     "",
+		"readme.md":   "",
 	}
 	for path, want := range tests {
 		if got := DetectMediaTypeFromPath(path); got != want {

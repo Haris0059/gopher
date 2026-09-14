@@ -38,8 +38,8 @@ const DefaultConnectTimeoutMS = 15_000
 // bridge API calls. Matches TS oauthHeaders().
 func OAuthHeaders(accessToken string) map[string]string {
 	return map[string]string{
-		"Authorization":    "Bearer " + accessToken,
-		"Content-Type":     "application/json",
+		"Authorization":     "Bearer " + accessToken,
+		"Content-Type":      "application/json",
 		"anthropic-version": AnthropicVersion,
 	}
 }

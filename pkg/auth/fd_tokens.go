@@ -15,9 +15,9 @@ import (
 // Well-known token file locations in CCR.
 // Source: utils/authFileDescriptor.ts:20-23
 const (
-	CCRTokenDir              = "/home/claude/.claude/remote"
-	CCROAuthTokenPath        = CCRTokenDir + "/.oauth_token"
-	CCRAPIKeyPath            = CCRTokenDir + "/.api_key"
+	CCRTokenDir                = "/home/claude/.claude/remote"
+	CCROAuthTokenPath          = CCRTokenDir + "/.oauth_token"
+	CCRAPIKeyPath              = CCRTokenDir + "/.api_key"
 	CCRSessionIngressTokenPath = CCRTokenDir + "/.session_ingress_token"
 )
 

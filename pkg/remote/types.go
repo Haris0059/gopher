@@ -103,9 +103,9 @@ type RemoteSessionCallbacks struct {
 
 // SDKControlRequest is the wire envelope for control requests from CCR.
 type SDKControlRequest struct {
-	Type      string                     `json:"type"` // "control_request"
-	RequestID string                     `json:"request_id"`
-	Request   SDKControlRequestInner     `json:"request"`
+	Type      string                 `json:"type"` // "control_request"
+	RequestID string                 `json:"request_id"`
+	Request   SDKControlRequestInner `json:"request"`
 }
 
 // SDKControlRequestInner is the inner payload of a control request.
@@ -118,13 +118,13 @@ type SDKControlRequestInner struct {
 
 // SDKControlResponse is the wire envelope for control responses to CCR.
 type SDKControlResponse struct {
-	Type     string                      `json:"type"` // "control_response"
-	Response SDKControlResponseInner     `json:"response"`
+	Type     string                  `json:"type"` // "control_response"
+	Response SDKControlResponseInner `json:"response"`
 }
 
 // SDKControlResponseInner is the inner payload of a control response.
 type SDKControlResponseInner struct {
-	Subtype   string         `json:"subtype"`    // "success" or "error"
+	Subtype   string         `json:"subtype"` // "success" or "error"
 	RequestID string         `json:"request_id"`
 	Response  map[string]any `json:"response,omitempty"` // for success
 	Error     string         `json:"error,omitempty"`    // for error

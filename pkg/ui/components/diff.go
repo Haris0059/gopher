@@ -21,10 +21,10 @@ type DiffLine struct {
 type DiffLineType int
 
 const (
-	DiffContext  DiffLineType = iota // Unchanged line
-	DiffAdded                        // Added line
-	DiffRemoved                      // Removed line
-	DiffHeader                       // File header / hunk header
+	DiffContext DiffLineType = iota // Unchanged line
+	DiffAdded                       // Added line
+	DiffRemoved                     // Removed line
+	DiffHeader                      // File header / hunk header
 )
 
 // DiffViewMode controls the display format.
@@ -32,28 +32,28 @@ type DiffViewMode int
 
 const (
 	DiffUnified    DiffViewMode = iota // Unified diff format
-	DiffSideBySide                      // Side-by-side format
+	DiffSideBySide                     // Side-by-side format
 )
 
 // DiffViewer displays diffs with syntax highlighting and scrolling.
 type DiffViewer struct {
-	lines      []DiffLine
-	mode       DiffViewMode
-	scrollPos  int
-	width      int
-	height     int
-	focused    bool
-	theme      theme.Theme
-	fileName   string
+	lines     []DiffLine
+	mode      DiffViewMode
+	scrollPos int
+	width     int
+	height    int
+	focused   bool
+	theme     theme.Theme
+	fileName  string
 }
 
 // NewDiffViewer creates a new diff viewer.
 func NewDiffViewer(t theme.Theme) *DiffViewer {
 	return &DiffViewer{
-		lines: make([]DiffLine, 0),
-		mode:  DiffUnified,
-		theme: t,
-		width: 80,
+		lines:  make([]DiffLine, 0),
+		mode:   DiffUnified,
+		theme:  t,
+		width:  80,
 		height: 20,
 	}
 }

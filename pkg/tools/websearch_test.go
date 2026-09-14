@@ -80,7 +80,7 @@ func TestWebSearchTool(t *testing.T) {
 		// we test the parse logic through a mock server that returns the same format.
 		// For a real test, we'd need to inject the URL, but we can test parsing directly.
 		tc := &tools.ToolContext{CWD: t.TempDir()}
-		input := json.RawMessage(fmt.Sprintf(`{"query": "test query"}`, ))
+		input := json.RawMessage(fmt.Sprintf(`{"query": "test query"}`))
 
 		// Since WebSearchTool hits DuckDuckGo directly, we test the parsing separately.
 		// For integration, we verify the tool handles invalid URLs gracefully.

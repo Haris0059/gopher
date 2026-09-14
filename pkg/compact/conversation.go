@@ -44,11 +44,11 @@ type CompactionResult struct {
 // RecompactionInfo tracks compact history for diagnostics.
 // Source: compact.ts:317-323
 type RecompactionInfo struct {
-	IsRecompactionInChain    bool
+	IsRecompactionInChain     bool
 	TurnsSincePreviousCompact int
-	PreviousCompactTurnID    string
-	AutoCompactThreshold     int
-	QuerySource              string
+	PreviousCompactTurnID     string
+	AutoCompactThreshold      int
+	QuerySource               string
 }
 
 // SummaryFunc is the callback that sends messages to the LLM for summarization
@@ -118,12 +118,12 @@ func CompactConversation(
 	postCompactTokenCount := EstimateMessageTokens([]message.Message{boundaryMarker, summaryMsg})
 
 	return CompactionResult{
-		BoundaryMarker:           boundaryMarker,
-		SummaryMessages:          []message.Message{summaryMsg},
-		Attachments:              nil, // filled by caller with createPostCompactFileAttachments etc.
-		HookResults:              nil,
-		PreCompactTokenCount:     preCompactTokenCount,
-		PostCompactTokenCount:    postCompactTokenCount,
+		BoundaryMarker:            boundaryMarker,
+		SummaryMessages:           []message.Message{summaryMsg},
+		Attachments:               nil, // filled by caller with createPostCompactFileAttachments etc.
+		HookResults:               nil,
+		PreCompactTokenCount:      preCompactTokenCount,
+		PostCompactTokenCount:     postCompactTokenCount,
 		TruePostCompactTokenCount: postCompactTokenCount,
 	}, nil
 }

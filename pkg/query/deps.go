@@ -3,13 +3,12 @@ package query
 import (
 	"context"
 
-
-	"github.com/google/uuid"
 	"github.com/Haris0059/gopher/pkg/analytics"
 	"github.com/Haris0059/gopher/pkg/compact"
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/tools"
+	"github.com/google/uuid"
 )
 
 // QueryDeps is the dependency-injection surface for the query loop.

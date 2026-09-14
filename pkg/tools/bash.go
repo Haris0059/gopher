@@ -40,16 +40,18 @@ var DisallowedAutoBackgroundCommands = []string{"sleep"}
 type BashTool struct{}
 
 type bashInput struct {
-	Command                  string `json:"command"`
-	Description              string `json:"description,omitempty"`
-	Timeout                  int    `json:"timeout,omitempty"` // milliseconds
-	RunInBackground          bool   `json:"run_in_background,omitempty"`
-	DangerouslyDisableSandbox bool  `json:"dangerouslyDisableSandbox,omitempty"`
+	Command                   string `json:"command"`
+	Description               string `json:"description,omitempty"`
+	Timeout                   int    `json:"timeout,omitempty"` // milliseconds
+	RunInBackground           bool   `json:"run_in_background,omitempty"`
+	DangerouslyDisableSandbox bool   `json:"dangerouslyDisableSandbox,omitempty"`
 }
 
-func (b *BashTool) Name() string        { return "Bash" }
-func (b *BashTool) Description() string { return "Executes a given bash command and returns its output." }
-func (b *BashTool) IsReadOnly() bool    { return false }
+func (b *BashTool) Name() string { return "Bash" }
+func (b *BashTool) Description() string {
+	return "Executes a given bash command and returns its output."
+}
+func (b *BashTool) IsReadOnly() bool { return false }
 
 // IsConcurrencySafe evaluates per-call based on whether the command is read-only.
 // Source: BashTool.tsx:434-436

@@ -88,10 +88,10 @@ func NewLspRecommender(registry []LspPluginEntry, opts LspRecommenderOpts) *LspR
 
 // LspRecommenderOpts configures a new LspRecommender.
 type LspRecommenderOpts struct {
-	NeverSuggest     []string
-	InstalledPlugins []string
-	IgnoredCount     int
-	Disabled         bool
+	NeverSuggest      []string
+	InstalledPlugins  []string
+	IgnoredCount      int
+	Disabled          bool
 	IsBinaryInstalled func(cmd string) bool
 }
 

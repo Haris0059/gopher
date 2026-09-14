@@ -29,25 +29,25 @@ type AgentSystem struct {
 		CanDisableAllVia string `json:"can_disable_all_via"`
 	} `json:"built_in_agents"`
 	AgentToolBehavior struct {
-		DefaultType              string   `json:"default_type_when_omitted"`
-		ForkOverridesDefault     bool     `json:"fork_subagent_overrides_default"`
-		ExplicitTypeWins         bool     `json:"subagent_type_explicit_wins"`
-		SpawnsOwnSession         bool     `json:"agent_spawns_with_own_session"`
-		InheritsToolContext       bool     `json:"agent_inherits_tool_context"`
-		IsolationModes           []string `json:"isolation_modes"`
-		ModelOptions             []string `json:"model_options"`
+		DefaultType          string   `json:"default_type_when_omitted"`
+		ForkOverridesDefault bool     `json:"fork_subagent_overrides_default"`
+		ExplicitTypeWins     bool     `json:"subagent_type_explicit_wins"`
+		SpawnsOwnSession     bool     `json:"agent_spawns_with_own_session"`
+		InheritsToolContext  bool     `json:"agent_inherits_tool_context"`
+		IsolationModes       []string `json:"isolation_modes"`
+		ModelOptions         []string `json:"model_options"`
 	} `json:"agent_tool_behavior"`
 	ExploreAgent struct {
-		Type             string   `json:"type"`
-		DisallowedTools  []string `json:"disallowed_tools"`
-		ModelExternal    string   `json:"model_external"`
-		ModelAnt         string   `json:"model_ant"`
+		Type            string   `json:"type"`
+		DisallowedTools []string `json:"disallowed_tools"`
+		ModelExternal   string   `json:"model_external"`
+		ModelAnt        string   `json:"model_ant"`
 	} `json:"explore_agent"`
 	PlanAgent struct {
-		Type                string   `json:"type"`
-		DisallowedTools     []string `json:"disallowed_tools"`
-		Model               string   `json:"model"`
-		SharesToolsWithExplore bool  `json:"shares_tools_with_explore"`
+		Type                   string   `json:"type"`
+		DisallowedTools        []string `json:"disallowed_tools"`
+		Model                  string   `json:"model"`
+		SharesToolsWithExplore bool     `json:"shares_tools_with_explore"`
 	} `json:"plan_agent"`
 	MCPNaming struct {
 		ToolNameFormat string `json:"tool_name_format"`
@@ -57,9 +57,9 @@ type AgentSystem struct {
 		ParseRule      string `json:"parse_rule"`
 	} `json:"mcp_naming"`
 	SessionPersistence struct {
-		Format    string `json:"format"`
-		Extension string `json:"file_extension"`
-		Location  string `json:"location"`
+		Format      string `json:"format"`
+		Extension   string `json:"file_extension"`
+		Location    string `json:"location"`
 		HistoryFile string `json:"history_file"`
 	} `json:"session_persistence"`
 }

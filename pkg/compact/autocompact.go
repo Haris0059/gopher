@@ -5,10 +5,10 @@ package compact
 // AutoCompact constants matching TS source.
 // Source: services/compact/autoCompact.ts:62-65
 const (
-	AutocompactBufferTokens    = 13_000
-	WarningThresholdBuffer     = 20_000
-	ErrorThresholdBuffer       = 20_000
-	ManualCompactBufferTokens  = 3_000
+	AutocompactBufferTokens   = 13_000
+	WarningThresholdBuffer    = 20_000
+	ErrorThresholdBuffer      = 20_000
+	ManualCompactBufferTokens = 3_000
 )
 
 // MaxConsecutiveAutocompactFailures is the circuit breaker threshold.

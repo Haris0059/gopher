@@ -3,7 +3,7 @@ package vim
 // FindTextObject locates the [Start, End) range of a text object at the given
 // rune offset. Returns nil if the text object cannot be found.
 //
-// objectType: 'w','W','"','\'','`','(',')','{','}','[',']','<','>','b','B'
+// objectType: 'w','W','"','\”,'`','(',')','{','}','[',']','<','>','b','B'
 // inner: true for "inner" (i), false for "around" (a)
 //
 // Source: src/vim/textObjects.ts — findTextObject

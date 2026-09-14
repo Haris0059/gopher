@@ -45,10 +45,10 @@ type Diagnostic struct {
 
 // UsageInfo shows plan usage data for the Usage tab.
 type UsageInfo struct {
-	PlanName     string
-	UsedPercent  float64
-	ResetDate    string
-	TotalTokens  int64
+	PlanName      string
+	UsedPercent   float64
+	ResetDate     string
+	TotalTokens   int64
 	SessionTokens int64
 }
 
@@ -74,13 +74,13 @@ type ConfigEntry struct {
 
 // Model is the settings dialog bubbletea model.
 type Model struct {
-	tab         Tab
-	tabIndex    int
-	status      StatusData
-	configs     []ConfigEntry
-	usage       *UsageInfo
-	width       int
-	height      int
+	tab      Tab
+	tabIndex int
+	status   StatusData
+	configs  []ConfigEntry
+	usage    *UsageInfo
+	width    int
+	height   int
 }
 
 // New creates a settings model with the given default tab.

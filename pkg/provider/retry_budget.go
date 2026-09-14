@@ -15,16 +15,16 @@ import (
 type RetryBudget struct {
 	mu sync.Mutex
 
-	maxRetries         int
-	max529Consecutive  int
-	totalAttempts      int
-	consecutive529     int
-	querySource        QuerySource
-	model              string
-	fallbackModel      string
-	exhausted          bool
-	fallbackTriggered  bool
-	lastRetryAt        time.Time
+	maxRetries        int
+	max529Consecutive int
+	totalAttempts     int
+	consecutive529    int
+	querySource       QuerySource
+	model             string
+	fallbackModel     string
+	exhausted         bool
+	fallbackTriggered bool
+	lastRetryAt       time.Time
 }
 
 // RetryBudgetConfig holds the configuration for a RetryBudget.

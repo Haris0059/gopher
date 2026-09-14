@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Haris0059/gopher/pkg/ui/hooks/diff"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/Haris0059/gopher/pkg/ui/hooks/diff"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

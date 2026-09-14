@@ -42,31 +42,31 @@ type CellData struct {
 
 // Recording is the complete data from a scenario run.
 type Recording struct {
-	AppName    string       `json:"app_name"`
-	Scenario   string       `json:"scenario"`
-	Cols       int          `json:"cols"`
-	Rows       int          `json:"rows"`
-	StartTime  time.Time    `json:"start_time"`
-	Duration   time.Duration `json:"duration_ms"`
-	Frames     []Frame      `json:"frames"`
-	Inputs     []InputEvent `json:"inputs"`
-	Snapshots  map[string]string `json:"snapshots"` // name → screen text
+	AppName   string            `json:"app_name"`
+	Scenario  string            `json:"scenario"`
+	Cols      int               `json:"cols"`
+	Rows      int               `json:"rows"`
+	StartTime time.Time         `json:"start_time"`
+	Duration  time.Duration     `json:"duration_ms"`
+	Frames    []Frame           `json:"frames"`
+	Inputs    []InputEvent      `json:"inputs"`
+	Snapshots map[string]string `json:"snapshots"` // name → screen text
 }
 
 // Recorder monitors a VT terminal for screen changes and records frames.
 type Recorder struct {
-	term     vt10x.Terminal
-	cols     int
-	rows     int
-	start    time.Time
-	mu       sync.Mutex
-	frames   []Frame
-	inputs   []InputEvent
-	snapshots map[string]string
-	prevScreen string
+	term         vt10x.Terminal
+	cols         int
+	rows         int
+	start        time.Time
+	mu           sync.Mutex
+	frames       []Frame
+	inputs       []InputEvent
+	snapshots    map[string]string
+	prevScreen   string
 	pollInterval time.Duration
-	stopCh   chan struct{}
-	wg       sync.WaitGroup
+	stopCh       chan struct{}
+	wg           sync.WaitGroup
 }
 
 // NewRecorder creates a recorder that will monitor the given terminal.
@@ -314,14 +314,14 @@ func WriteRecording(rec *Recording, outDir string) error {
 
 	// Write metadata
 	meta := map[string]interface{}{
-		"app_name":     rec.AppName,
-		"scenario":     rec.Scenario,
-		"cols":         rec.Cols,
-		"rows":         rec.Rows,
-		"start_time":   rec.StartTime.Format(time.RFC3339Nano),
-		"duration_ms":  rec.Duration.Milliseconds(),
-		"frame_count":  len(rec.Frames),
-		"input_count":  len(rec.Inputs),
+		"app_name":       rec.AppName,
+		"scenario":       rec.Scenario,
+		"cols":           rec.Cols,
+		"rows":           rec.Rows,
+		"start_time":     rec.StartTime.Format(time.RFC3339Nano),
+		"duration_ms":    rec.Duration.Milliseconds(),
+		"frame_count":    len(rec.Frames),
+		"input_count":    len(rec.Inputs),
 		"snapshot_count": len(rec.Snapshots),
 	}
 	metaData, _ := json.MarshalIndent(meta, "", "  ")

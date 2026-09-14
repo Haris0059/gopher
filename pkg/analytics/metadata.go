@@ -10,13 +10,13 @@ import (
 
 // SessionInfo holds session-level metadata set once at startup.
 type SessionInfo struct {
-	SessionID string
-	Model     string
-	Version   string
-	UserType  string // "ant", "external", etc.
-	ClientType string // "cli", "vscode", etc.
+	SessionID     string
+	Model         string
+	Version       string
+	UserType      string // "ant", "external", etc.
+	ClientType    string // "cli", "vscode", etc.
 	IsInteractive bool
-	Cwd       string
+	Cwd           string
 }
 
 // globalSession is the session info set at startup.
@@ -41,12 +41,12 @@ func GetSessionInfo() SessionInfo {
 
 // EnvContext describes the runtime environment.
 type EnvContext struct {
-	Platform string // "darwin", "linux", "windows"
-	Arch     string // "amd64", "arm64"
+	Platform  string // "darwin", "linux", "windows"
+	Arch      string // "amd64", "arm64"
 	GoVersion string
 	Terminal  string
-	IsCi     bool
-	Version  string
+	IsCi      bool
+	Version   string
 }
 
 // BuildEnvContext gathers environment context (memoized-safe: all values
@@ -59,7 +59,7 @@ func BuildEnvContext() EnvContext {
 			GoVersion: runtime.Version(),
 			Terminal:  os.Getenv("TERM"),
 			IsCi:      isEnvTruthy(os.Getenv("CI")),
-			Version:  os.Getenv("GOPHER_VERSION"),
+			Version:   os.Getenv("GOPHER_VERSION"),
 		}
 	})
 	return cachedEnvCtx

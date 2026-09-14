@@ -22,10 +22,10 @@ type webSearchInput struct {
 	MaxResults     int      `json:"max_results"`
 }
 
-func (t *WebSearchTool) Name() string        { return "WebSearch" }
-func (t *WebSearchTool) Description() string { return "Search the web and return results" }
-func (t *WebSearchTool) IsReadOnly() bool    { return true }
-func (t *WebSearchTool) SearchHint() string  { return "search the web for current information" }
+func (t *WebSearchTool) Name() string            { return "WebSearch" }
+func (t *WebSearchTool) Description() string     { return "Search the web and return results" }
+func (t *WebSearchTool) IsReadOnly() bool        { return true }
+func (t *WebSearchTool) SearchHint() string      { return "search the web for current information" }
 func (t *WebSearchTool) MaxResultSizeChars() int { return 100_000 }
 
 // Prompt returns the WebSearch tool prompt matching the TS source.

@@ -422,8 +422,8 @@ func (t *CronCreateTool) Description() string {
 	return "Schedule a prompt to run at a future time within this Claude session \u2014 either recurring on a cron schedule, or once at a specific time."
 }
 
-func (t *CronCreateTool) IsReadOnly() bool  { return false }
-func (t *CronCreateTool) ShouldDefer() bool { return true }
+func (t *CronCreateTool) IsReadOnly() bool   { return false }
+func (t *CronCreateTool) ShouldDefer() bool  { return true }
 func (t *CronCreateTool) SearchHint() string { return "schedule a recurring or one-shot prompt" }
 func (t *CronCreateTool) Prompt() string     { return cronCreatePrompt }
 
@@ -597,10 +597,10 @@ func (t *CronListTool) Description() string {
 	return "List scheduled cron jobs"
 }
 
-func (t *CronListTool) IsReadOnly() bool                          { return true }
-func (t *CronListTool) ShouldDefer() bool                         { return true }
-func (t *CronListTool) SearchHint() string                        { return "list active cron jobs" }
-func (t *CronListTool) Prompt() string                            { return cronListPrompt }
+func (t *CronListTool) IsReadOnly() bool                         { return true }
+func (t *CronListTool) ShouldDefer() bool                        { return true }
+func (t *CronListTool) SearchHint() string                       { return "list active cron jobs" }
+func (t *CronListTool) Prompt() string                           { return cronListPrompt }
 func (t *CronListTool) IsConcurrencySafe(_ json.RawMessage) bool { return true }
 
 func (t *CronListTool) InputSchema() json.RawMessage {

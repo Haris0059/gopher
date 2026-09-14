@@ -22,7 +22,7 @@ type ClassifierRunner func(ctx context.Context, toolName string, toolInput strin
 //
 // Source: src/hooks/toolPermission/handlers/coordinatorHandler.ts
 type CoordinatorHandler struct {
-	Hooks      HookRunner      // permission-request hook runner (required)
+	Hooks      HookRunner       // permission-request hook runner (required)
 	Classifier ClassifierRunner // bash classifier runner (optional, feature-gated)
 	Logger     *slog.Logger
 }

@@ -40,14 +40,14 @@ const (
 // PollIntervalConfig holds tunable poll intervals for the bridge.
 // JSON tags use snake_case millisecond keys to match the TS wire format.
 type PollIntervalConfig struct {
-	PollIntervalNotAtCapacity                 time.Duration `json:"-"`
-	PollIntervalAtCapacity                    time.Duration `json:"-"`
-	NonExclusiveHeartbeatInterval             time.Duration `json:"-"`
-	MultisessionPollIntervalNotAtCapacity     time.Duration `json:"-"`
-	MultisessionPollIntervalPartialCapacity   time.Duration `json:"-"`
-	MultisessionPollIntervalAtCapacity        time.Duration `json:"-"`
-	ReclaimOlderThan                          time.Duration `json:"-"`
-	SessionKeepaliveInterval                  time.Duration `json:"-"`
+	PollIntervalNotAtCapacity               time.Duration `json:"-"`
+	PollIntervalAtCapacity                  time.Duration `json:"-"`
+	NonExclusiveHeartbeatInterval           time.Duration `json:"-"`
+	MultisessionPollIntervalNotAtCapacity   time.Duration `json:"-"`
+	MultisessionPollIntervalPartialCapacity time.Duration `json:"-"`
+	MultisessionPollIntervalAtCapacity      time.Duration `json:"-"`
+	ReclaimOlderThan                        time.Duration `json:"-"`
+	SessionKeepaliveInterval                time.Duration `json:"-"`
 }
 
 // pollIntervalConfigWire is the JSON wire representation (milliseconds).
@@ -137,7 +137,7 @@ func ComputeNextDelay(attempt int) time.Duration {
 
 // Validation error messages matching TS verbatim strings.
 const (
-	ErrZeroOrAtLeast100 = "must be 0 (disabled) or ≥100ms"
+	ErrZeroOrAtLeast100      = "must be 0 (disabled) or ≥100ms"
 	ErrSingleSessionLiveness = "at-capacity liveness requires non_exclusive_heartbeat_interval_ms > 0 or poll_interval_ms_at_capacity > 0"
 	ErrMultisessionLiveness  = "at-capacity liveness requires non_exclusive_heartbeat_interval_ms > 0 or multisession_poll_interval_ms_at_capacity > 0"
 )

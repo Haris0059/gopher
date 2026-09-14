@@ -6,12 +6,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Haris0059/gopher/pkg/compact"
 	"github.com/Haris0059/gopher/pkg/message"
-	"github.com/Haris0059/gopher/pkg/services"
 	"github.com/Haris0059/gopher/pkg/permissions"
 	"github.com/Haris0059/gopher/pkg/provider"
+	"github.com/Haris0059/gopher/pkg/services"
+	"github.com/google/uuid"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -23,19 +23,19 @@ type PermissionPolicyProvider interface {
 
 // SessionConfig holds configuration for a session.
 type SessionConfig struct {
-	Model           string
-	SystemPrompt    string
-	MaxTurns        int
-	TokenBudget     compact.TokenBudget
-	PermissionMode  permissions.PermissionMode
-	ThinkingEnabled bool
-	ThinkingBudget  int     // default 10000
-	JSONSchema        string  `json:"json_schema,omitempty"`
-	MaxBudgetUSD      float64 `json:"max_budget_usd,omitempty"`
-	TokenBudgetTarget int     `json:"token_budget_target,omitempty"` // +500k feature: output token target
-	FallbackModel     string  `json:"fallback_model,omitempty"`      // --fallback-model: switch on 529 exhaustion
-	QuerySource       provider.QuerySource `json:"query_source,omitempty"` // origin of query for retry policy + analytics
-	RetryBaseDelay    time.Duration        `json:"-"`                      // override retry backoff base delay (tests only)
+	Model             string
+	SystemPrompt      string
+	MaxTurns          int
+	TokenBudget       compact.TokenBudget
+	PermissionMode    permissions.PermissionMode
+	ThinkingEnabled   bool
+	ThinkingBudget    int                  // default 10000
+	JSONSchema        string               `json:"json_schema,omitempty"`
+	MaxBudgetUSD      float64              `json:"max_budget_usd,omitempty"`
+	TokenBudgetTarget int                  `json:"token_budget_target,omitempty"` // +500k feature: output token target
+	FallbackModel     string               `json:"fallback_model,omitempty"`      // --fallback-model: switch on 529 exhaustion
+	QuerySource       provider.QuerySource `json:"query_source,omitempty"`        // origin of query for retry policy + analytics
+	RetryBaseDelay    time.Duration        `json:"-"`                             // override retry backoff base delay (tests only)
 }
 
 // DefaultConfig returns sensible defaults.
@@ -82,12 +82,12 @@ type SessionState struct {
 	CreatedAt                time.Time         `json:"created_at"`
 
 	// Cost & duration tracking — Source: bootstrap/state.ts lines 51-64
-	TotalCostUSD                  float64 `json:"total_cost_usd"`
-	TotalAPIDuration              float64 `json:"total_api_duration_ms"`                // cumulative API call time in ms
+	TotalCostUSD                   float64 `json:"total_cost_usd"`
+	TotalAPIDuration               float64 `json:"total_api_duration_ms"`                 // cumulative API call time in ms
 	TotalAPIDurationWithoutRetries float64 `json:"total_api_duration_without_retries_ms"` // T108: API duration excluding retries
-	TotalToolDuration             float64 `json:"total_tool_duration_ms"`                // cumulative tool execution time in ms
-	TotalLinesAdded               int     `json:"total_lines_added"`
-	TotalLinesRemoved             int     `json:"total_lines_removed"`
+	TotalToolDuration              float64 `json:"total_tool_duration_ms"`                // cumulative tool execution time in ms
+	TotalLinesAdded                int     `json:"total_lines_added"`
+	TotalLinesRemoved              int     `json:"total_lines_removed"`
 
 	// Per-turn duration tracking — Source: bootstrap/state.ts lines 55-57 (T109)
 	TurnHookDurationMs       float64 `json:"turn_hook_duration_ms"`
@@ -151,7 +151,7 @@ type SessionState struct {
 	QuestionPreviewFormat string `json:"question_preview_format,omitempty"`
 
 	// Per-model usage tracking — Source: bootstrap/state.ts line 67
-	mu         sync.Mutex               `json:"-"`
+	mu         sync.Mutex                  `json:"-"`
 	ModelUsage map[string]*ModelUsageEntry `json:"model_usage,omitempty"`
 
 	// CoordinatorMode stores the session's coordinator mode for resume reconciliation.
@@ -178,7 +178,7 @@ type SessionState struct {
 
 	// T130: Last API request/response for debugging (/share, bug reports).
 	// Source: bootstrap/state.ts — lastAPIRequest, lastAPIRequestMessages
-	LastAPIRequest         interface{}             `json:"-"` // raw API request body (for debug/share)
+	LastAPIRequest         interface{}               `json:"-"` // raw API request body (for debug/share)
 	LastAPIRequestMessages []provider.RequestMessage `json:"-"` // messages from the last API request
 
 	// T131: Recent classifier API calls stored for debugging.
@@ -216,8 +216,8 @@ type SessionState struct {
 
 	// T140: Plan mode transition tracking.
 	// Source: bootstrap/state.ts — hasExitedPlanMode, needsPlanModeExitAttachment
-	HasExitedPlanMode            bool `json:"-"`
-	NeedsPlanModeExitAttachment  bool `json:"-"`
+	HasExitedPlanMode           bool `json:"-"`
+	NeedsPlanModeExitAttachment bool `json:"-"`
 
 	// T141: Auto mode transition tracking.
 	// Source: bootstrap/state.ts — needsAutoModeExitAttachment

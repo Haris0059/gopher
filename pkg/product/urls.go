@@ -5,10 +5,10 @@ import "strings"
 
 // Product and Claude AI base URLs.
 const (
-	ProductURL            = "https://claude.com/claude-code"
-	ClaudeAIBaseURL       = "https://claude.ai"
+	ProductURL             = "https://claude.com/claude-code"
+	ClaudeAIBaseURL        = "https://claude.ai"
 	ClaudeAIStagingBaseURL = "https://claude-ai.staging.ant.dev"
-	ClaudeAILocalBaseURL  = "http://localhost:4000"
+	ClaudeAILocalBaseURL   = "http://localhost:4000"
 )
 
 // IsRemoteSessionStaging reports whether the session targets a staging environment.

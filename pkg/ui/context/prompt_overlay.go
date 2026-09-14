@@ -95,5 +95,5 @@ func (o *PromptOverlay) MoveSelection(delta int) {
 	if n == 0 {
 		return
 	}
-	o.SelectedIndex = ((o.SelectedIndex + delta) % n + n) % n
+	o.SelectedIndex = ((o.SelectedIndex+delta)%n + n) % n
 }

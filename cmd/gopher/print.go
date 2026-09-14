@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/Haris0059/gopher/internal/cli"
-	pkgcli "github.com/Haris0059/gopher/pkg/cli"
 	"github.com/Haris0059/gopher/pkg/bridge"
+	pkgcli "github.com/Haris0059/gopher/pkg/cli"
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/query"
@@ -245,8 +245,8 @@ func setupRemoteIO(logger *slog.Logger) (*pkgcli.RemoteIO, error) {
 	}
 
 	rio, err := pkgcli.NewRemoteIO(pkgcli.RemoteIOConfig{
-		StreamURL:  streamURL,
-		SessionID:  sessionID,
+		StreamURL: streamURL,
+		SessionID: sessionID,
 		TokenSource: func() string {
 			return os.Getenv("CLAUDE_CODE_SESSION_INGRESS_TOKEN")
 		},
@@ -268,11 +268,11 @@ type noopTransport struct {
 	onClose func()
 }
 
-func (t *noopTransport) Connect() error              { return nil }
-func (t *noopTransport) Write(_ any) error            { return nil }
-func (t *noopTransport) SetOnData(fn func(string))    { t.onData = fn }
-func (t *noopTransport) SetOnClose(fn func())         { t.onClose = fn }
-func (t *noopTransport) Close()                       {}
+func (t *noopTransport) Connect() error            { return nil }
+func (t *noopTransport) Write(_ any) error         { return nil }
+func (t *noopTransport) SetOnData(fn func(string)) { t.onData = fn }
+func (t *noopTransport) SetOnClose(fn func())      { t.onClose = fn }
+func (t *noopTransport) Close()                    {}
 
 // emitError writes an error to stderr (or as stream-json to stdout).
 // Source: cli/print.ts — emitLoadError

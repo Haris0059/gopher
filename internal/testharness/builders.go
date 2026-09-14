@@ -6,12 +6,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Haris0059/gopher/pkg/compact"
 	"github.com/Haris0059/gopher/pkg/message"
 	"github.com/Haris0059/gopher/pkg/permissions"
 	"github.com/Haris0059/gopher/pkg/provider"
 	"github.com/Haris0059/gopher/pkg/session"
+	"github.com/google/uuid"
 )
 
 // --- Session builders ---

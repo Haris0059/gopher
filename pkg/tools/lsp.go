@@ -39,7 +39,7 @@ var ValidLSPOperations = map[string]bool{
 	LSPOpWorkspaceSymbol: true, LSPOpGoToImplementation: true,
 	LSPOpPrepareCallHierarchy: true, LSPOpIncomingCalls: true,
 	LSPOpOutgoingCalls: true,
-	LSPOpDiagnostics: true, LSPOpSymbols: true,
+	LSPOpDiagnostics:   true, LSPOpSymbols: true,
 }
 
 // LSPOutput is the structured output from LSP operations.
@@ -96,8 +96,8 @@ type lspInput struct {
 	Line      int    `json:"line"`
 	Character int    `json:"character"`
 	// Legacy field names (backward compat)
-	Command   string `json:"command"`
-	LegacyFP  string `json:"file_path"`
+	Command  string `json:"command"`
+	LegacyFP string `json:"file_path"`
 }
 
 func (t *LSPTool) Execute(ctx context.Context, tc *ToolContext, input json.RawMessage) (*ToolOutput, error) {

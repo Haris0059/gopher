@@ -65,10 +65,10 @@ func CreateHistoryAuthCtx(sessionID string) (*HistoryAuthCtx, error) {
 	baseURL := fmt.Sprintf("%s/v1/sessions/%s/events", oauthCfg.BaseAPIURL, sessionID)
 
 	headers := map[string]string{
-		"Authorization":        "Bearer " + apiKey,
-		"anthropic-beta":       "ccr-byoc-2025-07-29",
-		"x-organization-uuid":  "", // populated by caller when available
-		"Content-Type":         "application/json",
+		"Authorization":       "Bearer " + apiKey,
+		"anthropic-beta":      "ccr-byoc-2025-07-29",
+		"x-organization-uuid": "", // populated by caller when available
+		"Content-Type":        "application/json",
 	}
 
 	return &HistoryAuthCtx{

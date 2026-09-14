@@ -22,28 +22,28 @@ type HooksAndPrompts struct {
 		SessionEvents       []string `json:"session_events"`
 	} `json:"hook_events"`
 	HookDecisions struct {
-		ValidDecisions       []string `json:"valid_decisions"`
-		ApproveSetsAllow     bool     `json:"approve_sets_allow"`
-		BlockSetsDeny        bool     `json:"block_sets_deny"`
-		BlockDefaultMessage  string   `json:"block_default_message"`
-		UnknownDecisionThrows bool    `json:"unknown_decision_throws"`
-		UnknownDecisionError string   `json:"unknown_decision_error"`
+		ValidDecisions        []string `json:"valid_decisions"`
+		ApproveSetsAllow      bool     `json:"approve_sets_allow"`
+		BlockSetsDeny         bool     `json:"block_sets_deny"`
+		BlockDefaultMessage   string   `json:"block_default_message"`
+		UnknownDecisionThrows bool     `json:"unknown_decision_throws"`
+		UnknownDecisionError  string   `json:"unknown_decision_error"`
 	} `json:"hook_decisions"`
 	HookOutput struct {
-		ContinueFalsePrevents     bool     `json:"continue_false_prevents_continuation"`
-		StopReasonOptional        bool     `json:"stop_reason_optional"`
-		SystemMessageOptional     bool     `json:"system_message_optional"`
-		PreToolUseOverridePerm    bool     `json:"pre_tool_use_can_override_permission"`
-		PreToolUseUpdateInput     bool     `json:"pre_tool_use_can_update_input"`
-		PostToolUseUpdateMCP      bool     `json:"post_tool_use_can_update_mcp_output"`
-		ElicitationActions        []string `json:"elicitation_actions"`
+		ContinueFalsePrevents  bool     `json:"continue_false_prevents_continuation"`
+		StopReasonOptional     bool     `json:"stop_reason_optional"`
+		SystemMessageOptional  bool     `json:"system_message_optional"`
+		PreToolUseOverridePerm bool     `json:"pre_tool_use_can_override_permission"`
+		PreToolUseUpdateInput  bool     `json:"pre_tool_use_can_update_input"`
+		PostToolUseUpdateMCP   bool     `json:"post_tool_use_can_update_mcp_output"`
+		ElicitationActions     []string `json:"elicitation_actions"`
 	} `json:"hook_json_output"`
 	SystemPrompt struct {
-		PriorityOrder        []string `json:"priority_order"`
-		OverrideReplacesAll  bool     `json:"override_replaces_all"`
-		AppendAlwaysAdded    bool     `json:"append_always_added_unless_override"`
-		CustomReplacesDefault bool    `json:"custom_replaces_default"`
-		DefaultIsArrayBlocks bool     `json:"default_is_array_of_blocks"`
+		PriorityOrder         []string `json:"priority_order"`
+		OverrideReplacesAll   bool     `json:"override_replaces_all"`
+		AppendAlwaysAdded     bool     `json:"append_always_added_unless_override"`
+		CustomReplacesDefault bool     `json:"custom_replaces_default"`
+		DefaultIsArrayBlocks  bool     `json:"default_is_array_of_blocks"`
 	} `json:"system_prompt_construction"`
 	PermissionRuleSources []string `json:"permission_rule_sources"`
 	PermissionCheckOrder  []string `json:"permission_check_order"`

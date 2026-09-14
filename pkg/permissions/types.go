@@ -7,19 +7,19 @@ type PermissionMode string
 const (
 	// External modes (user-facing)
 	// Source: types/permissions.ts:16-22
-	ModeDefault          PermissionMode = "default"
-	ModeAcceptEdits      PermissionMode = "acceptEdits"
+	ModeDefault           PermissionMode = "default"
+	ModeAcceptEdits       PermissionMode = "acceptEdits"
 	ModeBypassPermissions PermissionMode = "bypassPermissions"
-	ModeDontAsk          PermissionMode = "dontAsk"
-	ModePlan             PermissionMode = "plan"
+	ModeDontAsk           PermissionMode = "dontAsk"
+	ModePlan              PermissionMode = "plan"
 
 	// Internal modes
 	// Source: types/permissions.ts:28
-	ModeAuto   PermissionMode = "auto"
+	ModeAuto PermissionMode = "auto"
 
 	// Legacy aliases for backward compatibility with existing Go code
-	AutoApprove = ModeBypassPermissions
-	Interactive = ModeDefault
+	AutoApprove                = ModeBypassPermissions
+	Interactive                = ModeDefault
 	Deny        PermissionMode = "deny" // Not in TS, used internally
 )
 

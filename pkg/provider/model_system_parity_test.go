@@ -17,20 +17,20 @@ func modelSystemPath() string {
 
 type ModelSystem struct {
 	ModelAliases struct {
-		AllAliases          []string `json:"all_aliases"`
-		FamilyAliases       []string `json:"family_aliases"`
-		OneMSuffix          string   `json:"1m_suffix_pattern"`
-		FamilyIsWildcard    bool     `json:"family_alias_is_wildcard"`
+		AllAliases       []string `json:"all_aliases"`
+		FamilyAliases    []string `json:"family_aliases"`
+		OneMSuffix       string   `json:"1m_suffix_pattern"`
+		FamilyIsWildcard bool     `json:"family_alias_is_wildcard"`
 	} `json:"model_aliases"`
 	CanonicalNames struct {
-		Opus46    string `json:"claude_opus_4_6"`
-		Opus45    string `json:"claude_opus_4_5"`
-		Opus41    string `json:"claude_opus_4_1"`
-		Opus4     string `json:"claude_opus_4"`
-		Sonnet46  string `json:"claude_sonnet_4_6"`
-		Sonnet45  string `json:"claude_sonnet_4_5"`
-		Sonnet4   string `json:"claude_sonnet_4"`
-		Order     string `json:"resolution_order"`
+		Opus46   string `json:"claude_opus_4_6"`
+		Opus45   string `json:"claude_opus_4_5"`
+		Opus41   string `json:"claude_opus_4_1"`
+		Opus4    string `json:"claude_opus_4"`
+		Sonnet46 string `json:"claude_sonnet_4_6"`
+		Sonnet45 string `json:"claude_sonnet_4_5"`
+		Sonnet4  string `json:"claude_sonnet_4"`
+		Order    string `json:"resolution_order"`
 	} `json:"canonical_model_names"`
 	ContextWindows struct {
 		DefaultTokens        int      `json:"default_tokens"`
@@ -41,23 +41,23 @@ type ModelSystem struct {
 		OneMSuffixPrecedence bool     `json:"1m_suffix_takes_precedence"`
 	} `json:"context_windows"`
 	OutputTokens struct {
-		Default      int `json:"default"`
-		UpperLimit   int `json:"upper_limit"`
+		Default       int `json:"default"`
+		UpperLimit    int `json:"upper_limit"`
 		CappedDefault int `json:"capped_default"`
-		Escalated    int `json:"escalated"`
-		CompactMax   int `json:"compact_max"`
+		Escalated     int `json:"escalated"`
+		CompactMax    int `json:"compact_max"`
 	} `json:"output_tokens"`
 	FastMode struct {
-		DisableEnv          string   `json:"disable_env"`
-		SameModelFaster     bool     `json:"same_model_faster_output"`
-		NotDifferentModel   bool     `json:"not_a_different_model"`
-		CooldownReasons     []string `json:"cooldown_reasons"`
+		DisableEnv        string   `json:"disable_env"`
+		SameModelFaster   bool     `json:"same_model_faster_output"`
+		NotDifferentModel bool     `json:"not_a_different_model"`
+		CooldownReasons   []string `json:"cooldown_reasons"`
 	} `json:"fast_mode"`
 	SubagentModels struct {
-		ExploreDefault    string `json:"explore_external_default"`
-		PlanDefault       string `json:"plan_default"`
-		StatuslineSetup   string `json:"statusline_setup"`
-		ClaudeCodeGuide   string `json:"claude_code_guide"`
+		ExploreDefault  string `json:"explore_external_default"`
+		PlanDefault     string `json:"plan_default"`
+		StatuslineSetup string `json:"statusline_setup"`
+		ClaudeCodeGuide string `json:"claude_code_guide"`
 	} `json:"subagent_models"`
 }
 

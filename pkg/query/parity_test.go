@@ -29,9 +29,9 @@ type ParityRules struct {
 	} `json:"tool_partitioning"`
 
 	TurnCounting struct {
-		StartsAt       int    `json:"starts_at"`
+		StartsAt        int    `json:"starts_at"`
 		IncrementsAfter string `json:"increments_after"`
-		MaxTurnsCheck  string `json:"max_turns_check"`
+		MaxTurnsCheck   string `json:"max_turns_check"`
 	} `json:"turn_counting"`
 
 	ToolDetection struct {
@@ -40,25 +40,25 @@ type ParityRules struct {
 	} `json:"tool_detection"`
 
 	MaxOutputTokensRecovery struct {
-		EscalationValue             int    `json:"escalation_value"`
-		MultiTurnLimit              int    `json:"multi_turn_limit"`
+		EscalationValue               int    `json:"escalation_value"`
+		MultiTurnLimit                int    `json:"multi_turn_limit"`
 		ContinuationMessageStartsWith string `json:"continuation_message_starts_with"`
 		ContinuationMessageContains   string `json:"continuation_message_contains"`
 	} `json:"max_output_tokens_recovery"`
 
 	ContextTooLongRecovery struct {
-		MaxAttempts        int  `json:"max_attempts"`
-		Strategy           string `json:"strategy"`
-		NoStopHooksOnPTL   bool `json:"no_stop_hooks_on_ptl"`
+		MaxAttempts      int    `json:"max_attempts"`
+		Strategy         string `json:"strategy"`
+		NoStopHooksOnPTL bool   `json:"no_stop_hooks_on_ptl"`
 	} `json:"context_too_long_recovery"`
 
 	MessageFormatRules struct {
-		ToolResultsRole                 string `json:"tool_results_role"`
-		EveryToolUseNeedsExactlyOneResult bool  `json:"every_tool_use_needs_exactly_one_result"`
-		MissingResultSynthesized        bool   `json:"missing_result_synthesized"`
-		MissingResultText               string `json:"missing_result_text"`
-		SystemPromptInSystemField       bool   `json:"system_prompt_in_system_field"`
-		SystemPromptNotInMessages       bool   `json:"system_prompt_not_in_messages"`
+		ToolResultsRole                   string `json:"tool_results_role"`
+		EveryToolUseNeedsExactlyOneResult bool   `json:"every_tool_use_needs_exactly_one_result"`
+		MissingResultSynthesized          bool   `json:"missing_result_synthesized"`
+		MissingResultText                 string `json:"missing_result_text"`
+		SystemPromptInSystemField         bool   `json:"system_prompt_in_system_field"`
+		SystemPromptNotInMessages         bool   `json:"system_prompt_not_in_messages"`
 	} `json:"message_format_rules"`
 
 	StopReasons struct {
@@ -75,16 +75,16 @@ type ParityRules struct {
 	} `json:"error_classification"`
 
 	MemoryPrefetch struct {
-		FileName            string `json:"file_name"`
-		LoadedOnceBeforeLoop bool  `json:"loaded_once_before_loop"`
-		MergedIntoSystemPrompt bool `json:"merged_into_system_prompt"`
-		MissingFileIsSilent bool   `json:"missing_file_is_silent"`
+		FileName               string `json:"file_name"`
+		LoadedOnceBeforeLoop   bool   `json:"loaded_once_before_loop"`
+		MergedIntoSystemPrompt bool   `json:"merged_into_system_prompt"`
+		MissingFileIsSilent    bool   `json:"missing_file_is_silent"`
 	} `json:"memory_prefetch"`
 
 	CompactBehavior struct {
 		ProactiveCheckBeforeEachTurn bool `json:"proactive_check_before_each_turn"`
-		ReactiveOn413Once           bool `json:"reactive_on_413_once"`
-		PreservesSystemPrompt       bool `json:"preserves_system_prompt"`
+		ReactiveOn413Once            bool `json:"reactive_on_413_once"`
+		PreservesSystemPrompt        bool `json:"preserves_system_prompt"`
 		CircuitBreakerAfter3Failures bool `json:"circuit_breaker_after_3_failures"`
 	} `json:"compact_behavior"`
 }

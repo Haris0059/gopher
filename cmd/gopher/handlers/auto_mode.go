@@ -37,12 +37,12 @@ type SideQueryFunc func(ctx context.Context, opts SideQueryOptions) (*SideQueryR
 
 // SideQueryOptions configures a side query request.
 type SideQueryOptions struct {
-	QuerySource           string
-	Model                 string
-	System                string
+	QuerySource            string
+	Model                  string
+	System                 string
 	SkipSystemPromptPrefix bool
-	MaxTokens             int
-	Messages              []SideQueryMessage
+	MaxTokens              int
+	Messages               []SideQueryMessage
 }
 
 // SideQueryMessage is a single message in a side query.

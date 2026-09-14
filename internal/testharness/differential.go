@@ -23,10 +23,10 @@ type DiffResult struct {
 
 // MessageDiff captures a difference in message sequences.
 type MessageDiff struct {
-	Index   int
-	Field   string
-	ValueA  string
-	ValueB  string
+	Index  int
+	Field  string
+	ValueA string
+	ValueB string
 }
 
 // ToolDiff captures a difference in tool call sequences.
@@ -169,19 +169,19 @@ func RunDifferential(
 	// Compare token accounting
 	if sessA.TotalInputTokens != sessB.TotalInputTokens {
 		result.TokenDiffs = append(result.TokenDiffs, TokenDiff{
-			Field: "total_input_tokens",
+			Field:  "total_input_tokens",
 			ValueA: sessA.TotalInputTokens, ValueB: sessB.TotalInputTokens,
 		})
 	}
 	if sessA.TotalOutputTokens != sessB.TotalOutputTokens {
 		result.TokenDiffs = append(result.TokenDiffs, TokenDiff{
-			Field: "total_output_tokens",
+			Field:  "total_output_tokens",
 			ValueA: sessA.TotalOutputTokens, ValueB: sessB.TotalOutputTokens,
 		})
 	}
 	if sessA.TurnCount != sessB.TurnCount {
 		result.TokenDiffs = append(result.TokenDiffs, TokenDiff{
-			Field: "turn_count",
+			Field:  "turn_count",
 			ValueA: sessA.TurnCount, ValueB: sessB.TurnCount,
 		})
 	}

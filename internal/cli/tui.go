@@ -14,8 +14,8 @@ type AppState int
 
 const (
 	StateIdle    AppState = iota // Waiting for user input
-	StateRunning                // Query is executing
-	StateExiting                // User requested exit
+	StateRunning                 // Query is executing
+	StateExiting                 // User requested exit
 )
 
 // Model is the Bubble Tea model for the gopher TUI.

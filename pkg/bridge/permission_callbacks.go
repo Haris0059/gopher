@@ -30,10 +30,10 @@ const (
 // BridgePermissionResponse is the response payload for a bridge permission request.
 // Source: bridgePermissionCallbacks.ts:3-8
 type BridgePermissionResponse struct {
-	Behavior           PermissionBehavior          `json:"behavior"`
-	UpdatedInput       map[string]any              `json:"updatedInput,omitempty"`
+	Behavior           PermissionBehavior             `json:"behavior"`
+	UpdatedInput       map[string]any                 `json:"updatedInput,omitempty"`
 	UpdatedPermissions []permissions.PermissionUpdate `json:"updatedPermissions,omitempty"`
-	Message            string                      `json:"message,omitempty"`
+	Message            string                         `json:"message,omitempty"`
 }
 
 // ParseBridgePermissionResponse validates and decodes raw JSON into a
@@ -61,7 +61,7 @@ type BridgePermissionRequest struct {
 	Input                 map[string]any                 `json:"input"`
 	ToolUseID             string                         `json:"tool_use_id"`
 	Description           string                         `json:"description"`
-	PermissionSuggestions []permissions.PermissionUpdate  `json:"permission_suggestions,omitempty"`
+	PermissionSuggestions []permissions.PermissionUpdate `json:"permission_suggestions,omitempty"`
 	BlockedPath           string                         `json:"blocked_path,omitempty"`
 }
 

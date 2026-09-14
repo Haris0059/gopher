@@ -8,10 +8,10 @@ package plugins
 // Source: src/hooks/useMergedClients.ts, src/hooks/useManagePlugins.ts,
 // src/hooks/useLspPluginRecommendation.tsx, src/hooks/usePluginRecommendationBase.tsx
 type PluginHooks struct {
-	MCPClients    *MergedClients
-	State         *PluginState
-	LspRec        *LspRecommender
-	LspRecBase    *RecommendationBase[LspRecommendation]
+	MCPClients *MergedClients
+	State      *PluginState
+	LspRec     *LspRecommender
+	LspRecBase *RecommendationBase[LspRecommendation]
 }
 
 // NewPluginHooks creates a PluginHooks with sensible zero-value defaults.
@@ -20,7 +20,7 @@ func NewPluginHooks() *PluginHooks {
 	return &PluginHooks{
 		MCPClients: NewMergedClients(nil),
 		State:      NewPluginState(),
-		LspRec: NewLspRecommender(nil, LspRecommenderOpts{}),
+		LspRec:     NewLspRecommender(nil, LspRecommenderOpts{}),
 		LspRecBase: NewRecommendationBase[LspRecommendation](false),
 	}
 }

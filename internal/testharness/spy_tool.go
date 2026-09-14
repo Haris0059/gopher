@@ -56,8 +56,8 @@ func (s *SpyTool) Calls() []json.RawMessage {
 // --- tools.Tool interface ---
 
 func (s *SpyTool) Name() string        { return s.name }
-func (s *SpyTool) Description() string  { return "A spy tool for testing." }
-func (s *SpyTool) IsReadOnly() bool     { return s.readOnly }
+func (s *SpyTool) Description() string { return "A spy tool for testing." }
+func (s *SpyTool) IsReadOnly() bool    { return s.readOnly }
 func (s *SpyTool) InputSchema() json.RawMessage {
 	return json.RawMessage(`{"type":"object"}`)
 }

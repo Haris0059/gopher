@@ -3,7 +3,6 @@ package spinner
 import (
 	"strings"
 	"testing"
-
 )
 
 func TestFrameAt(t *testing.T) {

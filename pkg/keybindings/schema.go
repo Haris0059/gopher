@@ -81,16 +81,16 @@ type Action string
 
 const (
 	// App-level actions (Global context)
-	ActionAppInterrupt              Action = "app:interrupt"
-	ActionAppExit                   Action = "app:exit"
-	ActionAppToggleTodos            Action = "app:toggleTodos"
-	ActionAppToggleTranscript       Action = "app:toggleTranscript"
-	ActionAppToggleBrief            Action = "app:toggleBrief"
-	ActionAppToggleTeammatePreview  Action = "app:toggleTeammatePreview"
-	ActionAppToggleTerminal         Action = "app:toggleTerminal"
-	ActionAppRedraw                 Action = "app:redraw"
-	ActionAppGlobalSearch           Action = "app:globalSearch"
-	ActionAppQuickOpen              Action = "app:quickOpen"
+	ActionAppInterrupt             Action = "app:interrupt"
+	ActionAppExit                  Action = "app:exit"
+	ActionAppToggleTodos           Action = "app:toggleTodos"
+	ActionAppToggleTranscript      Action = "app:toggleTranscript"
+	ActionAppToggleBrief           Action = "app:toggleBrief"
+	ActionAppToggleTeammatePreview Action = "app:toggleTeammatePreview"
+	ActionAppToggleTerminal        Action = "app:toggleTerminal"
+	ActionAppRedraw                Action = "app:redraw"
+	ActionAppGlobalSearch          Action = "app:globalSearch"
+	ActionAppQuickOpen             Action = "app:quickOpen"
 
 	// History navigation
 	ActionHistorySearch   Action = "history:search"

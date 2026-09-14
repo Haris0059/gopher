@@ -197,12 +197,12 @@ type WebSocketTransport struct {
 	onConnectCb func()
 
 	// Reconnection state.
-	reconnectAttempts          int
-	reconnectStartTime         time.Time
-	lastReconnectAttemptTime   time.Time
-	reconnectStartTimeSet      bool
+	reconnectAttempts           int
+	reconnectStartTime          time.Time
+	lastReconnectAttemptTime    time.Time
+	reconnectStartTimeSet       bool
 	lastReconnectAttemptTimeSet bool
-	reconnectTimer             *time.Timer
+	reconnectTimer              *time.Timer
 
 	// Activity tracking.
 	lastActivityTime time.Time

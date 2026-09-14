@@ -1,6 +1,7 @@
 // Package context provides context-window analysis utilities.
 // Source: utils/context.ts, utils/contextAnalysis.ts, utils/contentArray.ts,
-//         utils/analyzeContext.ts, utils/contextSuggestions.ts
+//
+//	utils/analyzeContext.ts, utils/contextSuggestions.ts
 package context
 
 import (
@@ -225,7 +226,7 @@ func TokenStatsToMetrics(stats *TokenStats) map[string]int {
 		"human_message_tokens":        stats.HumanMessages,
 		"assistant_message_tokens":    stats.AssistantMessages,
 		"local_command_output_tokens": stats.LocalCommandOutputs,
-		"other_tokens":               stats.Other,
+		"other_tokens":                stats.Other,
 	}
 
 	for tool, tokens := range stats.ToolRequests {

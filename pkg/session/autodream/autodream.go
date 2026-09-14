@@ -29,12 +29,12 @@ var DefaultConfig = Config{MinHours: 24, MinSessions: 5}
 
 // State tracks auto-dream gate state within a session.
 type State struct {
-	mu              sync.Mutex
-	enabled         bool
-	lastScanAt      time.Time
-	scanInterval    time.Duration
-	memoryDir       string // ~/.claude/projects/{project}/memory/
-	config          Config
+	mu           sync.Mutex
+	enabled      bool
+	lastScanAt   time.Time
+	scanInterval time.Duration
+	memoryDir    string // ~/.claude/projects/{project}/memory/
+	config       Config
 }
 
 // New creates an auto-dream state tracker.

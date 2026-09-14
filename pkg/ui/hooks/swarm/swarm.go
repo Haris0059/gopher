@@ -343,10 +343,10 @@ const (
 
 // PermissionResponse is a single response from the leader.
 type PermissionResponse struct {
-	RequestID  string             `json:"requestId"`
-	Decision   PermissionDecision `json:"decision"`
-	Feedback   string             `json:"feedback,omitempty"`
-	UpdatedInput map[string]any   `json:"updatedInput,omitempty"`
+	RequestID    string             `json:"requestId"`
+	Decision     PermissionDecision `json:"decision"`
+	Feedback     string             `json:"feedback,omitempty"`
+	UpdatedInput map[string]any     `json:"updatedInput,omitempty"`
 }
 
 // PermissionPollMsg is dispatched each tick with any received responses.

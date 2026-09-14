@@ -16,33 +16,33 @@ import (
 type HookEvent string
 
 const (
-	PreToolUse        HookEvent = "PreToolUse"
-	PostToolUse       HookEvent = "PostToolUse"
+	PreToolUse         HookEvent = "PreToolUse"
+	PostToolUse        HookEvent = "PostToolUse"
 	PostToolUseFailure HookEvent = "PostToolUseFailure"
-	Notification      HookEvent = "Notification"
-	UserPromptSubmit  HookEvent = "UserPromptSubmit"
-	SessionStart      HookEvent = "SessionStart"
-	SessionEnd        HookEvent = "SessionEnd"
-	Stop              HookEvent = "Stop"
-	StopFailure       HookEvent = "StopFailure"
-	SubagentStart     HookEvent = "SubagentStart"
-	SubagentStop      HookEvent = "SubagentStop"
-	PreCompact        HookEvent = "PreCompact"
-	PostCompact       HookEvent = "PostCompact"
-	PermissionRequest HookEvent = "PermissionRequest"
-	PermissionDenied  HookEvent = "PermissionDenied"
-	Setup             HookEvent = "Setup"
-	TeammateIdle      HookEvent = "TeammateIdle"
-	TaskCreated       HookEvent = "TaskCreated"
-	TaskCompleted     HookEvent = "TaskCompleted"
-	Elicitation       HookEvent = "Elicitation"
-	ElicitationResult HookEvent = "ElicitationResult"
-	ConfigChange      HookEvent = "ConfigChange"
-	WorktreeCreate    HookEvent = "WorktreeCreate"
-	WorktreeRemove    HookEvent = "WorktreeRemove"
+	Notification       HookEvent = "Notification"
+	UserPromptSubmit   HookEvent = "UserPromptSubmit"
+	SessionStart       HookEvent = "SessionStart"
+	SessionEnd         HookEvent = "SessionEnd"
+	Stop               HookEvent = "Stop"
+	StopFailure        HookEvent = "StopFailure"
+	SubagentStart      HookEvent = "SubagentStart"
+	SubagentStop       HookEvent = "SubagentStop"
+	PreCompact         HookEvent = "PreCompact"
+	PostCompact        HookEvent = "PostCompact"
+	PermissionRequest  HookEvent = "PermissionRequest"
+	PermissionDenied   HookEvent = "PermissionDenied"
+	Setup              HookEvent = "Setup"
+	TeammateIdle       HookEvent = "TeammateIdle"
+	TaskCreated        HookEvent = "TaskCreated"
+	TaskCompleted      HookEvent = "TaskCompleted"
+	Elicitation        HookEvent = "Elicitation"
+	ElicitationResult  HookEvent = "ElicitationResult"
+	ConfigChange       HookEvent = "ConfigChange"
+	WorktreeCreate     HookEvent = "WorktreeCreate"
+	WorktreeRemove     HookEvent = "WorktreeRemove"
 	InstructionsLoaded HookEvent = "InstructionsLoaded"
-	CwdChanged        HookEvent = "CwdChanged"
-	FileChanged       HookEvent = "FileChanged"
+	CwdChanged         HookEvent = "CwdChanged"
+	FileChanged        HookEvent = "FileChanged"
 )
 
 // AllHookEvents lists all recognized hook events in order.
@@ -83,20 +83,20 @@ const (
 // union; only fields relevant to the chosen type are populated.
 // Source: schemas/hooks.ts:176-189
 type HookCommand struct {
-	Type          HookCommandType   `json:"type"`
-	Command       string            `json:"command,omitempty"`       // type=command
-	Prompt        string            `json:"prompt,omitempty"`        // type=prompt or type=agent
-	URL           string            `json:"url,omitempty"`           // type=http
-	If            string            `json:"if,omitempty"`            // permission rule filter
-	Shell         string            `json:"shell,omitempty"`         // "bash" or "powershell"
-	Timeout       int               `json:"timeout,omitempty"`       // seconds
-	StatusMessage string            `json:"statusMessage,omitempty"` // custom spinner text
-	Once          bool              `json:"once,omitempty"`          // run once then remove
-	Async         bool              `json:"async,omitempty"`         // fire-and-forget (type=command)
-	AsyncRewake   bool              `json:"asyncRewake,omitempty"`   // async + rewake on exit 2
-	Model         string            `json:"model,omitempty"`         // type=prompt or type=agent
-	Headers       map[string]string `json:"headers,omitempty"`       // type=http
-	AllowedEnvVars []string         `json:"allowedEnvVars,omitempty"` // type=http
+	Type           HookCommandType   `json:"type"`
+	Command        string            `json:"command,omitempty"`        // type=command
+	Prompt         string            `json:"prompt,omitempty"`         // type=prompt or type=agent
+	URL            string            `json:"url,omitempty"`            // type=http
+	If             string            `json:"if,omitempty"`             // permission rule filter
+	Shell          string            `json:"shell,omitempty"`          // "bash" or "powershell"
+	Timeout        int               `json:"timeout,omitempty"`        // seconds
+	StatusMessage  string            `json:"statusMessage,omitempty"`  // custom spinner text
+	Once           bool              `json:"once,omitempty"`           // run once then remove
+	Async          bool              `json:"async,omitempty"`          // fire-and-forget (type=command)
+	AsyncRewake    bool              `json:"asyncRewake,omitempty"`    // async + rewake on exit 2
+	Model          string            `json:"model,omitempty"`          // type=prompt or type=agent
+	Headers        map[string]string `json:"headers,omitempty"`        // type=http
+	AllowedEnvVars []string          `json:"allowedEnvVars,omitempty"` // type=http
 }
 
 // HookMatcher pairs a pattern with hook commands.
@@ -205,8 +205,8 @@ type HookInput struct {
 	ParentFilePath  string   `json:"parent_file_path,omitempty"`
 
 	// WorktreeCreate, WorktreeRemove
-	Name          string `json:"name,omitempty"`
-	WorktreePath  string `json:"worktree_path,omitempty"`
+	Name         string `json:"name,omitempty"`
+	WorktreePath string `json:"worktree_path,omitempty"`
 
 	// CwdChanged
 	OldCwd string `json:"old_cwd,omitempty"`
@@ -276,16 +276,16 @@ type HookResult struct {
 	Blocked  bool   // true if hook returned exit 2 on PreToolUse
 	Message  string // optional message from the hook
 
-	Outcome                     HookOutcome
-	PreventContinuation         bool
-	StopReason                  string
-	PermissionBehavior          string // "ask", "deny", "allow", "passthrough"
+	Outcome                      HookOutcome
+	PreventContinuation          bool
+	StopReason                   string
+	PermissionBehavior           string // "ask", "deny", "allow", "passthrough"
 	HookPermissionDecisionReason string
-	AdditionalContext           string
-	InitialUserMessage          string
-	BlockingError               *HookBlockingError
-	SystemMessage               string
-	JSONOutput                  *HookJSONOutput // parsed structured output
+	AdditionalContext            string
+	InitialUserMessage           string
+	BlockingError                *HookBlockingError
+	SystemMessage                string
+	JSONOutput                   *HookJSONOutput // parsed structured output
 }
 
 // HookRunner manages and executes hooks.

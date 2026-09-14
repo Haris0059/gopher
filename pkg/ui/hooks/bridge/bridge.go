@@ -91,7 +91,7 @@ func (s BridgeStatus) String() string {
 
 // BridgeStatusMsg is dispatched when bridge connection status changes.
 type BridgeStatusMsg struct {
-	Source string       // "repl", "remote", "mailbox"
+	Source string // "repl", "remote", "mailbox"
 	Status BridgeStatus
 	Err    error // non-nil when Status == StatusError
 }
@@ -324,10 +324,10 @@ type RemoteSessionConfig struct {
 // It generates the session URL for display (e.g., QR code) and tracks connection
 // status.
 type RemoteSessionHook struct {
-	cfg    *RemoteSessionConfig
-	mu     sync.Mutex
-	status BridgeStatus
-	url    string
+	cfg       *RemoteSessionConfig
+	mu        sync.Mutex
+	status    BridgeStatus
+	url       string
 	echoDedup *br.BoundedUUIDSet
 }
 

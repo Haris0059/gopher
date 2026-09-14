@@ -65,7 +65,7 @@ func TestHookRegistry_RegisterMerges(t *testing.T) {
 
 	// Second registration appends, does not overwrite
 	r.Register(map[HookEvent][]RegisteredHookCallback{
-		PreToolUse: {{Matcher: "Read", Callback: "cb2"}},
+		PreToolUse:  {{Matcher: "Read", Callback: "cb2"}},
 		PostToolUse: {{Matcher: "*", Callback: "cb3"}},
 	})
 

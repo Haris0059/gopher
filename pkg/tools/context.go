@@ -101,13 +101,13 @@ type MCPClientProvider interface {
 // ToolContext provides context for tool execution.
 type ToolContext struct {
 	CWD            string
-	ProjectDir     string                       // root project directory for sandbox enforcement
-	PlanMode       bool                         // true when agent is in plan mode (read-only)
-	SandboxEnabled bool                         // true to sandbox bash commands via seatbelt/bwrap
+	ProjectDir     string // root project directory for sandbox enforcement
+	PlanMode       bool   // true when agent is in plan mode (read-only)
+	SandboxEnabled bool   // true to sandbox bash commands via seatbelt/bwrap
 	Permissions    permissions.PermissionPolicy
 	SessionID      string
-	Hooks          HookRunner          // optional hook runner for pre/post tool hooks
-	ReadFileState *ReadFileState      // tracks file read timestamps for staleness guard
-	FileHistory   FileHistoryTracker  // optional file history for undo/checkpoint
-	MCP           MCPClientProvider   // optional MCP client access for resource tools
+	Hooks          HookRunner         // optional hook runner for pre/post tool hooks
+	ReadFileState  *ReadFileState     // tracks file read timestamps for staleness guard
+	FileHistory    FileHistoryTracker // optional file history for undo/checkpoint
+	MCP            MCPClientProvider  // optional MCP client access for resource tools
 }

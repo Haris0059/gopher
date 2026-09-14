@@ -308,8 +308,8 @@ func TestPSDestructivePatternAnchoring(t *testing.T) {
 // Source: destructiveCommandWarning.ts:58-75
 func TestPSGitSafetyPatterns(t *testing.T) {
 	tests := []struct {
-		name    string
-		command string
+		name     string
+		command  string
 		wantWarn bool
 	}{
 		{"reset_hard", "git reset --hard", true},

@@ -160,11 +160,11 @@ type BridgeConfig struct {
 // fields from the credential store and environment.
 func NewRemoteControlConfig(dir string, machineName string) BridgeConfig {
 	return BridgeConfig{
-		Dir:            dir,
-		MachineName:    machineName,
-		MaxSessions:    1,
-		SpawnMode:      SpawnModeSingleSession,
-		WorkerType:     string(WorkerTypeClaudeCode),
+		Dir:              dir,
+		MachineName:      machineName,
+		MaxSessions:      1,
+		SpawnMode:        SpawnModeSingleSession,
+		WorkerType:       string(WorkerTypeClaudeCode),
 		SessionTimeoutMS: func() *int { v := DefaultSessionTimeoutMS; return &v }(),
 	}
 }
@@ -208,11 +208,11 @@ type HeartbeatResponse struct {
 
 // SessionSpawnOpts configures a new session spawn.
 type SessionSpawnOpts struct {
-	SessionID          string `json:"session_id"`
-	SDKURL             string `json:"sdk_url"`
-	AccessToken        string `json:"access_token"`
-	UseCcrV2           bool   `json:"use_ccr_v2,omitempty"`
-	WorkerEpoch        *int   `json:"worker_epoch,omitempty"`
+	SessionID          string            `json:"session_id"`
+	SDKURL             string            `json:"sdk_url"`
+	AccessToken        string            `json:"access_token"`
+	UseCcrV2           bool              `json:"use_ccr_v2,omitempty"`
+	WorkerEpoch        *int              `json:"worker_epoch,omitempty"`
 	OnFirstUserMessage func(text string) `json:"-"`
 }
 
@@ -222,15 +222,15 @@ type SessionSpawnOpts struct {
 
 // SessionHandle represents a running session.
 type SessionHandle struct {
-	SessionID       string
-	Done            <-chan SessionDoneStatus
-	Kill            func()
-	ForceKill       func()
-	Activities      []SessionActivity
-	CurrentActivity *SessionActivity
-	AccessToken     string
-	LastStderr      []string
-	WriteStdin      func(data string)
+	SessionID         string
+	Done              <-chan SessionDoneStatus
+	Kill              func()
+	ForceKill         func()
+	Activities        []SessionActivity
+	CurrentActivity   *SessionActivity
+	AccessToken       string
+	LastStderr        []string
+	WriteStdin        func(data string)
 	UpdateAccessToken func(token string)
 }
 

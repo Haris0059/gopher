@@ -59,9 +59,11 @@ type KeyringStore interface {
 // osKeyring is the default production keyring backed by go-keyring.
 type osKeyring struct{}
 
-func (osKeyring) Get(service, user string) (string, error)          { return keyring.Get(service, user) }
-func (osKeyring) Set(service, user, password string) error          { return keyring.Set(service, user, password) }
-func (osKeyring) Delete(service, user string) error                 { return keyring.Delete(service, user) }
+func (osKeyring) Get(service, user string) (string, error) { return keyring.Get(service, user) }
+func (osKeyring) Set(service, user, password string) error {
+	return keyring.Set(service, user, password)
+}
+func (osKeyring) Delete(service, user string) error { return keyring.Delete(service, user) }
 
 // EssentialTrafficFunc returns true when only essential traffic should be sent
 // (privacy/diagnostic mode). When true, enrollment is skipped.

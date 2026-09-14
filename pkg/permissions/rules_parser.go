@@ -18,7 +18,7 @@ type PermissionRuleValue struct {
 // Source: types/permissions.ts:75-79
 type PermissionRule struct {
 	Source       string              `json:"source"`       // userSettings, projectSettings, localSettings, etc.
-	RuleBehavior string             `json:"ruleBehavior"` // allow, deny, ask
+	RuleBehavior string              `json:"ruleBehavior"` // allow, deny, ask
 	RuleValue    PermissionRuleValue `json:"ruleValue"`
 }
 

@@ -14,7 +14,8 @@ import (
 // TestAutocompactThresholdFormula validates the compaction trigger formula from the TS source.
 // Source: autoCompact.ts lines 71-90
 // Formula: effectiveWindow = contextWindow - MAX_OUTPUT_TOKENS_FOR_SUMMARY
-//          autocompactThreshold = effectiveWindow - AUTOCOMPACT_BUFFER_TOKENS
+//
+//	autocompactThreshold = effectiveWindow - AUTOCOMPACT_BUFFER_TOKENS
 func TestAutocompactThresholdFormula(t *testing.T) {
 	c, err := testharness.LoadQueryLoopConstants()
 	if err != nil {

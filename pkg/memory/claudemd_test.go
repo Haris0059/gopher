@@ -99,12 +99,12 @@ func TestGetLargeFiles(t *testing.T) {
 
 func TestIsMemoryFilePath(t *testing.T) {
 	tests := map[string]bool{
-		"CLAUDE.md":                          true,
-		"claude.md":                          true,
-		"CLAUDE.local.md":                    true,
-		".claude/rules/style.md":             true,
-		"src/main.go":                        false,
-		"README.md":                          false,
+		"CLAUDE.md":              true,
+		"claude.md":              true,
+		"CLAUDE.local.md":        true,
+		".claude/rules/style.md": true,
+		"src/main.go":            false,
+		"README.md":              false,
 	}
 	for path, want := range tests {
 		if got := IsMemoryFilePath(path); got != want {

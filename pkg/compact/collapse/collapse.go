@@ -3,7 +3,8 @@
 // to keep the conversation display compact.
 //
 // Source: utils/collapseReadSearch.ts, collapseHookSummaries.ts,
-//         collapseTeammateShutdowns.ts, collapseBackgroundBashNotifications.ts
+//
+//	collapseTeammateShutdowns.ts, collapseBackgroundBashNotifications.ts
 package collapse
 
 import (

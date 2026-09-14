@@ -43,8 +43,8 @@ const MaxConsecutiveAuthFailures = 10
 type CCRInitFailReason string
 
 const (
-	InitFailNoAuthHeaders       CCRInitFailReason = "no_auth_headers"
-	InitFailMissingEpoch        CCRInitFailReason = "missing_epoch"
+	InitFailNoAuthHeaders        CCRInitFailReason = "no_auth_headers"
+	InitFailMissingEpoch         CCRInitFailReason = "missing_epoch"
 	InitFailWorkerRegisterFailed CCRInitFailReason = "worker_register_failed"
 )
 
@@ -178,9 +178,9 @@ type CCRClient struct {
 	heartbeatTimer          *time.Timer
 	heartbeatInFlight       bool
 
-	closed                   bool
-	consecutiveAuthFailures  int
-	currentState             SessionState
+	closed                  bool
+	consecutiveAuthFailures int
+	currentState            SessionState
 
 	onEpochMismatch func()
 	getAuthHeaders  func() map[string]string
@@ -241,7 +241,7 @@ func NewCCRClient(sessionURL string, opts CCRClientOpts) (*CCRClient, error) {
 
 	rc := retryablehttp.NewClient()
 	rc.RetryMax = 0 // we manage retries ourselves
-	rc.Logger = nil  // silence default logger
+	rc.Logger = nil // silence default logger
 	rc.CheckRetry = func(_ context.Context, _ *http.Response, _ error) (bool, error) {
 		return false, nil // never retry — we handle retry logic ourselves
 	}

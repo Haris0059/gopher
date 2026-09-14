@@ -69,17 +69,17 @@ func TestModelConfigFirstPartyIDs(t *testing.T) {
 		key    string
 		firstP string
 	}{
-		{"opus46", "claude-opus-4-6"},                   // Source: configs.ts:73
-		{"opus45", "claude-opus-4-5-20251101"},          // Source: configs.ts:66
-		{"opus41", "claude-opus-4-1-20250805"},          // Source: configs.ts:59
-		{"opus40", "claude-opus-4-20250514"},            // Source: configs.ts:52
-		{"sonnet46", "claude-sonnet-4-6"},               // Source: configs.ts:80
-		{"sonnet45", "claude-sonnet-4-5-20250929"},      // Source: configs.ts:45
-		{"sonnet40", "claude-sonnet-4-20250514"},        // Source: configs.ts:38
-		{"sonnet37", "claude-3-7-sonnet-20250219"},      // Source: configs.ts:10
-		{"sonnet35", "claude-3-5-sonnet-20241022"},      // Source: configs.ts:17
-		{"haiku45", "claude-haiku-4-5-20251001"},        // Source: configs.ts:31
-		{"haiku35", "claude-3-5-haiku-20241022"},        // Source: configs.ts:24
+		{"opus46", "claude-opus-4-6"},              // Source: configs.ts:73
+		{"opus45", "claude-opus-4-5-20251101"},     // Source: configs.ts:66
+		{"opus41", "claude-opus-4-1-20250805"},     // Source: configs.ts:59
+		{"opus40", "claude-opus-4-20250514"},       // Source: configs.ts:52
+		{"sonnet46", "claude-sonnet-4-6"},          // Source: configs.ts:80
+		{"sonnet45", "claude-sonnet-4-5-20250929"}, // Source: configs.ts:45
+		{"sonnet40", "claude-sonnet-4-20250514"},   // Source: configs.ts:38
+		{"sonnet37", "claude-3-7-sonnet-20250219"}, // Source: configs.ts:10
+		{"sonnet35", "claude-3-5-sonnet-20241022"}, // Source: configs.ts:17
+		{"haiku45", "claude-haiku-4-5-20251001"},   // Source: configs.ts:31
+		{"haiku35", "claude-3-5-haiku-20241022"},   // Source: configs.ts:24
 	}
 	for _, tc := range tests {
 		t.Run(tc.key, func(t *testing.T) {

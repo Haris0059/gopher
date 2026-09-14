@@ -215,16 +215,16 @@ func TestParseCronExpression(t *testing.T) {
 	invalid := []string{
 		"",
 		"* * *",
-		"* * * * * *",       // 6 fields
-		"60 * * * *",        // minute 60 out of range
-		"* 24 * * *",        // hour 24 out of range
-		"* * 0 * *",         // day-of-month 0 out of range
-		"* * * 13 *",        // month 13 out of range
-		"* * * * 8",         // day-of-week 8 out of range
-		"abc * * * *",       // non-numeric
-		"*/0 * * * *",       // step 0
-		"5-3 * * * *",       // lo > hi
-		"* * * * * extra",   // extra text
+		"* * * * * *",     // 6 fields
+		"60 * * * *",      // minute 60 out of range
+		"* 24 * * *",      // hour 24 out of range
+		"* * 0 * *",       // day-of-month 0 out of range
+		"* * * 13 *",      // month 13 out of range
+		"* * * * 8",       // day-of-week 8 out of range
+		"abc * * * *",     // non-numeric
+		"*/0 * * * *",     // step 0
+		"5-3 * * * *",     // lo > hi
+		"* * * * * extra", // extra text
 	}
 	for _, expr := range invalid {
 		if f := tools.ParseCronExpression(expr); f != nil {

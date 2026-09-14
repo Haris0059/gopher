@@ -24,12 +24,12 @@ type FailedAgentFile struct {
 // AgentInfo aggregates agent directory scan results for /doctor.
 // Source: Doctor.tsx — AgentInfo type
 type AgentInfo struct {
-	ActiveAgents    []AgentEntry
-	UserAgentsDir   string
+	ActiveAgents     []AgentEntry
+	UserAgentsDir    string
 	ProjectAgentsDir string
-	UserDirExists   bool
+	UserDirExists    bool
 	ProjectDirExists bool
-	FailedFiles     []FailedAgentFile
+	FailedFiles      []FailedAgentFile
 }
 
 // RenderAgents renders the agent directory scan section.

@@ -34,7 +34,7 @@ func TestAsQueryFuncWithDeps_Accepts_QueryDeps(t *testing.T) {
 			}}
 			sr := provider.StopReasonEndTurn
 			ch <- provider.StreamResult{Event: &provider.StreamEvent{
-				Type: provider.EventMessageDone,
+				Type:     provider.EventMessageDone,
 				Response: &provider.ModelResponse{StopReason: &sr},
 			}}
 			close(ch)
@@ -81,7 +81,9 @@ func TestQueryDeps_Covers4DepShape(t *testing.T) {
 	// This is a compile-time + runtime check that the fields exist and
 	// are assignable.
 	deps := QueryDeps{
-		CallModel:    func(_ context.Context, _ provider.ModelRequest) (<-chan provider.StreamResult, error) { return nil, nil },
+		CallModel: func(_ context.Context, _ provider.ModelRequest) (<-chan provider.StreamResult, error) {
+			return nil, nil
+		},
 		Microcompact: func(s string) string { return s },
 		Autocompact:  func(m []message.Message, k int) ([]message.Message, int) { return m, 0 },
 		UUID:         func() string { return "id" },

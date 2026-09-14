@@ -22,8 +22,8 @@ const (
 // ResolveResult is the outcome of resolving a key event.
 type ResolveResult struct {
 	Type    ResolveResultType
-	Action  string             // set when Type == ResolveMatch
-	Pending []ParsedKeystroke  // set when Type == ResolveChordStarted
+	Action  string            // set when Type == ResolveMatch
+	Pending []ParsedKeystroke // set when Type == ResolveChordStarted
 }
 
 // keystrokesEqual compares two keystrokes, collapsing alt/meta.

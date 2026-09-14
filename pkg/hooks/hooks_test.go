@@ -256,10 +256,10 @@ func TestHookInputPreToolUse(t *testing.T) {
 	// Source: entrypoints/sdk/coreSchemas.ts:414-423
 	input := HookInput{
 		BaseHookInput: BaseHookInput{
-			SessionID:     "s1",
+			SessionID:      "s1",
 			TranscriptPath: "/tmp/t.jsonl",
-			Cwd:           "/tmp",
-			HookEventName: "PreToolUse",
+			Cwd:            "/tmp",
+			HookEventName:  "PreToolUse",
 		},
 		ToolName:  "Bash",
 		ToolInput: json.RawMessage(`{"command":"ls"}`),

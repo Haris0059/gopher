@@ -18,9 +18,9 @@ import (
 // settings from the API, caches with checksum-based invalidation, polls hourly.
 
 const (
-	settingsTimeoutMs     = 10_000
-	defaultMaxRetries     = 5
-	pollingIntervalMs     = 60 * 60 * 1000 // 1 hour
+	settingsTimeoutMs = 10_000
+	defaultMaxRetries = 5
+	pollingIntervalMs = 60 * 60 * 1000 // 1 hour
 )
 
 // RemoteManagedSettingsResponse is the API response.

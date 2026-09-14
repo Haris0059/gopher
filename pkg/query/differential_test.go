@@ -29,8 +29,8 @@ func TestDifferentialSelfConsistency(t *testing.T) {
 	registry := tools.NewRegistry()
 
 	scenarios := []struct {
-		name   string
-		turns  []testharness.TurnScript
+		name  string
+		turns []testharness.TurnScript
 	}{
 		{
 			"text_only",

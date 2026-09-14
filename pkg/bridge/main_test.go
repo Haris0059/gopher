@@ -19,20 +19,20 @@ import (
 
 // mockAPIClient implements BridgeAPIClient for testing.
 type mockAPIClient struct {
-	mu                   sync.Mutex
-	registerResp         *RegisterEnvironmentResponse
-	registerErr          error
-	pollResults          []*WorkResponse // returned in order; cycles on last
-	pollErrs             []error
-	pollIndex            int
-	ackCalls             []string // workIDs
-	stopCalls            []string // workIDs
-	deregisterCalled     atomic.Bool
-	heartbeatResp        *HeartbeatResponse
-	heartbeatErr         error
-	reconnectErr         error
-	archiveCalls         []string
-	sendPermissionErr    error
+	mu                sync.Mutex
+	registerResp      *RegisterEnvironmentResponse
+	registerErr       error
+	pollResults       []*WorkResponse // returned in order; cycles on last
+	pollErrs          []error
+	pollIndex         int
+	ackCalls          []string // workIDs
+	stopCalls         []string // workIDs
+	deregisterCalled  atomic.Bool
+	heartbeatResp     *HeartbeatResponse
+	heartbeatErr      error
+	reconnectErr      error
+	archiveCalls      []string
+	sendPermissionErr error
 }
 
 func (m *mockAPIClient) RegisterBridgeEnvironment(_ BridgeConfig) (*RegisterEnvironmentResponse, error) {
@@ -128,34 +128,34 @@ func (l *mockLogger) Messages() []string {
 	return cp
 }
 
-func (l *mockLogger) PrintBanner(_ BridgeConfig, _ string)  { l.record("banner") }
-func (l *mockLogger) LogSessionStart(id string, _ string)   { l.record("session_start:" + id) }
+func (l *mockLogger) PrintBanner(_ BridgeConfig, _ string) { l.record("banner") }
+func (l *mockLogger) LogSessionStart(id string, _ string)  { l.record("session_start:" + id) }
 func (l *mockLogger) LogSessionComplete(id string, _ time.Duration) {
 	l.record("session_complete:" + id)
 }
 func (l *mockLogger) LogSessionFailed(id string, err string) {
 	l.record("session_failed:" + id + ":" + err)
 }
-func (l *mockLogger) LogStatus(msg string)                 { l.record("status:" + msg) }
-func (l *mockLogger) LogVerbose(msg string)                { l.record("verbose:" + msg) }
-func (l *mockLogger) LogError(msg string)                  { l.record("error:" + msg) }
-func (l *mockLogger) LogReconnected(_ time.Duration)       { l.record("reconnected") }
-func (l *mockLogger) UpdateIdleStatus()                    {}
-func (l *mockLogger) UpdateReconnectingStatus(_, _ string) { l.record("reconnecting") }
+func (l *mockLogger) LogStatus(msg string)                                                  { l.record("status:" + msg) }
+func (l *mockLogger) LogVerbose(msg string)                                                 { l.record("verbose:" + msg) }
+func (l *mockLogger) LogError(msg string)                                                   { l.record("error:" + msg) }
+func (l *mockLogger) LogReconnected(_ time.Duration)                                        { l.record("reconnected") }
+func (l *mockLogger) UpdateIdleStatus()                                                     {}
+func (l *mockLogger) UpdateReconnectingStatus(_, _ string)                                  { l.record("reconnecting") }
 func (l *mockLogger) UpdateSessionStatus(_ string, _ string, _ SessionActivity, _ []string) {}
-func (l *mockLogger) ClearStatus()                         {}
-func (l *mockLogger) SetRepoInfo(_, _ string)              {}
-func (l *mockLogger) SetDebugLogPath(_ string)             {}
-func (l *mockLogger) SetAttached(_ string)                 {}
-func (l *mockLogger) UpdateFailedStatus(_ string)          {}
-func (l *mockLogger) ToggleQR()                            {}
-func (l *mockLogger) UpdateSessionCount(_ int, _ int, _ SpawnMode) {}
-func (l *mockLogger) SetSpawnModeDisplay(_ *SpawnMode)     {}
-func (l *mockLogger) AddSession(_, _ string)               {}
-func (l *mockLogger) UpdateSessionActivity(_ string, _ SessionActivity) {}
-func (l *mockLogger) SetSessionTitle(_, _ string)          {}
-func (l *mockLogger) RemoveSession(_ string)               {}
-func (l *mockLogger) RefreshDisplay()                      {}
+func (l *mockLogger) ClearStatus()                                                          {}
+func (l *mockLogger) SetRepoInfo(_, _ string)                                               {}
+func (l *mockLogger) SetDebugLogPath(_ string)                                              {}
+func (l *mockLogger) SetAttached(_ string)                                                  {}
+func (l *mockLogger) UpdateFailedStatus(_ string)                                           {}
+func (l *mockLogger) ToggleQR()                                                             {}
+func (l *mockLogger) UpdateSessionCount(_ int, _ int, _ SpawnMode)                          {}
+func (l *mockLogger) SetSpawnModeDisplay(_ *SpawnMode)                                      {}
+func (l *mockLogger) AddSession(_, _ string)                                                {}
+func (l *mockLogger) UpdateSessionActivity(_ string, _ SessionActivity)                     {}
+func (l *mockLogger) SetSessionTitle(_, _ string)                                           {}
+func (l *mockLogger) RemoveSession(_ string)                                                {}
+func (l *mockLogger) RefreshDisplay()                                                       {}
 
 // mockSpawner implements SessionSpawner for testing.
 type mockSpawner struct {
@@ -207,8 +207,8 @@ func TestStartPollStop_Lifecycle(t *testing.T) {
 	api := &mockAPIClient{
 		pollResults: []*WorkResponse{
 			{
-				ID:    "work-1",
-				Data:  WorkData{Type: WorkDataTypeSession, ID: "session-abc"},
+				ID:     "work-1",
+				Data:   WorkData{Type: WorkDataTypeSession, ID: "session-abc"},
 				Secret: makeTestWorkSecret(),
 			},
 			nil, // no more work after first
@@ -816,4 +816,3 @@ func TestOrchestratorHealthcheck(t *testing.T) {
 		t.Error("expected healthcheck to be acknowledged")
 	}
 }
-

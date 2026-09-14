@@ -9,14 +9,14 @@ import (
 // Claude Code infrastructure. It mirrors the TS Options type from
 // services/api/claude.ts:676-707.
 type QueryOptions struct {
-	Model                string
-	QuerySource          QuerySource
-	EnablePromptCaching  bool
-	FallbackModel        string
-	MaxOutputTokens      int      // 0 = use model default
-	Temperature          *float64 // nil = API default
-	FastMode             bool
-	EffortValue          EffortLevel
+	Model               string
+	QuerySource         QuerySource
+	EnablePromptCaching bool
+	FallbackModel       string
+	MaxOutputTokens     int      // 0 = use model default
+	Temperature         *float64 // nil = API default
+	FastMode            bool
+	EffortValue         EffortLevel
 	// TaskBudget is the API-side task budget (output_config.task_budget).
 	// Distinct from the tokenBudget auto-continue feature.
 	// Source: claude.ts:703-706
@@ -125,9 +125,9 @@ const MaxNonStreamingTokens = 64_000
 // QueryHaikuRequest holds parameters for a side query using the small/fast model.
 // Source: claude.ts:3241-3291
 type QueryHaikuRequest struct {
-	SystemPrompt []string // System prompt blocks
-	UserPrompt   string
-	QuerySource  QuerySource
+	SystemPrompt        []string // System prompt blocks
+	UserPrompt          string
+	QuerySource         QuerySource
 	EnablePromptCaching bool
 }
 

@@ -146,9 +146,9 @@ func (t *TaskCreateTool) Name() string { return "TaskCreate" }
 
 // Source: TaskCreateTool/prompt.ts — DESCRIPTION
 func (t *TaskCreateTool) Description() string { return "Create a new task in the task list" }
-func (t *TaskCreateTool) IsReadOnly() bool     { return false }
-func (t *TaskCreateTool) ShouldDefer() bool    { return true }
-func (t *TaskCreateTool) SearchHint() string   { return "create a task in the task list" }
+func (t *TaskCreateTool) IsReadOnly() bool    { return false }
+func (t *TaskCreateTool) ShouldDefer() bool   { return true }
+func (t *TaskCreateTool) SearchHint() string  { return "create a task in the task list" }
 
 // Prompt implements ToolPrompter.
 // Source: TaskCreateTool/prompt.ts — getPrompt()
@@ -240,9 +240,9 @@ func (t *TaskListTool) Name() string { return "TaskList" }
 
 // Source: TaskListTool/prompt.ts — DESCRIPTION
 func (t *TaskListTool) Description() string { return "List all tasks in the task list" }
-func (t *TaskListTool) IsReadOnly() bool     { return true }
-func (t *TaskListTool) ShouldDefer() bool    { return true }
-func (t *TaskListTool) SearchHint() string   { return "list all tasks" }
+func (t *TaskListTool) IsReadOnly() bool    { return true }
+func (t *TaskListTool) ShouldDefer() bool   { return true }
+func (t *TaskListTool) SearchHint() string  { return "list all tasks" }
 
 // Prompt implements ToolPrompter.
 // Source: TaskListTool/prompt.ts — getPrompt()
@@ -371,9 +371,9 @@ func (t *TaskGetTool) Name() string { return "TaskGet" }
 
 // Source: TaskGetTool/prompt.ts — DESCRIPTION
 func (t *TaskGetTool) Description() string { return "Get a task by ID from the task list" }
-func (t *TaskGetTool) IsReadOnly() bool     { return true }
-func (t *TaskGetTool) ShouldDefer() bool    { return true }
-func (t *TaskGetTool) SearchHint() string   { return "retrieve a task by ID" }
+func (t *TaskGetTool) IsReadOnly() bool    { return true }
+func (t *TaskGetTool) ShouldDefer() bool   { return true }
+func (t *TaskGetTool) SearchHint() string  { return "retrieve a task by ID" }
 
 // Prompt implements ToolPrompter.
 // Source: TaskGetTool/prompt.ts — PROMPT
@@ -478,9 +478,9 @@ func (t *TaskUpdateTool) Name() string { return "TaskUpdate" }
 
 // Source: TaskUpdateTool/prompt.ts — DESCRIPTION
 func (t *TaskUpdateTool) Description() string { return "Update a task in the task list" }
-func (t *TaskUpdateTool) IsReadOnly() bool     { return false }
-func (t *TaskUpdateTool) ShouldDefer() bool    { return true }
-func (t *TaskUpdateTool) SearchHint() string   { return "update a task in the task list" }
+func (t *TaskUpdateTool) IsReadOnly() bool    { return false }
+func (t *TaskUpdateTool) ShouldDefer() bool   { return true }
+func (t *TaskUpdateTool) SearchHint() string  { return "update a task in the task list" }
 
 // Prompt implements ToolPrompter.
 // Source: TaskUpdateTool/prompt.ts — PROMPT

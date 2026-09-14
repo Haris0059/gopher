@@ -48,13 +48,13 @@ type SkillDefinition struct {
 // with enable/disable state applied.
 // Source: types/plugin.ts — LoadedPlugin
 type LoadedPlugin struct {
-	Name       string
-	Manifest   PluginManifest
-	Path       string // sentinel "builtin" for built-in plugins
-	Source     string // "{name}@builtin"
-	Repository string
-	Enabled    bool
-	IsBuiltin  bool // true for built-in plugins that ship with the CLI
+	Name        string
+	Manifest    PluginManifest
+	Path        string // sentinel "builtin" for built-in plugins
+	Source      string // "{name}@builtin"
+	Repository  string
+	Enabled     bool
+	IsBuiltin   bool // true for built-in plugins that ship with the CLI
 	HooksConfig map[string]any
 	McpServers  map[string]any
 }
@@ -110,21 +110,21 @@ func (ps *PluginState) ClearChromeFlagOverride() {
 // Command represents a skill command surfaced to the model.
 // Source: types/command.ts — Command (subset for plugin skills)
 type Command struct {
-	Type                    string   `json:"type"`
-	Name                    string   `json:"name"`
-	Description             string   `json:"description"`
-	HasUserSpecifiedDesc    bool     `json:"hasUserSpecifiedDescription"`
-	AllowedTools            []string `json:"allowedTools"`
-	ArgumentHint            string   `json:"argumentHint,omitempty"`
-	WhenToUse               string   `json:"whenToUse,omitempty"`
-	Model                   string   `json:"model,omitempty"`
-	DisableModelInvocation  bool     `json:"disableModelInvocation"`
-	UserInvocable           bool     `json:"userInvocable"`
-	ContentLength           int      `json:"contentLength"`
-	Source                  string   `json:"source"`   // "bundled" (not "builtin")
-	LoadedFrom              string   `json:"loadedFrom"` // "bundled"
-	Context                 string   `json:"context,omitempty"`
-	Agent                   string   `json:"agent,omitempty"`
-	IsHidden                bool     `json:"isHidden"`
-	ProgressMessage         string   `json:"progressMessage"`
+	Type                   string   `json:"type"`
+	Name                   string   `json:"name"`
+	Description            string   `json:"description"`
+	HasUserSpecifiedDesc   bool     `json:"hasUserSpecifiedDescription"`
+	AllowedTools           []string `json:"allowedTools"`
+	ArgumentHint           string   `json:"argumentHint,omitempty"`
+	WhenToUse              string   `json:"whenToUse,omitempty"`
+	Model                  string   `json:"model,omitempty"`
+	DisableModelInvocation bool     `json:"disableModelInvocation"`
+	UserInvocable          bool     `json:"userInvocable"`
+	ContentLength          int      `json:"contentLength"`
+	Source                 string   `json:"source"`     // "bundled" (not "builtin")
+	LoadedFrom             string   `json:"loadedFrom"` // "bundled"
+	Context                string   `json:"context,omitempty"`
+	Agent                  string   `json:"agent,omitempty"`
+	IsHidden               bool     `json:"isHidden"`
+	ProgressMessage        string   `json:"progressMessage"`
 }

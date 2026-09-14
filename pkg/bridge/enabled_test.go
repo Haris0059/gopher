@@ -12,9 +12,9 @@ import (
 // allPassingDeps returns a BridgeDeps with all gates passing.
 func allPassingDeps() *BridgeDeps {
 	return &BridgeDeps{
-		BridgeMode:     true,
-		CCRAutoConnect: true,
-		CCRMirror:      true,
+		BridgeMode:           true,
+		CCRAutoConnect:       true,
+		CCRMirror:            true,
 		IsClaudeAISubscriber: func() bool { return true },
 		HasProfileScope:      func() bool { return true },
 		GetOAuthAccountInfo: func() *OAuthAccountInfo {

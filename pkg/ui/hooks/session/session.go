@@ -142,7 +142,7 @@ func (l *MessageLogger) LastWrittenIndex() int {
 type TaskStatus int
 
 const (
-	TaskRunning   TaskStatus = iota
+	TaskRunning TaskStatus = iota
 	TaskCompleted
 	TaskAborted
 )
@@ -323,10 +323,10 @@ func NewFileHistoryState() *FileHistoryState {
 
 // FileHistoryManager manages file-history snapshots for undo/rewind.
 type FileHistoryManager struct {
-	mu       sync.Mutex
-	state    *FileHistoryState
+	mu        sync.Mutex
+	state     *FileHistoryState
 	backupDir string // directory where backup copies are stored
-	enabled  bool
+	enabled   bool
 }
 
 // NewFileHistoryManager creates a manager. backupDir is where file copies are stored.

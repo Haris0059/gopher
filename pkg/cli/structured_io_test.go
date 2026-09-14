@@ -99,9 +99,9 @@ func TestStructuredIO_PermissionResponseRouting(t *testing.T) {
 	defer cancel()
 
 	var (
-		wg       sync.WaitGroup
-		gotResp  json.RawMessage
-		gotErr   error
+		wg      sync.WaitGroup
+		gotResp json.RawMessage
+		gotErr  error
 	)
 	wg.Add(1)
 	go func() {

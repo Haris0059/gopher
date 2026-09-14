@@ -69,17 +69,17 @@ func TestTransition_IdleOperator_dd(t *testing.T) {
 
 func TestTransition_InsertModeKeys(t *testing.T) {
 	tests := []struct {
-		key      string
-		text     string
-		cursor   int
-		wantPos  int // expected insert position
+		key     string
+		text    string
+		cursor  int
+		wantPos int // expected insert position
 	}{
 		{"i", "hello", 2, 2},
 		{"a", "hello", 2, 3},
-		{"A", "hello\nworld", 2, 4},    // end of first line
-		{"I", "  hello", 2, 2},          // first non-blank
-		{"o", "hello", 0, -1},           // open line triggers EnterInsert via ExecuteOpenLine
-		{"O", "hello", 0, -1},           // open line above
+		{"A", "hello\nworld", 2, 4}, // end of first line
+		{"I", "  hello", 2, 2},      // first non-blank
+		{"o", "hello", 0, -1},       // open line triggers EnterInsert via ExecuteOpenLine
+		{"O", "hello", 0, -1},       // open line above
 	}
 	for _, tt := range tests {
 		t.Run(tt.key, func(t *testing.T) {

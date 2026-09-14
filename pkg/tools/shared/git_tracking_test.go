@@ -117,9 +117,9 @@ func TestDetectGitOperation_NoMatch(t *testing.T) {
 
 func TestParseGitCommitID(t *testing.T) {
 	tests := map[string]string{
-		"[main abc1234] fix bug":                "abc1234",
-		"[feature (root-commit) def5678] init":  "def5678",
-		"no commit output here":                 "",
+		"[main abc1234] fix bug":               "abc1234",
+		"[feature (root-commit) def5678] init": "def5678",
+		"no commit output here":                "",
 	}
 	for input, want := range tests {
 		got := ParseGitCommitID(input)

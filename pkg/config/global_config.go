@@ -105,16 +105,16 @@ func IsProjectConfigKey(key string) bool {
 // AccountInfo represents OAuth account information.
 // Source: config.ts:161-174
 type AccountInfo struct {
-	AccountUUID        string `json:"accountUuid"`
-	EmailAddress       string `json:"emailAddress"`
-	OrganizationUUID   string `json:"organizationUuid,omitempty"`
-	OrganizationName   string `json:"organizationName,omitempty"`
-	OrganizationRole   string `json:"organizationRole,omitempty"`
-	WorkspaceRole      string `json:"workspaceRole,omitempty"`
-	DisplayName        string `json:"displayName,omitempty"`
-	HasExtraUsageEnabled bool  `json:"hasExtraUsageEnabled,omitempty"`
-	BillingType        string `json:"billingType,omitempty"`
-	AccountCreatedAt   string `json:"accountCreatedAt,omitempty"`
+	AccountUUID           string `json:"accountUuid"`
+	EmailAddress          string `json:"emailAddress"`
+	OrganizationUUID      string `json:"organizationUuid,omitempty"`
+	OrganizationName      string `json:"organizationName,omitempty"`
+	OrganizationRole      string `json:"organizationRole,omitempty"`
+	WorkspaceRole         string `json:"workspaceRole,omitempty"`
+	DisplayName           string `json:"displayName,omitempty"`
+	HasExtraUsageEnabled  bool   `json:"hasExtraUsageEnabled,omitempty"`
+	BillingType           string `json:"billingType,omitempty"`
+	AccountCreatedAt      string `json:"accountCreatedAt,omitempty"`
 	SubscriptionCreatedAt string `json:"subscriptionCreatedAt,omitempty"`
 }
 
@@ -128,62 +128,62 @@ type CustomApiKeyResponses struct {
 // ProjectConfig holds per-project configuration stored in ~/.claude.json under "projects".
 // Source: config.ts:76-136
 type ProjectConfig struct {
-	AllowedTools                          []string `json:"allowedTools,omitempty"`
-	McpContextUris                        []string `json:"mcpContextUris,omitempty"`
-	HasTrustDialogAccepted                bool     `json:"hasTrustDialogAccepted,omitempty"`
-	HasCompletedProjectOnboarding         bool     `json:"hasCompletedProjectOnboarding,omitempty"`
-	ProjectOnboardingSeenCount            int      `json:"projectOnboardingSeenCount,omitempty"`
-	HasClaudeMdExternalIncludesApproved   bool     `json:"hasClaudeMdExternalIncludesApproved,omitempty"`
-	HasClaudeMdExternalIncludesWarningShown bool   `json:"hasClaudeMdExternalIncludesWarningShown,omitempty"`
-	LastSessionID                         string   `json:"lastSessionId,omitempty"`
+	AllowedTools                            []string `json:"allowedTools,omitempty"`
+	McpContextUris                          []string `json:"mcpContextUris,omitempty"`
+	HasTrustDialogAccepted                  bool     `json:"hasTrustDialogAccepted,omitempty"`
+	HasCompletedProjectOnboarding           bool     `json:"hasCompletedProjectOnboarding,omitempty"`
+	ProjectOnboardingSeenCount              int      `json:"projectOnboardingSeenCount,omitempty"`
+	HasClaudeMdExternalIncludesApproved     bool     `json:"hasClaudeMdExternalIncludesApproved,omitempty"`
+	HasClaudeMdExternalIncludesWarningShown bool     `json:"hasClaudeMdExternalIncludesWarningShown,omitempty"`
+	LastSessionID                           string   `json:"lastSessionId,omitempty"`
 }
 
 // GlobalConfig holds the full ~/.claude.json configuration.
 // Source: config.ts:183-578
 type GlobalConfig struct {
-	NumStartups            int                        `json:"numStartups"`
-	InstallMethod          string                     `json:"installMethod,omitempty"`
-	AutoUpdates            *bool                      `json:"autoUpdates,omitempty"`
-	Theme                  string                     `json:"theme"`
-	HasCompletedOnboarding bool                       `json:"hasCompletedOnboarding,omitempty"`
-	Verbose                bool                       `json:"verbose"`
-	PreferredNotifChannel  string                     `json:"preferredNotifChannel"`
-	EditorMode             string                     `json:"editorMode,omitempty"`
-	AutoCompactEnabled     bool                       `json:"autoCompactEnabled"`
-	ShowTurnDuration       bool                       `json:"showTurnDuration"`
-	DiffTool               string                     `json:"diffTool,omitempty"`
-	TodoFeatureEnabled     bool                       `json:"todoFeatureEnabled"`
-	ShowExpandedTodos      bool                       `json:"showExpandedTodos,omitempty"`
-	MessageIdleNotifThresholdMs int                   `json:"messageIdleNotifThresholdMs"`
-	AutoConnectIde         bool                       `json:"autoConnectIde"`
-	AutoInstallIdeExtension bool                      `json:"autoInstallIdeExtension"`
-	FileCheckpointingEnabled bool                     `json:"fileCheckpointingEnabled"`
-	TerminalProgressBarEnabled bool                   `json:"terminalProgressBarEnabled"`
-	RespectGitignore       bool                       `json:"respectGitignore"`
-	CopyFullResponse       bool                       `json:"copyFullResponse"`
-	MemoryUsageCount       int                        `json:"memoryUsageCount"`
-	PromptQueueUseCount    int                        `json:"promptQueueUseCount"`
-	BtwUseCount            int                        `json:"btwUseCount"`
-	UserID                 string                     `json:"userID,omitempty"`
-	PrimaryApiKey          string                     `json:"primaryApiKey,omitempty"`
-	OauthAccount           *AccountInfo               `json:"oauthAccount,omitempty"`
-	CustomApiKeyResponses  *CustomApiKeyResponses     `json:"customApiKeyResponses,omitempty"`
-	Env                    map[string]string           `json:"env,omitempty"`
-	Projects               map[string]*ProjectConfig  `json:"projects,omitempty"`
+	NumStartups                 int                       `json:"numStartups"`
+	InstallMethod               string                    `json:"installMethod,omitempty"`
+	AutoUpdates                 *bool                     `json:"autoUpdates,omitempty"`
+	Theme                       string                    `json:"theme"`
+	HasCompletedOnboarding      bool                      `json:"hasCompletedOnboarding,omitempty"`
+	Verbose                     bool                      `json:"verbose"`
+	PreferredNotifChannel       string                    `json:"preferredNotifChannel"`
+	EditorMode                  string                    `json:"editorMode,omitempty"`
+	AutoCompactEnabled          bool                      `json:"autoCompactEnabled"`
+	ShowTurnDuration            bool                      `json:"showTurnDuration"`
+	DiffTool                    string                    `json:"diffTool,omitempty"`
+	TodoFeatureEnabled          bool                      `json:"todoFeatureEnabled"`
+	ShowExpandedTodos           bool                      `json:"showExpandedTodos,omitempty"`
+	MessageIdleNotifThresholdMs int                       `json:"messageIdleNotifThresholdMs"`
+	AutoConnectIde              bool                      `json:"autoConnectIde"`
+	AutoInstallIdeExtension     bool                      `json:"autoInstallIdeExtension"`
+	FileCheckpointingEnabled    bool                      `json:"fileCheckpointingEnabled"`
+	TerminalProgressBarEnabled  bool                      `json:"terminalProgressBarEnabled"`
+	RespectGitignore            bool                      `json:"respectGitignore"`
+	CopyFullResponse            bool                      `json:"copyFullResponse"`
+	MemoryUsageCount            int                       `json:"memoryUsageCount"`
+	PromptQueueUseCount         int                       `json:"promptQueueUseCount"`
+	BtwUseCount                 int                       `json:"btwUseCount"`
+	UserID                      string                    `json:"userID,omitempty"`
+	PrimaryApiKey               string                    `json:"primaryApiKey,omitempty"`
+	OauthAccount                *AccountInfo              `json:"oauthAccount,omitempty"`
+	CustomApiKeyResponses       *CustomApiKeyResponses    `json:"customApiKeyResponses,omitempty"`
+	Env                         map[string]string         `json:"env,omitempty"`
+	Projects                    map[string]*ProjectConfig `json:"projects,omitempty"`
 
 	// UI tracking
-	HasUsedBackslashReturn bool  `json:"hasUsedBackslashReturn,omitempty"`
-	HasSeenTasksHint       bool  `json:"hasSeenTasksHint,omitempty"`
-	HasUsedStash           bool  `json:"hasUsedStash,omitempty"`
-	HasUsedBackgroundTask  bool  `json:"hasUsedBackgroundTask,omitempty"`
-	QueuedCommandUpHintCount int `json:"queuedCommandUpHintCount,omitempty"`
+	HasUsedBackslashReturn   bool `json:"hasUsedBackslashReturn,omitempty"`
+	HasSeenTasksHint         bool `json:"hasSeenTasksHint,omitempty"`
+	HasUsedStash             bool `json:"hasUsedStash,omitempty"`
+	HasUsedBackgroundTask    bool `json:"hasUsedBackgroundTask,omitempty"`
+	QueuedCommandUpHintCount int  `json:"queuedCommandUpHintCount,omitempty"`
 
 	// Terminal setup
 	ShiftEnterKeyBindingInstalled bool `json:"shiftEnterKeyBindingInstalled,omitempty"`
 
 	// Feature flags / caches (kept for parity; not exhaustive)
-	CachedStatsigGates        map[string]bool           `json:"cachedStatsigGates,omitempty"`
-	CachedGrowthBookFeatures  map[string]interface{}     `json:"cachedGrowthBookFeatures,omitempty"`
+	CachedStatsigGates       map[string]bool        `json:"cachedStatsigGates,omitempty"`
+	CachedGrowthBookFeatures map[string]interface{} `json:"cachedGrowthBookFeatures,omitempty"`
 
 	// Remote control
 	RemoteControlAtStartup *bool `json:"remoteControlAtStartup,omitempty"`
@@ -193,26 +193,26 @@ type GlobalConfig struct {
 // Source: config.ts:585-623
 func DefaultGlobalConfig() GlobalConfig {
 	return GlobalConfig{
-		NumStartups:                0,
-		Theme:                      "dark",
-		PreferredNotifChannel:      "auto",
-		Verbose:                    false,
-		EditorMode:                 "normal",
-		AutoCompactEnabled:         true,
-		ShowTurnDuration:           true,
-		DiffTool:                   "auto",
-		TodoFeatureEnabled:         true,
-		ShowExpandedTodos:          false,
+		NumStartups:                 0,
+		Theme:                       "dark",
+		PreferredNotifChannel:       "auto",
+		Verbose:                     false,
+		EditorMode:                  "normal",
+		AutoCompactEnabled:          true,
+		ShowTurnDuration:            true,
+		DiffTool:                    "auto",
+		TodoFeatureEnabled:          true,
+		ShowExpandedTodos:           false,
 		MessageIdleNotifThresholdMs: 60000,
-		AutoConnectIde:             false,
-		AutoInstallIdeExtension:    true,
-		FileCheckpointingEnabled:   true,
-		TerminalProgressBarEnabled: true,
-		RespectGitignore:           true,
-		CopyFullResponse:           false,
-		MemoryUsageCount:           0,
-		PromptQueueUseCount:        0,
-		BtwUseCount:                0,
+		AutoConnectIde:              false,
+		AutoInstallIdeExtension:     true,
+		FileCheckpointingEnabled:    true,
+		TerminalProgressBarEnabled:  true,
+		RespectGitignore:            true,
+		CopyFullResponse:            false,
+		MemoryUsageCount:            0,
+		PromptQueueUseCount:         0,
+		BtwUseCount:                 0,
 	}
 }
 
@@ -220,9 +220,9 @@ func DefaultGlobalConfig() GlobalConfig {
 // Source: config.ts:138-148
 func DefaultProjectConfig() ProjectConfig {
 	return ProjectConfig{
-		AllowedTools:           []string{},
-		McpContextUris:         []string{},
-		HasTrustDialogAccepted: false,
+		AllowedTools:               []string{},
+		McpContextUris:             []string{},
+		HasTrustDialogAccepted:     false,
 		ProjectOnboardingSeenCount: 0,
 	}
 }

@@ -481,12 +481,12 @@ func TestNewBridgeAPIClientFromConfig_Integration(t *testing.T) {
 	// Verify the convenience constructor produces a working client that is
 	// reachable through the same code path used by cmd/gopher/main.go.
 	cfg := BridgeConfig{
-		Dir:           "/tmp/test",
-		APIBaseURL:    "https://api.anthropic.com",
-		MaxSessions:   SpawnSessionsDefault,
-		SpawnMode:     SpawnModeSingleSession,
-		WorkerType:    string(WorkerTypeClaudeCode),
-		MachineName:   "test-machine",
+		Dir:         "/tmp/test",
+		APIBaseURL:  "https://api.anthropic.com",
+		MaxSessions: SpawnSessionsDefault,
+		SpawnMode:   SpawnModeSingleSession,
+		WorkerType:  string(WorkerTypeClaudeCode),
+		MachineName: "test-machine",
 	}
 
 	var debugMsgs []string

@@ -19,12 +19,12 @@ func TestDoctorModel_Init(t *testing.T) {
 func TestDoctorModel_RendersDiagnostics(t *testing.T) {
 	cfg := DoctorConfig{
 		Diagnostic: &DoctorDiagnostic{
-			Version:            "0.2.0",
-			InstallationType:   "go-binary",
-			InstallationPath:   "/usr/local/bin/gopher",
-			InvokedBinary:      "gopher",
+			Version:             "0.2.0",
+			InstallationType:    "go-binary",
+			InstallationPath:    "/usr/local/bin/gopher",
+			InvokedBinary:       "gopher",
 			ConfigInstallMethod: "direct",
-			AutoUpdates:        "enabled",
+			AutoUpdates:         "enabled",
 		},
 		DistTags:      &doctor.DistTags{Stable: "1.0.0", Latest: "1.1.0"},
 		AutoUpdates:   "enabled",

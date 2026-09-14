@@ -93,8 +93,8 @@ func TestIsReadOnlyCommand(t *testing.T) {
 	// Source: tools/BashTool/readOnlyValidation.ts:1432-1503
 
 	readOnlyCases := []struct {
-		name    string
-		cmd     string
+		name     string
+		cmd      string
 		readOnly bool
 	}{
 		// Simple read-only commands

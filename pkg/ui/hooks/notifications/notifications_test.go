@@ -397,7 +397,7 @@ func TestCheckModelMigrations_MultipleMigrations(t *testing.T) {
 	now := time.Now()
 	notifs := CheckModelMigrations(MigrationConfig{
 		Sonnet45To46Timestamp: &now,
-		OpusProTimestamp:       &now,
+		OpusProTimestamp:      &now,
 	})
 	if len(notifs) != 2 {
 		t.Fatalf("expected 2, got %d", len(notifs))

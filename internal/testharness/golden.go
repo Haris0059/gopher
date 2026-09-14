@@ -41,7 +41,7 @@ func LoadToolSchemas() ([]ToolSchemaEntry, error) {
 // QueryLoopConstants represents the operational constants from the golden file.
 type QueryLoopConstants struct {
 	MaxOutputTokensRecoveryLimit      int    `json:"max_output_tokens_recovery_limit"`
-	MaxConsecutiveAutocompactFailures  int    `json:"max_consecutive_autocompact_failures"`
+	MaxConsecutiveAutocompactFailures int    `json:"max_consecutive_autocompact_failures"`
 	AutocompactBufferTokens           int    `json:"autocompact_buffer_tokens"`
 	WarningThresholdBufferTokens      int    `json:"warning_threshold_buffer_tokens"`
 	ErrorThresholdBufferTokens        int    `json:"error_threshold_buffer_tokens"`
@@ -79,24 +79,24 @@ type ToolBehavior struct {
 }
 
 type BashBehavior struct {
-	ToolName                string `json:"tool_name"`
-	DefaultTimeoutMs        int    `json:"default_timeout_ms"`
-	MaxTimeoutMs            int    `json:"max_timeout_ms"`
-	MaxTimeoutAlwaysGteDefault bool `json:"max_timeout_always_gte_default"`
-	MaxResultSizeChars      int    `json:"max_result_size_chars"`
+	ToolName                   string `json:"tool_name"`
+	DefaultTimeoutMs           int    `json:"default_timeout_ms"`
+	MaxTimeoutMs               int    `json:"max_timeout_ms"`
+	MaxTimeoutAlwaysGteDefault bool   `json:"max_timeout_always_gte_default"`
+	MaxResultSizeChars         int    `json:"max_result_size_chars"`
 }
 
 type FileReadBehavior struct {
-	ToolName                   string   `json:"tool_name"`
-	DefaultMaxOutputTokens     int      `json:"default_max_output_tokens"`
-	MaxOutputSizeBytes         int      `json:"max_output_size_bytes"`
-	MaxResultSizeChars         int      `json:"max_result_size_chars"`
-	PDFMaxPagesPerRead         int      `json:"pdf_max_pages_per_read"`
-	PDFInlineThresholdPages    int      `json:"pdf_inline_threshold_pages"`
-	PDFExtractSizeThresholdBytes int    `json:"pdf_extract_size_threshold_bytes"`
-	BlockedPaths               []string `json:"blocked_paths"`
-	IsReadOnly                 bool     `json:"is_read_only"`
-	IsConcurrencySafe          bool     `json:"is_concurrency_safe"`
+	ToolName                     string   `json:"tool_name"`
+	DefaultMaxOutputTokens       int      `json:"default_max_output_tokens"`
+	MaxOutputSizeBytes           int      `json:"max_output_size_bytes"`
+	MaxResultSizeChars           int      `json:"max_result_size_chars"`
+	PDFMaxPagesPerRead           int      `json:"pdf_max_pages_per_read"`
+	PDFInlineThresholdPages      int      `json:"pdf_inline_threshold_pages"`
+	PDFExtractSizeThresholdBytes int      `json:"pdf_extract_size_threshold_bytes"`
+	BlockedPaths                 []string `json:"blocked_paths"`
+	IsReadOnly                   bool     `json:"is_read_only"`
+	IsConcurrencySafe            bool     `json:"is_concurrency_safe"`
 }
 
 type FileWriteBehavior struct {
@@ -107,13 +107,13 @@ type FileWriteBehavior struct {
 }
 
 type FileEditBehavior struct {
-	ToolName               string              `json:"tool_name"`
-	MaxFileSizeBytes       int64               `json:"max_file_size_bytes"`
-	MaxResultSizeChars     int                 `json:"max_result_size_chars"`
-	ErrorCodes             FileEditErrorCodes  `json:"error_codes"`
-	RequiresFullReadBefore bool                `json:"requires_full_read_before_edit"`
-	IsReadOnly             bool                `json:"is_read_only"`
-	IsConcurrencySafe      bool                `json:"is_concurrency_safe"`
+	ToolName               string             `json:"tool_name"`
+	MaxFileSizeBytes       int64              `json:"max_file_size_bytes"`
+	MaxResultSizeChars     int                `json:"max_result_size_chars"`
+	ErrorCodes             FileEditErrorCodes `json:"error_codes"`
+	RequiresFullReadBefore bool               `json:"requires_full_read_before_edit"`
+	IsReadOnly             bool               `json:"is_read_only"`
+	IsConcurrencySafe      bool               `json:"is_concurrency_safe"`
 }
 
 type FileEditErrorCodes struct {
@@ -136,26 +136,26 @@ type GlobBehavior struct {
 }
 
 type GrepBehavior struct {
-	ToolName              string   `json:"tool_name"`
-	DefaultHeadLimit      int      `json:"default_head_limit"`
-	DefaultOutputMode     string   `json:"default_output_mode"`
-	DefaultLineNumbers    bool     `json:"default_line_numbers"`
-	MaxLineLengthChars    int      `json:"max_line_length_chars"`
+	ToolName               string   `json:"tool_name"`
+	DefaultHeadLimit       int      `json:"default_head_limit"`
+	DefaultOutputMode      string   `json:"default_output_mode"`
+	DefaultLineNumbers     bool     `json:"default_line_numbers"`
+	MaxLineLengthChars     int      `json:"max_line_length_chars"`
 	VCSDirectoriesExcluded []string `json:"vcs_directories_excluded"`
-	MaxResultSizeChars    int      `json:"max_result_size_chars"`
-	IsReadOnly            bool     `json:"is_read_only"`
-	IsConcurrencySafe     bool     `json:"is_concurrency_safe"`
+	MaxResultSizeChars     int      `json:"max_result_size_chars"`
+	IsReadOnly             bool     `json:"is_read_only"`
+	IsConcurrencySafe      bool     `json:"is_concurrency_safe"`
 }
 
 type QueryLoopBehavior struct {
-	TurnCounterStartsAt                        int    `json:"turn_counter_starts_at"`
-	MaxOutputTokensRecoveryMessage             string `json:"max_output_tokens_recovery_message"`
+	TurnCounterStartsAt                         int    `json:"turn_counter_starts_at"`
+	MaxOutputTokensRecoveryMessage              string `json:"max_output_tokens_recovery_message"`
 	ToolDetectionUsesContentBlocksNotStopReason bool   `json:"tool_detection_uses_content_blocks_not_stop_reason"`
-	SystemPromptInSeparateFieldNotMessages     bool   `json:"system_prompt_in_separate_field_not_messages"`
-	ToolResultsInUserRoleMessages              bool   `json:"tool_results_in_user_role_messages"`
-	CappedDefaultMaxTokens                     int    `json:"capped_default_max_tokens"`
-	CompactMaxOutputTokens                     int    `json:"compact_max_output_tokens"`
-	FallbackDefaultMaxOutputTokens             int    `json:"fallback_default_max_output_tokens"`
+	SystemPromptInSeparateFieldNotMessages      bool   `json:"system_prompt_in_separate_field_not_messages"`
+	ToolResultsInUserRoleMessages               bool   `json:"tool_results_in_user_role_messages"`
+	CappedDefaultMaxTokens                      int    `json:"capped_default_max_tokens"`
+	CompactMaxOutputTokens                      int    `json:"compact_max_output_tokens"`
+	FallbackDefaultMaxOutputTokens              int    `json:"fallback_default_max_output_tokens"`
 }
 
 // LoadToolBehavior loads per-tool behavioral constants from testdata/tool_behavior.json.

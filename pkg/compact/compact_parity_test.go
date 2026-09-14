@@ -16,18 +16,18 @@ func compactSystemPath() string {
 
 type CompactSystem struct {
 	Autocompact struct {
-		Strategy                   string  `json:"strategy"`
-		UsesModelToSummarize       bool    `json:"uses_model_to_summarize"`
-		DropsGroupsNotMessages     bool    `json:"drops_groups_not_individual_messages"`
-		DefaultDropFraction        float64 `json:"default_drop_fraction"`
-		MinGroupsBeforeCompact     int     `json:"min_groups_before_compact"`
-		PreservesAtLeastOneGroup   bool    `json:"preserves_at_least_one_group"`
-		PostCompactMaxFiles        int     `json:"post_compact_max_files_to_restore"`
-		PostCompactTokenBudget     int     `json:"post_compact_token_budget"`
-		PostCompactMaxTokensPerFile int    `json:"post_compact_max_tokens_per_file"`
-		PostCompactMaxTokensPerSkill int   `json:"post_compact_max_tokens_per_skill"`
-		PostCompactSkillsTokenBudget int   `json:"post_compact_skills_token_budget"`
-		CircuitBreakerMaxFailures  int     `json:"circuit_breaker_max_failures"`
+		Strategy                     string  `json:"strategy"`
+		UsesModelToSummarize         bool    `json:"uses_model_to_summarize"`
+		DropsGroupsNotMessages       bool    `json:"drops_groups_not_individual_messages"`
+		DefaultDropFraction          float64 `json:"default_drop_fraction"`
+		MinGroupsBeforeCompact       int     `json:"min_groups_before_compact"`
+		PreservesAtLeastOneGroup     bool    `json:"preserves_at_least_one_group"`
+		PostCompactMaxFiles          int     `json:"post_compact_max_files_to_restore"`
+		PostCompactTokenBudget       int     `json:"post_compact_token_budget"`
+		PostCompactMaxTokensPerFile  int     `json:"post_compact_max_tokens_per_file"`
+		PostCompactMaxTokensPerSkill int     `json:"post_compact_max_tokens_per_skill"`
+		PostCompactSkillsTokenBudget int     `json:"post_compact_skills_token_budget"`
+		CircuitBreakerMaxFailures    int     `json:"circuit_breaker_max_failures"`
 	} `json:"autocompact"`
 
 	Microcompact struct {
@@ -40,10 +40,10 @@ type CompactSystem struct {
 	} `json:"microcompact"`
 
 	PTLRecovery struct {
-		GroupsByAPIRound             bool `json:"groups_messages_by_api_round"`
-		DefaultDrop20Percent         bool `json:"default_drop_20_percent"`
-		TokenGapBasedWhenAvailable   bool `json:"token_gap_based_when_available"`
-		PrependsUserMarkerIfAsst     bool `json:"prepends_user_marker_if_assistant_first"`
+		GroupsByAPIRound           bool `json:"groups_messages_by_api_round"`
+		DefaultDrop20Percent       bool `json:"default_drop_20_percent"`
+		TokenGapBasedWhenAvailable bool `json:"token_gap_based_when_available"`
+		PrependsUserMarkerIfAsst   bool `json:"prepends_user_marker_if_assistant_first"`
 	} `json:"ptl_recovery"`
 }
 

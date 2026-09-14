@@ -20,21 +20,21 @@ type Skill struct {
 
 	// Extended frontmatter fields — Source: skills/loadSkillsDir.ts:185-265
 	DisplayName            string   `json:"displayName,omitempty"`
-	AllowedTools           []string `json:"allowedTools,omitempty"`     // Source: frontmatter "allowed-tools"
-	ArgumentHint           string   `json:"argumentHint,omitempty"`     // Source: frontmatter "argument-hint"
-	ArgumentNames          []string `json:"argumentNames,omitempty"`    // Source: frontmatter "arguments"
-	WhenToUse              string   `json:"whenToUse,omitempty"`        // Source: frontmatter "when_to_use"
-	Version                string   `json:"version,omitempty"`          // Source: frontmatter "version"
-	Model                  string   `json:"model,omitempty"`            // Source: frontmatter "model"
+	AllowedTools           []string `json:"allowedTools,omitempty"`           // Source: frontmatter "allowed-tools"
+	ArgumentHint           string   `json:"argumentHint,omitempty"`           // Source: frontmatter "argument-hint"
+	ArgumentNames          []string `json:"argumentNames,omitempty"`          // Source: frontmatter "arguments"
+	WhenToUse              string   `json:"whenToUse,omitempty"`              // Source: frontmatter "when_to_use"
+	Version                string   `json:"version,omitempty"`                // Source: frontmatter "version"
+	Model                  string   `json:"model,omitempty"`                  // Source: frontmatter "model"
 	DisableModelInvocation bool     `json:"disableModelInvocation,omitempty"` // Source: frontmatter "disable-model-invocation"
-	UserInvocable          bool     `json:"userInvocable"`              // Source: frontmatter "user-invocable", default true
-	Context                string   `json:"context,omitempty"`          // "inline" or "fork"
-	Agent                  string   `json:"agent,omitempty"`            // agent type to delegate to
-	Effort                 string   `json:"effort,omitempty"`           // effort level
-	Paths                  []string `json:"paths,omitempty"`            // glob patterns for activation
-	Shell                  string   `json:"shell,omitempty"`            // "bash" or "powershell"
-	BaseDir                string   `json:"baseDir,omitempty"`          // root directory for the skill
-	IsHidden               bool     `json:"isHidden,omitempty"`         // !userInvocable
+	UserInvocable          bool     `json:"userInvocable"`                    // Source: frontmatter "user-invocable", default true
+	Context                string   `json:"context,omitempty"`                // "inline" or "fork"
+	Agent                  string   `json:"agent,omitempty"`                  // agent type to delegate to
+	Effort                 string   `json:"effort,omitempty"`                 // effort level
+	Paths                  []string `json:"paths,omitempty"`                  // glob patterns for activation
+	Shell                  string   `json:"shell,omitempty"`                  // "bash" or "powershell"
+	BaseDir                string   `json:"baseDir,omitempty"`                // root directory for the skill
+	IsHidden               bool     `json:"isHidden,omitempty"`               // !userInvocable
 }
 
 // LoadedFrom tracks where a skill was loaded from.
@@ -42,11 +42,11 @@ type Skill struct {
 type LoadedFrom string
 
 const (
-	LoadedFromSkills     LoadedFrom = "skills"
-	LoadedFromPlugin     LoadedFrom = "plugin"
-	LoadedFromManaged    LoadedFrom = "managed"
-	LoadedFromBundled    LoadedFrom = "bundled"
-	LoadedFromMCP        LoadedFrom = "mcp"
+	LoadedFromSkills  LoadedFrom = "skills"
+	LoadedFromPlugin  LoadedFrom = "plugin"
+	LoadedFromManaged LoadedFrom = "managed"
+	LoadedFromBundled LoadedFrom = "bundled"
+	LoadedFromMCP     LoadedFrom = "mcp"
 )
 
 // LoadSkills discovers and loads skills from standard locations.

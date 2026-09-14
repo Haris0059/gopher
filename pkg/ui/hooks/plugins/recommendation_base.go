@@ -11,10 +11,10 @@ import (
 //
 // Source: src/hooks/usePluginRecommendationBase.tsx
 type RecommendationBase[T any] struct {
-	mu         sync.Mutex
-	value      *T
-	checking   bool
-	isRemote   bool // skip recommendations in remote mode
+	mu       sync.Mutex
+	value    *T
+	checking bool
+	isRemote bool // skip recommendations in remote mode
 }
 
 // NewRecommendationBase creates a new recommendation base.

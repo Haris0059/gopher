@@ -28,12 +28,12 @@ func collectSender[T any]() (func(context.Context, []T) error, *[][]T) {
 
 func defaultCfg[T any](send func(context.Context, []T) error) SerialBatchUploaderConfig[T] {
 	return SerialBatchUploaderConfig[T]{
-		MaxBatchSize:  10,
-		MaxQueueSize:  100,
-		Send:          send,
-		BaseDelay:     time.Millisecond,
-		MaxDelay:      10 * time.Millisecond,
-		Jitter:        time.Millisecond,
+		MaxBatchSize: 10,
+		MaxQueueSize: 100,
+		Send:         send,
+		BaseDelay:    time.Millisecond,
+		MaxDelay:     10 * time.Millisecond,
+		Jitter:       time.Millisecond,
 	}
 }
 

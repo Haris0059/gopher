@@ -8,24 +8,24 @@ import "strings"
 // Source: preapproved.ts:14-131
 var preapprovedHostsOnly = map[string]bool{
 	// Anthropic
-	"platform.claude.com": true,
-	"code.claude.com":     true,
+	"platform.claude.com":     true,
+	"code.claude.com":         true,
 	"modelcontextprotocol.io": true,
-	"agentskills.io": true,
+	"agentskills.io":          true,
 
 	// Top Programming Languages
-	"docs.python.org":       true,
-	"en.cppreference.com":   true,
-	"docs.oracle.com":       true,
-	"learn.microsoft.com":   true,
-	"developer.mozilla.org": true,
-	"go.dev":                true,
-	"pkg.go.dev":            true,
-	"www.php.net":           true,
-	"docs.swift.org":        true,
-	"kotlinlang.org":        true,
-	"ruby-doc.org":          true,
-	"doc.rust-lang.org":     true,
+	"docs.python.org":        true,
+	"en.cppreference.com":    true,
+	"docs.oracle.com":        true,
+	"learn.microsoft.com":    true,
+	"developer.mozilla.org":  true,
+	"go.dev":                 true,
+	"pkg.go.dev":             true,
+	"www.php.net":            true,
+	"docs.swift.org":         true,
+	"kotlinlang.org":         true,
+	"ruby-doc.org":           true,
+	"doc.rust-lang.org":      true,
 	"www.typescriptlang.org": true,
 
 	// Web & JavaScript Frameworks
@@ -47,17 +47,17 @@ var preapprovedHostsOnly = map[string]bool{
 	"reactrouter.com":  true,
 
 	// Python Frameworks
-	"docs.djangoproject.com":   true,
+	"docs.djangoproject.com":    true,
 	"flask.palletsprojects.com": true,
-	"fastapi.tiangolo.com":    true,
-	"pandas.pydata.org":       true,
-	"numpy.org":               true,
-	"www.tensorflow.org":      true,
-	"pytorch.org":             true,
-	"scikit-learn.org":        true,
-	"matplotlib.org":          true,
-	"requests.readthedocs.io": true,
-	"jupyter.org":             true,
+	"fastapi.tiangolo.com":      true,
+	"pandas.pydata.org":         true,
+	"numpy.org":                 true,
+	"www.tensorflow.org":        true,
+	"pytorch.org":               true,
+	"scikit-learn.org":          true,
+	"matplotlib.org":            true,
+	"requests.readthedocs.io":   true,
+	"jupyter.org":               true,
 
 	// PHP Frameworks
 	"laravel.com":   true,
@@ -65,17 +65,17 @@ var preapprovedHostsOnly = map[string]bool{
 	"wordpress.org": true,
 
 	// Java Frameworks
-	"docs.spring.io":     true,
-	"hibernate.org":      true,
-	"tomcat.apache.org":  true,
-	"gradle.org":         true,
-	"maven.apache.org":   true,
+	"docs.spring.io":    true,
+	"hibernate.org":     true,
+	"tomcat.apache.org": true,
+	"gradle.org":        true,
+	"maven.apache.org":  true,
 
 	// .NET & C#
-	"asp.net":                 true,
-	"dotnet.microsoft.com":    true,
-	"nuget.org":               true,
-	"blazor.net":              true,
+	"asp.net":              true,
+	"dotnet.microsoft.com": true,
+	"nuget.org":            true,
+	"blazor.net":           true,
 
 	// Mobile Development
 	"reactnative.dev":       true,
@@ -84,10 +84,10 @@ var preapprovedHostsOnly = map[string]bool{
 	"developer.android.com": true,
 
 	// Data Science & ML
-	"keras.io":          true,
-	"spark.apache.org":  true,
-	"huggingface.co":    true,
-	"www.kaggle.com":    true,
+	"keras.io":         true,
+	"spark.apache.org": true,
+	"huggingface.co":   true,
+	"www.kaggle.com":   true,
 
 	// Databases
 	"www.mongodb.com":    true,
@@ -99,24 +99,24 @@ var preapprovedHostsOnly = map[string]bool{
 	"prisma.io":          true,
 
 	// Cloud & DevOps
-	"docs.aws.amazon.com":   true,
-	"cloud.google.com":      true,
-	"kubernetes.io":         true,
-	"www.docker.com":        true,
-	"www.terraform.io":      true,
-	"www.ansible.com":       true,
-	"docs.netlify.com":      true,
-	"devcenter.heroku.com":  true,
-	"cypress.io":            true,
-	"selenium.dev":          true,
+	"docs.aws.amazon.com":  true,
+	"cloud.google.com":     true,
+	"kubernetes.io":        true,
+	"www.docker.com":       true,
+	"www.terraform.io":     true,
+	"www.ansible.com":      true,
+	"docs.netlify.com":     true,
+	"devcenter.heroku.com": true,
+	"cypress.io":           true,
+	"selenium.dev":         true,
 
 	// Game Development
-	"docs.unity.com":         true,
-	"docs.unrealengine.com":  true,
+	"docs.unity.com":        true,
+	"docs.unrealengine.com": true,
 
 	// Other Essential Tools
-	"git-scm.com":   true,
-	"nginx.org":     true,
+	"git-scm.com":      true,
+	"nginx.org":        true,
 	"httpd.apache.org": true,
 }
 

@@ -24,8 +24,8 @@ type spyEvent struct {
 }
 
 func (s *spySink) LogEvent(name string, m EventMetadata)      { s.record(name, m, false) }
-func (s *spySink) LogEventAsync(name string, m EventMetadata)  { s.record(name, m, true) }
-func (s *spySink) Shutdown()                                   {}
+func (s *spySink) LogEventAsync(name string, m EventMetadata) { s.record(name, m, true) }
+func (s *spySink) Shutdown()                                  {}
 func (s *spySink) record(name string, m EventMetadata, a bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

@@ -36,24 +36,24 @@ func (p *OpenAICompatProvider) Name() string { return "openai-compat" }
 
 // openAIChatRequest is the JSON body sent to /v1/chat/completions.
 type openAIChatRequest struct {
-	Model       string             `json:"model"`
-	Messages    []openAIMessage    `json:"messages"`
-	Stream      bool               `json:"stream"`
-	Tools       []openAITool       `json:"tools"`
-	MaxTokens   int                `json:"max_tokens,omitempty"`
-	Temperature *float64           `json:"temperature,omitempty"`
+	Model       string          `json:"model"`
+	Messages    []openAIMessage `json:"messages"`
+	Stream      bool            `json:"stream"`
+	Tools       []openAITool    `json:"tools"`
+	MaxTokens   int             `json:"max_tokens,omitempty"`
+	Temperature *float64        `json:"temperature,omitempty"`
 }
 
 type openAIMessage struct {
-	Role       string              `json:"role"`
-	Content    string              `json:"content,omitempty"`
-	ToolCalls  []openAIToolCall    `json:"tool_calls,omitempty"`
-	ToolCallID string              `json:"tool_call_id,omitempty"`
+	Role       string           `json:"role"`
+	Content    string           `json:"content,omitempty"`
+	ToolCalls  []openAIToolCall `json:"tool_calls,omitempty"`
+	ToolCallID string           `json:"tool_call_id,omitempty"`
 }
 
 type openAITool struct {
-	Type     string           `json:"type"`
-	Function openAIFunction   `json:"function"`
+	Type     string         `json:"type"`
+	Function openAIFunction `json:"function"`
 }
 
 type openAIFunction struct {
@@ -63,10 +63,10 @@ type openAIFunction struct {
 }
 
 type openAIToolCall struct {
-	Index    *int                `json:"index,omitempty"`
-	ID       string              `json:"id,omitempty"`
-	Type     string              `json:"type,omitempty"`
-	Function openAIToolCallFunc  `json:"function"`
+	Index    *int               `json:"index,omitempty"`
+	ID       string             `json:"id,omitempty"`
+	Type     string             `json:"type,omitempty"`
+	Function openAIToolCallFunc `json:"function"`
 }
 
 type openAIToolCallFunc struct {
@@ -76,16 +76,16 @@ type openAIToolCallFunc struct {
 
 // openAIChunk is a single chunk from the streaming response.
 type openAIChunk struct {
-	ID      string            `json:"id"`
-	Object  string            `json:"object"`
-	Choices []openAIChoice    `json:"choices"`
-	Usage   *openAIUsage      `json:"usage,omitempty"`
+	ID      string         `json:"id"`
+	Object  string         `json:"object"`
+	Choices []openAIChoice `json:"choices"`
+	Usage   *openAIUsage   `json:"usage,omitempty"`
 }
 
 type openAIChoice struct {
-	Index        int               `json:"index"`
-	Delta        openAIDelta       `json:"delta"`
-	FinishReason *string           `json:"finish_reason"`
+	Index        int         `json:"index"`
+	Delta        openAIDelta `json:"delta"`
+	FinishReason *string     `json:"finish_reason"`
 }
 
 type openAIDelta struct {
@@ -266,8 +266,8 @@ func (p *OpenAICompatProvider) readOpenAIStream(ctx context.Context, resp *http.
 		// Track text assembled across deltas.
 		textAccum string
 		// Track tool calls being assembled.
-		toolCalls    = make(map[int]*openAIToolCall)
-		textBlockIdx = 0
+		toolCalls     = make(map[int]*openAIToolCall)
+		textBlockIdx  = 0
 		sentTextStart bool
 	)
 

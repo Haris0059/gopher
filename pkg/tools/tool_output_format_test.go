@@ -16,20 +16,20 @@ func outputFormatPath() string {
 
 type ToolOutputFormat struct {
 	FileRead struct {
-		MaxLinesDefault               int    `json:"max_lines_default"`
-		LineNumberFormat              string `json:"line_number_format"`
-		CompactLineFormat             string `json:"compact_line_format"`
-		StandardLineFormat            string `json:"standard_line_format"`
-		LineNumberSeparatorCompact    string `json:"line_number_separator_compact"`
-		LineNumberSeparatorStandard   string `json:"line_number_separator_standard"`
-		LineNumbers1Indexed           bool   `json:"line_numbers_1_indexed"`
-		EmptyContentReturnsEmpty      bool   `json:"empty_content_returns_empty_string"`
+		MaxLinesDefault             int    `json:"max_lines_default"`
+		LineNumberFormat            string `json:"line_number_format"`
+		CompactLineFormat           string `json:"compact_line_format"`
+		StandardLineFormat          string `json:"standard_line_format"`
+		LineNumberSeparatorCompact  string `json:"line_number_separator_compact"`
+		LineNumberSeparatorStandard string `json:"line_number_separator_standard"`
+		LineNumbers1Indexed         bool   `json:"line_numbers_1_indexed"`
+		EmptyContentReturnsEmpty    bool   `json:"empty_content_returns_empty_string"`
 	} `json:"file_read"`
 	Glob struct {
 		NoResultsText      string `json:"no_results_text"`
-		ResultFormat        string `json:"result_format"`
-		TruncationAppended  bool   `json:"truncation_appended"`
-		TruncationText      string `json:"truncation_text"`
+		ResultFormat       string `json:"result_format"`
+		TruncationAppended bool   `json:"truncation_appended"`
+		TruncationText     string `json:"truncation_text"`
 	} `json:"glob"`
 	Grep struct {
 		ContentMode struct {
@@ -45,18 +45,18 @@ type ToolOutputFormat struct {
 		} `json:"files_with_matches_mode"`
 	} `json:"grep"`
 	Bash struct {
-		MaxResultSizeChars        int  `json:"max_result_size_chars"`
-		OutputPersistedWhenTooLarge bool `json:"output_persisted_when_too_large"`
-		PersistedPathPattern       string `json:"persisted_path_pattern"`
+		MaxResultSizeChars          int    `json:"max_result_size_chars"`
+		OutputPersistedWhenTooLarge bool   `json:"output_persisted_when_too_large"`
+		PersistedPathPattern        string `json:"persisted_path_pattern"`
 	} `json:"bash"`
 	FileEdit struct {
 		ErrorMessages map[string]string `json:"error_messages"`
 	} `json:"file_edit"`
 	Common struct {
-		ToolResultBlockType           string `json:"tool_result_block_type"`
-		ToolResultHasToolUseID        bool   `json:"tool_result_has_tool_use_id"`
-		ToolResultContentIsStringOrArray bool `json:"tool_result_content_is_string_or_array"`
-		ErrorResultsHaveIsErrorTrue   bool   `json:"error_results_have_is_error_true"`
+		ToolResultBlockType              string `json:"tool_result_block_type"`
+		ToolResultHasToolUseID           bool   `json:"tool_result_has_tool_use_id"`
+		ToolResultContentIsStringOrArray bool   `json:"tool_result_content_is_string_or_array"`
+		ErrorResultsHaveIsErrorTrue      bool   `json:"error_results_have_is_error_true"`
 	} `json:"common"`
 }
 

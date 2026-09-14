@@ -19,8 +19,8 @@ const (
 type QueuedCommand struct {
 	Value    string        `json:"value"`
 	Priority QueuePriority `json:"priority"`
-	IsMeta   bool          `json:"isMeta,omitempty"`   // System-generated, not user input
-	AgentID  string        `json:"agentId,omitempty"`  // For agent-scoped filtering
+	IsMeta   bool          `json:"isMeta,omitempty"`  // System-generated, not user input
+	AgentID  string        `json:"agentId,omitempty"` // For agent-scoped filtering
 }
 
 // CommandQueue buffers user input while the agent is processing.
