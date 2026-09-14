@@ -394,12 +394,6 @@ func (sci *SlashCommandInput) View() tea.View {
 
 		line := nameStyle.Render(cmd.Name) + " " + descStyle.Render(cmd.Description)
 
-		if i == sci.selected {
-			selStyle := lipgloss.NewStyle().
-				Background(lipgloss.Color(cs.Selection))
-			line = selStyle.Render(line)
-		}
-
 		lines = append(lines, line)
 	}
 

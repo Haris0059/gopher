@@ -164,13 +164,11 @@ func (a *AppModel) renderFileSuggestions() string {
 	cs := theme.Current().Colors()
 	nameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 	selNameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
-	selStyle := lipgloss.NewStyle().Background(lipgloss.Color(cs.Selection))
 
 	lines := make([]string, len(a.fileSuggestions))
 	for i, item := range a.fileSuggestions {
 		if i == a.fileSuggestSelected {
-			line := "  " + selNameStyle.Render(item.DisplayText)
-			lines[i] = selStyle.Render(line)
+			lines[i] = "  " + selNameStyle.Render(item.DisplayText)
 		} else {
 			lines[i] = "  " + nameStyle.Render(item.DisplayText)
 		}

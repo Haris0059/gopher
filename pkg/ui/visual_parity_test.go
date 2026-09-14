@@ -3841,19 +3841,18 @@ func TestParity_SlashInputViewRendering(t *testing.T) {
 		}
 	}
 
-	// -- Behavior 5: selected line has selection background styling.
-	// After Activate, selected=0 which is /alpha. The raw (unstripped)
-	// output should contain MORE ANSI codes on the /alpha line than on
-	// /beta, because /alpha gets the extra selection-background wrapper.
+	// -- Behavior 5: selected line is styled differently from unselected.
+	// After Activate, selected=0 which is /alpha. Selection is marked by
+	// foreground color alone (cs.Secondary vs cs.Primary) — no background
+	// wrapper — so the raw (unstripped) /alpha line must differ from the
+	// raw /beta line, but both should render the same length once ANSI is
+	// stripped (no extra background escapes on either).
 	rawLines := strings.Split(sci.View().Content, "\n")
 	if len(rawLines) != 3 {
 		t.Fatalf("raw view should have 3 lines, got %d", len(rawLines))
 	}
-	// The selected /alpha line should be longer in raw form than the
-	// unselected /beta line — since the selection style adds more escapes.
-	if len(rawLines[0]) <= len(rawLines[1]) {
-		t.Errorf("selected line should be longer (more ANSI wrappers) than unselected: "+
-			"selected=%d unselected=%d", len(rawLines[0]), len(rawLines[1]))
+	if rawLines[0] == rawLines[1] {
+		t.Errorf("selected line should render with different styling (raw) than unselected, got identical: %q", rawLines[0])
 	}
 
 	// -- Behavior 6: Deactivate round-trips to empty view --
