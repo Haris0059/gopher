@@ -1,6 +1,10 @@
 package components
 
-import "strings"
+import (
+	"strings"
+
+	"charm.land/lipgloss/v2"
+)
 
 // UI characters matching Gopher's visual language.
 const (
@@ -36,6 +40,65 @@ func FuzzyMatch(needle, haystack string) bool {
 		}
 	}
 	return false
+}
+
+// FuzzyMatchMask reports, for each rune of haystack, whether it was consumed
+// by the same greedy left-to-right subsequence scan FuzzyMatch uses to test
+// a match. On a literal prefix (needle == haystack[:len(needle)]) this masks
+// exactly that prefix; on a non-contiguous fuzzy match it marks each matched
+// character individually. Case-insensitive.
+func FuzzyMatchMask(needle, haystack string) []bool {
+	runes := []rune(haystack)
+	mask := make([]bool, len(runes))
+	if needle == "" {
+		return mask
+	}
+	needleRunes := []rune(strings.ToLower(needle))
+	lowerRunes := []rune(strings.ToLower(haystack))
+	ni := 0
+	for i, c := range lowerRunes {
+		if ni < len(needleRunes) && c == needleRunes[ni] {
+			mask[i] = true
+			ni++
+		}
+	}
+	return mask
+}
+
+// HighlightMatched renders an autocomplete suggestion's name so the
+// characters the user has typed so far (needle) stand out: runs matched by
+// FuzzyMatchMask are styled with `matched` (bold, typically bright white),
+// the rest with `unmatched` (typically dim/gray). Contiguous runs of the
+// same state are rendered as a single styled segment.
+func HighlightMatched(name, needle string, matched, unmatched lipgloss.Style) string {
+	mask := FuzzyMatchMask(needle, name)
+	runes := []rune(name)
+	var b strings.Builder
+	start := 0
+	cur := false
+	flush := func(end int) {
+		if end <= start {
+			return
+		}
+		seg := string(runes[start:end])
+		if cur {
+			b.WriteString(matched.Render(seg))
+		} else {
+			b.WriteString(unmatched.Render(seg))
+		}
+	}
+	for i := range runes {
+		m := i < len(mask) && mask[i]
+		if i == 0 {
+			cur = m
+		} else if m != cur {
+			flush(i)
+			start = i
+			cur = m
+		}
+	}
+	flush(len(runes))
+	return b.String()
 }
 
 // truncateField truncates a string to maxLen, appending "…" if truncated.

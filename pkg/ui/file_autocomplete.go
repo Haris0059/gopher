@@ -15,6 +15,7 @@ import (
 	"unicode/utf8"
 
 	"charm.land/lipgloss/v2"
+	"github.com/Haris0059/gopher/pkg/ui/components"
 	"github.com/Haris0059/gopher/pkg/ui/hooks"
 	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
@@ -156,21 +157,31 @@ func extractAtToken(text string) (partial string, startPos int, ok bool) {
 
 // renderFileSuggestions returns the file suggestion dropdown lines, or empty
 // string if no suggestions are active. The selected row is highlighted,
-// matching the slash-command popup (components/slash_input.go).
+// matching the slash-command popup (components/slash_input.go). Unselected
+// rows are muted gray with the typed @-mention partial picked out in bold
+// white, same scheme as the slash-command popup.
 func (a *AppModel) renderFileSuggestions() string {
 	if !a.fileSuggestActive || len(a.fileSuggestions) == 0 {
 		return ""
 	}
 	cs := theme.Current().Colors()
-	nameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
+	matchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
+	unmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextMuted))
 	selNameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
+
+	var partial string
+	if a.input != nil {
+		partial, _ = extractAtPartial(a.input.Value())
+	}
 
 	lines := make([]string, len(a.fileSuggestions))
 	for i, item := range a.fileSuggestions {
 		if i == a.fileSuggestSelected {
+			// Selected row is a single color, not per-letter highlighted —
+			// matches the slash-command popup's selection treatment.
 			lines[i] = "  " + selNameStyle.Render(item.DisplayText)
 		} else {
-			lines[i] = "  " + nameStyle.Render(item.DisplayText)
+			lines[i] = "  " + components.HighlightMatched(item.DisplayText, partial, matchedStyle, unmatchedStyle)
 		}
 	}
 	return strings.Join(lines, "\n")

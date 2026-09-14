@@ -381,18 +381,25 @@ func (sci *SlashCommandInput) View() tea.View {
 	cs := sci.theme.Colors()
 	var lines []string
 
-	for i, cmd := range sci.suggestions {
-		nameColor := cs.Primary
-		if i == sci.selected {
-			// Matches the /help command-list focus highlight (cs.Secondary).
-			nameColor = cs.Secondary
-		}
-		nameStyle := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(nameColor)).Bold(true)
-		descStyle := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(cs.TextSecondary))
+	descStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 
-		line := nameStyle.Render(cmd.Name) + " " + descStyle.Render(cmd.Description)
+	for i, cmd := range sci.suggestions {
+		var name string
+		if i == sci.selected {
+			// Matches the /help command-list focus highlight (cs.Secondary):
+			// the selected row is a single color, not per-letter highlighted.
+			name = lipgloss.NewStyle().
+				Foreground(lipgloss.Color(cs.Secondary)).Bold(true).
+				Render(cmd.Name)
+		} else {
+			// Unselected rows are muted gray, with the characters the user
+			// has typed so far (sci.prefix) picked out in bold white.
+			matched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
+			unmatched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextMuted))
+			name = HighlightMatched(cmd.Name, sci.prefix, matched, unmatched)
+		}
+
+		line := name + " " + descStyle.Render(cmd.Description)
 
 		lines = append(lines, line)
 	}
