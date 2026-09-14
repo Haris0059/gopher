@@ -88,7 +88,7 @@ func (sl *StatusLine) View() tea.View {
 
 	switch sl.mode {
 	case ModeStreaming, ModeToolRunning:
-		// During streaming/tool: show interrupt hint (matching Gopher)
+		// During streaming/tool: show interrupt hint (matching Claude Code)
 		dimStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color(cs.TextMuted))
 		content = dimStyle.Render("esc to interrupt")
@@ -100,7 +100,7 @@ func (sl *StatusLine) View() tea.View {
 			// After first Ctrl+C: show exit confirmation hint
 			content = dimStyle.Render("Press Ctrl-C again to exit")
 		} else {
-			// Idle: show "? for shortcuts" on the left (matching Gopher)
+			// Idle: show "? for shortcuts" on the left (matching Claude Code)
 			content = dimStyle.Render("? for shortcuts")
 		}
 	}

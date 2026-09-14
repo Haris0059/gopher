@@ -670,7 +670,7 @@ func (d *Dispatcher) Commands() []string {
 }
 
 // HelpText builds a formatted help screen listing all visible commands,
-// keybindings, and tips. This matches the HelpV2 screen from Gopher TS.
+// keybindings, and tips. This matches the HelpV2 screen from Claude Code TS.
 func (d *Dispatcher) HelpText() string {
 	var b strings.Builder
 

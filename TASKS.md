@@ -145,12 +145,13 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 | ID | Task | Est | Depends on |
 |---|---|---|---|
 | ~~CLEAN-01~~ | ~~Fix stale `cmd/gopher-code/main.go` references in 4 scenario fixtures~~ Fixed — all 4 fixtures (`area-04-tools/07-tool-edit-file.json`, `.../32-tool-file-diff-preview.json`, `area-05-permissions/05-perm-file-edit.json`, `.../24-perm-diff-in-edit.json`) now point at `cmd/gopher/main.go` | 0.5 | — |
-| CLEAN-02 | Fix self-referential comments left over from the sed-replace rebrand: `pkg/ui/components/statusline.go:103`, `pkg/ui/components/utils.go:8`, `utils.go:21` (all now read "Gopher matches Gopher" where they meant "matches Claude Code") | 0.25 | — |
+| ~~CLEAN-02~~ | ~~Fix self-referential comments left over from the sed-replace rebrand~~ Fixed — 9 lines across 6 files restored to "matching Claude Code" (`utils.go:9,12,24`, `statusline.go:91,103`, `slash_input.go:109`, `app.go:507`, `handlers.go:673`); `message_bubble.go:99` restored differently — see `UI-01` | 0.25 | — |
 | CLEAN-03 | `pkg/bridge/init_repl.go:263` — v1/v2 branch selection, version gates, session title (leftover TODO, predates rebrand but adjacent) | 2 | — |
+| UI-01 | `message_bubble.go:105` bolds user messages (`Bold(true)`); the reference (`UserPromptMessage.tsx:76`, `HighlightedThinkingText.tsx:99`) only sets a subtle background, no bold. Found while fixing `CLEAN-02`'s comment at `message_bubble.go:99`, which had asserted parity that doesn't exist. Decide keep (Gopher-native emphasis) or drop `Bold(true)` to match. | 0.25 | — |
 
 ---
 
 ## Suggested starting point
 
-~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**TEST-06**~~, ~~**TEST-07**~~, ~~**INST-01**~~, ~~**INST-02**~~, ~~**INST-03**~~, ~~**TOOL-02**~~, ~~**CLEAN-01**~~ — done.
-Next smallest: **CLEAN-02** or **TOOL-03**.
+~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**TEST-06**~~, ~~**TEST-07**~~, ~~**INST-01**~~, ~~**INST-02**~~, ~~**INST-03**~~, ~~**TOOL-02**~~, ~~**CLEAN-01**~~, ~~**CLEAN-02**~~ — done.
+Next smallest: **UI-01** or **TOOL-03**.

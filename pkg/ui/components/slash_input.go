@@ -106,7 +106,7 @@ func DefaultSlashCommands() []SlashCommand {
 }
 
 // LoadSlashCommands returns built-ins plus user commands, project commands,
-// and skills discovered on disk (matching Gopher's command sources).
+// and skills discovered on disk (matching Claude Code's command sources).
 //   - ~/.claude/commands/*.md           → user commands
 //   - <cwd>/.claude/commands/*.md       → project commands
 //   - ~/.claude/skills/<n>/SKILL.md     → user skills

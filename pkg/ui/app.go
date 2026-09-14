@@ -504,7 +504,7 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case components.SlashCommandSelectedMsg:
 		// Fill the input with the chosen command; the user presses Enter
-		// to submit. Matches Gopher: autocomplete completes the name
+		// to submit. Matches Claude Code: autocomplete completes the name
 		// but does not auto-submit.
 		if a.input != nil {
 			a.input.SetValue(msg.Command.Name + " ")

@@ -96,7 +96,9 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 	cs := mb.theme.Colors()
 	var parts []string
 
-	// User messages: bold primary text on subtle background (matching Gopher).
+	// User messages: subtle background matches Claude Code (see
+	// UserPromptMessage.tsx); the bold text is a Gopher divergence — the
+	// reference renders the text plain (see UI-01).
 	// The background is set directly on each fragment's style (rather than
 	// wrapped around the already-rendered line afterward) so the SGR reset
 	// each nested Render emits doesn't strip color from the text itself —

@@ -6,10 +6,10 @@ import (
 	"charm.land/lipgloss/v2"
 )
 
-// UI characters matching Gopher's visual language.
+// UI characters matching Claude Code's visual language.
 const (
 	// PromptPrefix is the "❯" (U+276F) character used for input prompts and user messages.
-	// Gopher uses figures.pointer from the npm figures package.
+	// Claude Code uses figures.pointer from the npm figures package.
 	PromptPrefix = "❯ "
 
 	// ResponseConnector is the "⎿" (U+23BF) character for tool results/responses.
@@ -21,7 +21,7 @@ const (
 	ResponseContinuation = "    "
 
 	// DividerChar is the light horizontal line (U+2500) for section dividers.
-	// Gopher uses ─ (light), not ━ (heavy).
+	// Claude Code uses ─ (light), not ━ (heavy).
 	DividerChar = "─"
 )
 

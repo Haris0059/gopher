@@ -128,7 +128,7 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 17 | `auto` permission mode classifier unimplemented | `PERM-01` |
 | ~~18~~ | ~~Untested packages (`pkg/async`, ...)~~ Fixed — `pkg/async`, `pkg/installer`, `pkg/commands/install_github_app`, and `pkg/ui/components/{shell,wizard}` all now have tests | `TEST-05`–`TEST-07` |
 | ~~19~~ | ~~`pkg/agents` duplicates `pkg/skills/agents.go`~~ Fixed — `pkg/agents` deleted | `TEST-02` |
-| ~~20~~ | ~~Stale rebrand references (4 scenario fixtures, self-referential comments)~~ Scenario fixtures fixed — `CLEAN-01`; self-referential comments remain | `CLEAN-01`, `CLEAN-02` |
+| ~~20~~ | ~~Stale rebrand references (4 scenario fixtures, self-referential comments)~~ Fixed — `CLEAN-01`, `CLEAN-02`. One comment (`message_bubble.go:99`) turned up a real, unfixed parity gap in the process — see `UI-01` | `CLEAN-01`, `CLEAN-02` |
 | ~~21~~ | ~~`internal/cli/startup_bench_test.go` fails to compile~~ Fixed | `TEST-01` |
 | 22 | Sandbox has no Go equivalent | not yet in `TASKS.md` |
 | 23 | `pkg/async` has zero importers anywhere in the repo (not in `deps.go` either) | `TEST-10` |
