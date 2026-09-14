@@ -156,10 +156,10 @@ func extractAtToken(text string) (partial string, startPos int, ok bool) {
 }
 
 // renderFileSuggestions returns the file suggestion dropdown lines, or empty
-// string if no suggestions are active. The selected row is highlighted,
-// matching the slash-command popup (components/slash_input.go). Unselected
-// rows are muted gray with the typed @-mention partial picked out in bold
-// white, same scheme as the slash-command popup.
+// string if no suggestions are active. Unselected rows are muted gray with
+// the typed @-mention partial picked out in bold white; the selected row is
+// purple (cs.Secondary) throughout, with the same partial picked out in bold
+// — same scheme as the slash-command popup (components/slash_input.go).
 func (a *AppModel) renderFileSuggestions() string {
 	if !a.fileSuggestActive || len(a.fileSuggestions) == 0 {
 		return ""
@@ -167,7 +167,8 @@ func (a *AppModel) renderFileSuggestions() string {
 	cs := theme.Current().Colors()
 	matchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
 	unmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextMuted))
-	selNameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
+	selMatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
+	selUnmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary))
 
 	var partial string
 	if a.input != nil {
@@ -177,9 +178,7 @@ func (a *AppModel) renderFileSuggestions() string {
 	lines := make([]string, len(a.fileSuggestions))
 	for i, item := range a.fileSuggestions {
 		if i == a.fileSuggestSelected {
-			// Selected row is a single color, not per-letter highlighted —
-			// matches the slash-command popup's selection treatment.
-			lines[i] = "  " + selNameStyle.Render(item.DisplayText)
+			lines[i] = "  " + components.HighlightMatched(item.DisplayText, partial, selMatchedStyle, selUnmatchedStyle)
 		} else {
 			lines[i] = "  " + components.HighlightMatched(item.DisplayText, partial, matchedStyle, unmatchedStyle)
 		}

@@ -386,11 +386,11 @@ func (sci *SlashCommandInput) View() tea.View {
 	for i, cmd := range sci.suggestions {
 		var name string
 		if i == sci.selected {
-			// Matches the /help command-list focus highlight (cs.Secondary):
-			// the selected row is a single color, not per-letter highlighted.
-			name = lipgloss.NewStyle().
-				Foreground(lipgloss.Color(cs.Secondary)).Bold(true).
-				Render(cmd.Name)
+			// Selected row: same purple (cs.Secondary) throughout, but still
+			// bold only on the characters the user has typed so far.
+			matched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
+			unmatched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary))
+			name = HighlightMatched(cmd.Name, sci.prefix, matched, unmatched)
 		} else {
 			// Unselected rows are muted gray, with the characters the user
 			// has typed so far (sci.prefix) picked out in bold white.
