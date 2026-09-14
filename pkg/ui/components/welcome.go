@@ -14,7 +14,7 @@ const WelcomeScreenWidth = 58
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.043"
+const Version = "0.3.044"
 
 // gopherIcon is the compact block-character mark shown at startup, in the
 // style of Claude Code's v2 splash. Same shape, recolored to the Gopher

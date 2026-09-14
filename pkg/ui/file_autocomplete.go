@@ -156,17 +156,18 @@ func extractAtToken(text string) (partial string, startPos int, ok bool) {
 }
 
 // renderFileSuggestions returns the file suggestion dropdown lines, or empty
-// string if no suggestions are active. Unselected rows are muted gray with
-// the typed @-mention partial picked out in bold white; the selected row is
-// purple (cs.Secondary) throughout, with the same partial picked out in bold
-// — same scheme as the slash-command popup (components/slash_input.go).
+// string if no suggestions are active. Unselected rows are gray
+// (cs.TextSecondary) with the typed @-mention partial picked out in bold
+// white; the selected row is purple (cs.Secondary) throughout, with the same
+// partial picked out in bold — same scheme as the slash-command popup
+// (components/slash_input.go).
 func (a *AppModel) renderFileSuggestions() string {
 	if !a.fileSuggestActive || len(a.fileSuggestions) == 0 {
 		return ""
 	}
 	cs := theme.Current().Colors()
 	matchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
-	unmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextMuted))
+	unmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 	selMatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary)).Bold(true)
 	selUnmatchedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary))
 

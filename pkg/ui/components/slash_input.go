@@ -392,10 +392,11 @@ func (sci *SlashCommandInput) View() tea.View {
 			unmatched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary))
 			name = HighlightMatched(cmd.Name, sci.prefix, matched, unmatched)
 		} else {
-			// Unselected rows are muted gray, with the characters the user
-			// has typed so far (sci.prefix) picked out in bold white.
+			// Unselected rows are gray (cs.TextSecondary — the same gray as
+			// the description text), with the characters the user has typed
+			// so far (sci.prefix) picked out in bold white.
 			matched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
-			unmatched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextMuted))
+			unmatched := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 			name = HighlightMatched(cmd.Name, sci.prefix, matched, unmatched)
 		}
 
