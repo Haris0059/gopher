@@ -27,7 +27,7 @@ import (
 
 // Version is the current gopher version (kept in sync with main).
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.038"
+const Version = "0.3.039"
 
 // RunREPL starts an interactive read-eval-print loop.
 func RunREPL(ctx context.Context, sess *session.SessionState, prov provider.ModelProvider, registry *tools.ToolRegistry, verbose bool, hookRunner tools.HookRunner, noSessionPersist bool, prefill string, planState *tools.PlanState) {

@@ -67,9 +67,9 @@ func (d *darkTheme) Colors() ColorScheme {
 		// Spinner
 		Spinner: Cyan300,
 
-		// Selection
+		// Selection — indigo, matching Secondary, not the old blue family.
 		Cursor:    Cyan300,
-		Selection: Blue500,
+		Selection: Indigo800,
 
 		// Components
 		ToolName:    Cyan300,

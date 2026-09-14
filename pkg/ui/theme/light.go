@@ -67,9 +67,9 @@ func (l *lightTheme) Colors() ColorScheme {
 		// Spinner
 		Spinner: Blue400,
 
-		// Selection
+		// Selection — indigo, matching Secondary, not the old blue family.
 		Cursor:    Blue400,
-		Selection: Blue50,
+		Selection: Indigo100,
 
 		// Components
 		ToolName:    Blue400,

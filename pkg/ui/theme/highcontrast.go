@@ -76,9 +76,9 @@ func (h *highContrastTheme) Colors() ColorScheme {
 		// Spinner
 		Spinner: Cyan300,
 
-		// Selection
+		// Selection — indigo, matching Secondary, not the old blue family.
 		Cursor:    White,
-		Selection: Blue600,
+		Selection: Indigo700,
 
 		// Components
 		ToolName:    Cyan300,

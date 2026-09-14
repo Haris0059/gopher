@@ -29,6 +29,17 @@ var literalExcludedDirs = []string{
 	"claude-code-main",
 }
 
+// bannedColors are hex values retired from the palette entirely — not just
+// moved into pkg/ui/theme, but forbidden from appearing anywhere in the repo,
+// including inside pkg/ui/theme and test fixtures. No exceptions.
+//
+//   - #1e4976 (old Blue500): the leftover "dark blue" selected-row background
+//     in the "/" and "@" autocompletes, unrelated to either brand color.
+//     Replaced by the indigo/purple Selection roles (Indigo800/700/100).
+var bannedColors = []string{
+	"#1e4976",
+}
+
 func TestNoColorLiteralsOutsideTheme(t *testing.T) {
 	repoRoot := findRepoRoot(t)
 
@@ -84,6 +95,58 @@ func TestNoColorLiteralsOutsideTheme(t *testing.T) {
 
 	if len(violations) > 0 {
 		t.Errorf("found %d color literal(s) outside pkg/ui/theme:\n%s", len(violations), strings.Join(violations, "\n"))
+	}
+}
+
+// TestBannedColorsNeverAppear checks bannedColors don't reappear anywhere in
+// the repo — including pkg/ui/theme and *_test.go, which the general
+// no-literals-outside-theme check above exempts. A banned color is retired
+// for good, not just relocated.
+func TestBannedColorsNeverAppear(t *testing.T) {
+	repoRoot := findRepoRoot(t)
+
+	var violations []string
+
+	err := filepath.Walk(repoRoot, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			name := info.Name()
+			if name == ".git" || name == "node_modules" || name == "claude-code-main" {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+		// This file documents the banned values by name; exclude it from
+		// its own scan.
+		if filepath.Base(path) == "no_literals_test.go" {
+			return nil
+		}
+
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		content := strings.ToLower(string(data))
+
+		rel, _ := filepath.Rel(repoRoot, path)
+		for _, banned := range bannedColors {
+			if strings.Contains(content, strings.ToLower(banned)) {
+				violations = append(violations, rel+": banned color "+banned+" must not appear anywhere")
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("walk failed: %v", err)
+	}
+
+	if len(violations) > 0 {
+		t.Errorf("found %d banned color reference(s):\n%s", len(violations), strings.Join(violations, "\n"))
 	}
 }
 

@@ -20,7 +20,6 @@ const (
 	Blue800 = "#0d2137" // Panel background, secondary surfaces
 	Blue700 = "#132f4c" // Elevated surfaces, cards
 	Blue600 = "#1a3a52" // Borders, dividers on dark surfaces
-	Blue500 = "#1e4976" // Muted interactive elements
 	Blue400 = "#2a6496" // Default interactive elements
 	Blue300 = "#3d8bd4" // Hovered interactive elements
 	Blue200 = "#5fa8d3" // Active ring, selection highlight
@@ -50,7 +49,10 @@ const (
 // ---------------------------------------------------------------------------
 
 const (
+	Indigo800 = "#242a5e" // Dark indigo — selected-row bg in / and @ dropdowns (dark theme)
+	Indigo700 = "#303f9f" // High-contrast selected-row bg
 	Indigo400 = "#5c6bc0"
+	Indigo100 = "#c5cae9" // Light indigo — selected-row bg (light theme)
 )
 
 // ---------------------------------------------------------------------------
