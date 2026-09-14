@@ -26,11 +26,13 @@ repo; it's now fixed.
 | ~~TEST-04~~ | ~~Add tests for `pkg/async` (63 LOC, 0 tests)~~ Done | 0.5 | — |
 | ~~TEST-05~~ | ~~Add tests for `pkg/installer` (45 LOC, 0 tests)~~ Done — full suite alongside `INST-01` | 0.5 | ~~INST-01~~ |
 | ~~TEST-06~~ | ~~Add tests for `pkg/commands/install_github_app` (53 LOC, 0 tests)~~ Done — also ported the two constants missing from the reference (`PRBody`, `CodeReviewPluginWorkflowContent`) and restored `WorkflowContent`'s dropped inline comments; see `TEST-11` for the zero-consumer finding this turned up | 0.5 | — |
-| TEST-07 | Add tests for `pkg/ui/components/shell` (55 LOC, 0 tests) and `pkg/ui/components/wizard` (108 LOC, 0 tests) | 1 | — |
+| ~~TEST-07~~ | ~~Add tests for `pkg/ui/components/shell` (55 LOC, 0 tests) and `pkg/ui/components/wizard` (108 LOC, 0 tests)~~ Done — both packages' `// Source:` comments pointed at reference files they didn't actually mirror, same invented-API pattern as `TOOL-01`/`TOOL-02`. Ported the cheap, unambiguous reference semantics before testing: `shell` gained `tryFormatJson`/`tryJsonFormatContent`/`linkifyUrlsInText`/`stripUnderlineAnsi`, `OutputLine`/`ShellProgressMessage`/`ShellTimeDisplay` were rewritten to the reference's last-5-lines/status-row/timeout shape, and `TruncateOutput` had three bugs fixed (odd-`maxLines` undercounted omissions by one, `maxLines=1` discarded all content, negative `maxLines` panicked). `wizard` gained the reference's navigation-history stack (`GoTo`/`Prev` push/pop instead of plain arithmetic), `Next()`/`Prev()` completing/cancelling at the ends, bulk `Update()`, and `Title`/`ShowStepCounter`. See `TEST-12`/`TEST-13` for the zero-consumer finding this turned up | 1 | — |
 | TEST-08 | Thicken `pkg/services` tests (451 src / 109 test LOC — thinnest ratio outside known stubs) | 2 | — |
 | TEST-09 | `pkg/stats` parity + wiring: `GetAll()` diverges from `createStatsStore()` (`src/context/stats.tsx`) — Go emits an extra `<name>_sum`, emits sets as `<name>_unique` instead of plain `<name>`, and skips percentile keys on an empty reservoir. Also: the package has zero consumers (the TS `StatsProvider` flushes `getAll()` into `lastSessionMetrics` on process exit; Gopher has no equivalent). Decide keep-or-align, then wire it or delete it. | 1 | — |
 | TEST-10 | `pkg/async` keep-or-delete: the package has zero importers anywhere in the repo (not in `deps.go` either). Decide whether to wire `Debouncer`/`Throttler` into the call sites that want them (`pkg/ui`, `internal/cli`) or delete the package. | 0.5 | — |
 | TEST-11 | `pkg/commands/install_github_app` keep-or-wire: the package (constants only) has zero importers anywhere in the repo — `/install-github-app` (`pkg/ui/commands/handlers.go:3117`, registered at `:3673`) is a stub `Handler` that returns a static `InstallGitHubAppMsg` without importing it. Either wire the stub to surface these constants or accept it stays dormant pending the real wizard (`setupGitHubActions.ts` port, out of scope here). | 0.5 | ~~TEST-06~~ |
+| TEST-12 | `pkg/ui/components/shell` keep-or-wire: zero importers anywhere in the repo. The live tool-output truncation paths are `pkg/tools/bash.go:242` `truncateBashOutput` (character-count, wired into `BashTool.Execute` at `:200`) and `message_bubble.go:273` (inline 10-line display truncation) — neither uses this package. There is no `BashDisplay` renderer type at all; bash results flow through the generic `pkg/tools/brief.go` `BriefDisplay` path. Either wire `shell`'s now-reference-aligned `OutputLine`/`ShellProgressMessage` into that display path or accept it stays dormant. | 1 | ~~TEST-07~~ |
+| TEST-13 | `pkg/ui/components/wizard` keep-or-wire: zero importers anywhere in the repo. Two existing flows hand-roll their own step machines instead — `onboarding.go:19` (`OnboardingStep`/`OnboardingModel`) and `console_oauth.go:19` (`OAuthState`/`OAuthFlowModel`) — and neither can adopt `Wizard` as-is since both are `tea.Model`-shaped while `Wizard` has no `Update`/`View`. Wiring means refactoring one of them onto it, which is its own task. | 2 | ~~TEST-07~~ |
 
 ## MCP — Remote MCP transports & auth
 
@@ -142,7 +144,7 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 
 | ID | Task | Est | Depends on |
 |---|---|---|---|
-| CLEAN-01 | Fix stale `cmd/gopher-code/main.go` references in 4 scenario fixtures: `scripts/capture-tui/scenarios/area-04-tools/07-tool-edit-file.json`, `.../32-tool-file-diff-preview.json`, `scripts/capture-tui/scenarios/area-05-permissions/05-perm-file-edit.json`, `.../24-perm-diff-in-edit.json` | 0.5 | — |
+| ~~CLEAN-01~~ | ~~Fix stale `cmd/gopher-code/main.go` references in 4 scenario fixtures~~ Fixed — all 4 fixtures (`area-04-tools/07-tool-edit-file.json`, `.../32-tool-file-diff-preview.json`, `area-05-permissions/05-perm-file-edit.json`, `.../24-perm-diff-in-edit.json`) now point at `cmd/gopher/main.go` | 0.5 | — |
 | CLEAN-02 | Fix self-referential comments left over from the sed-replace rebrand: `pkg/ui/components/statusline.go:103`, `pkg/ui/components/utils.go:8`, `utils.go:21` (all now read "Gopher matches Gopher" where they meant "matches Claude Code") | 0.25 | — |
 | CLEAN-03 | `pkg/bridge/init_repl.go:263` — v1/v2 branch selection, version gates, session title (leftover TODO, predates rebrand but adjacent) | 2 | — |
 
@@ -150,5 +152,5 @@ Leftovers from the `gopher-code` → `gopher` rebrand (commit `d46cbab` and neig
 
 ## Suggested starting point
 
-~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**TEST-06**~~, ~~**INST-01**~~, ~~**INST-02**~~, ~~**INST-03**~~, ~~**TOOL-02**~~ — done.
+~~**TEST-01**~~, ~~**TEST-02**~~, ~~**TEST-03**~~, ~~**TEST-04**~~, ~~**TEST-05**~~, ~~**TEST-06**~~, ~~**TEST-07**~~, ~~**INST-01**~~, ~~**INST-02**~~, ~~**INST-03**~~, ~~**TOOL-02**~~, ~~**CLEAN-01**~~ — done.
 Next smallest: **CLEAN-02** or **TOOL-03**.
