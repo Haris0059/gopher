@@ -136,6 +136,8 @@ Condensed list of every Stub/Missing item above, cross-referenced to `TASKS.md`:
 | 25 | `/doctor`'s Context Usage Warnings section has no collector (CLAUDE.md size, agent-description/MCP-tool token totals, unreachable permission rules) | `INST-07` |
 | 26 | `/doctor` has no plugin-error section at all | `INST-08` |
 | 25 | Reference's actual JS-VM `REPL` tool (hides primitive tools behind an in-VM wrapper, ant-only) is unported; core implementation file missing from the leak | `TOOL-10` |
+| 27 | `pkg/ui/components/shell` has zero importers; live tool-output truncation goes through `pkg/tools/bash.go`'s `truncateBashOutput` and `message_bubble.go`'s inline truncation instead | `TEST-12` |
+| 28 | `pkg/ui/components/wizard` has zero importers; `onboarding.go` and `console_oauth.go` each hand-roll their own `tea.Model` step machines instead | `TEST-13` |
 
 ---
 
