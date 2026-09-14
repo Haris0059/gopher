@@ -33,10 +33,6 @@ const (
 	CommandTypePrompt   CommandType = "prompt"
 )
 
-// slashFocusColor highlights the selected command in the slash-command
-// autocomplete dropdown. Matches help.focusColor (pkg/ui/components/help).
-const slashFocusColor = "#a9b8f9"
-
 // SlashCommand defines an available slash command.
 // Source: src/types/command.ts — CommandBase
 type SlashCommand struct {
@@ -386,10 +382,10 @@ func (sci *SlashCommandInput) View() tea.View {
 	var lines []string
 
 	for i, cmd := range sci.suggestions {
-		nameColor := cs.Accent
+		nameColor := cs.Primary
 		if i == sci.selected {
-			// Matches the /help command-list focus highlight (help.focusColor).
-			nameColor = slashFocusColor
+			// Matches the /help command-list focus highlight (cs.Secondary).
+			nameColor = cs.Secondary
 		}
 		nameStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color(nameColor)).Bold(true)

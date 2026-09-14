@@ -106,7 +106,7 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 		Background(lipgloss.Color(cs.Surface)).
 		Bold(true)
 	promptStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent)).
+		Foreground(lipgloss.Color(cs.Primary)).
 		Background(lipgloss.Color(cs.Surface)).
 		Bold(true)
 	padStyle := lipgloss.NewStyle().
@@ -153,7 +153,7 @@ func (mb *MessageBubble) renderUserMessage(msg *message.Message) string {
 func (mb *MessageBubble) renderAssistantMessage(msg *message.Message) string {
 	cs := mb.theme.Colors()
 	prefixStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
+		Foreground(lipgloss.Color(cs.Primary))
 	var parts []string
 	firstText := true
 

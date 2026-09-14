@@ -1,8 +1,9 @@
 // Package ink provides Go equivalents of Ink's React components.
 //
 // Source: ink/components/Box.tsx, Text.tsx, Link.tsx, Button.tsx,
-//         Spacer.tsx, Newline.tsx, NoSelect.tsx, RawAnsi.tsx,
-//         AlternateScreen.tsx
+//
+//	Spacer.tsx, Newline.tsx, NoSelect.tsx, RawAnsi.tsx,
+//	AlternateScreen.tsx
 //
 // In TS, Ink uses React components (Box, Text, Link) for terminal UI.
 // In Go, these map to lipgloss styling functions and string builders.
@@ -242,7 +243,7 @@ func resolveThemeColor(name string, c theme.ColorScheme) string {
 	case "primary":
 		return c.Primary
 	case "accent":
-		return c.Accent
+		return c.Primary
 	case "success":
 		return c.Success
 	case "warning":

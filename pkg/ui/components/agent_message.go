@@ -28,17 +28,18 @@ func NewAgentMessageRenderer(th theme.Theme) *AgentMessageRenderer {
 func (amr *AgentMessageRenderer) initializeDefaultColors() {
 	cs := amr.th.Colors()
 
-	// Default agent colors
-	amr.agentColors["user"] = cs.Primary       // Blue for user messages
-	amr.agentColors["assistant"] = cs.Accent  // Cyan for assistant messages
+	// Default agent colors. Primary (brand aqua) is Gopher's own voice;
+	// Secondary (brand purple) is the human's.
+	amr.agentColors["user"] = cs.Secondary    // Purple for user messages
+	amr.agentColors["assistant"] = cs.Primary // Aqua for assistant messages
 	amr.agentColors["system"] = cs.Warning    // Orange for system messages
 	amr.agentColors["tool"] = cs.Info         // Green for tool messages
 	amr.agentColors["error"] = cs.Error       // Red for error messages
 
 	// Common agent names
-	amr.agentColors["claude"] = cs.Accent
-	amr.agentColors["gpt"] = cs.Primary
-	amr.agentColors["user-agent"] = cs.Primary
+	amr.agentColors["claude"] = cs.Primary
+	amr.agentColors["gpt"] = cs.Secondary
+	amr.agentColors["user-agent"] = cs.Secondary
 	amr.agentColors["system-agent"] = cs.Warning
 }
 
@@ -102,8 +103,8 @@ func (amr *AgentMessageRenderer) GetBackgroundColor(agentID string) string {
 	switch color {
 	case cs.Primary:
 		return cs.PrimaryMuted
-	case cs.Accent:
-		return cs.AccentMuted
+	case cs.Secondary:
+		return cs.SecondaryMuted
 	case cs.Warning:
 		return cs.WarningMuted
 	case cs.Info:
@@ -182,8 +183,8 @@ func (amr *AgentMessageRenderer) CreateMutedStyle(agentID string) lipgloss.Style
 	switch color {
 	case cs.Primary:
 		mutedColor = cs.PrimaryMuted
-	case cs.Accent:
-		mutedColor = cs.AccentMuted
+	case cs.Secondary:
+		mutedColor = cs.SecondaryMuted
 	default:
 		mutedColor = cs.TextSecondary
 	}
@@ -196,7 +197,7 @@ func (amr *AgentMessageRenderer) CreateMutedStyle(agentID string) lipgloss.Style
 func (amr *AgentMessageRenderer) CreateBadgeStyle(agentID string) lipgloss.Style {
 	color := amr.GetAgentColor(agentID)
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color("255")).
+		Foreground(lipgloss.Color(amr.th.Colors().TextInverse)).
 		Background(lipgloss.Color(color)).
 		Padding(0, 1).
 		Bold(true)

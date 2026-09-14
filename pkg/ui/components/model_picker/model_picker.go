@@ -58,11 +58,11 @@ func DefaultModelOptions() []ModelOption {
 
 // Model is the model picker bubbletea model.
 type Model struct {
-	options  []ModelOption
-	cursor   int
-	current  string // currently active model
-	effort   EffortLevel
-	width    int
+	options []ModelOption
+	cursor  int
+	current string // currently active model
+	effort  EffortLevel
+	width   int
 }
 
 // New creates a model picker with the given options and current model.
@@ -121,7 +121,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	currentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 

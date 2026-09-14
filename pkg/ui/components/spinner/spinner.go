@@ -87,7 +87,7 @@ func (s *ToolUseSpinner) Elapsed() time.Duration { return time.Since(s.start) }
 // View renders the tool use spinner line.
 func (s *ToolUseSpinner) View() string {
 	colors := theme.Current().Colors()
-	glyphStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+	glyphStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 	toolStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.ToolName)).Bold(true)
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
@@ -137,7 +137,7 @@ func (s *AgentSpinner) IsActive() bool { return s.active }
 // View renders the agent spinner line.
 func (s *AgentSpinner) View() string {
 	colors := theme.Current().Colors()
-	glyphStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+	glyphStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 	nameStyle := lipgloss.NewStyle().Bold(true)
 	if s.Color != "" {
 		nameStyle = nameStyle.Foreground(lipgloss.Color(s.Color))

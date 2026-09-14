@@ -2,6 +2,8 @@ package components
 
 import (
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/SearchBox.tsx
@@ -44,10 +46,11 @@ func RenderSearchBox(cfg SearchBoxConfig) string {
 			Padding(0, 1)
 	}
 
+	cs := theme.C()
 	if cfg.IsFocused {
-		style = style.BorderForeground(lipgloss.Color("12")) // blue
+		style = style.BorderForeground(lipgloss.Color(cs.BorderFocused))
 	} else {
-		style = style.BorderForeground(lipgloss.Color("240")) // dim
+		style = style.BorderForeground(lipgloss.Color(cs.Border))
 	}
 
 	return style.Render(content)

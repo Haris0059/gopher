@@ -57,7 +57,7 @@ func OnboardingContent(ideType pkgide.IdeType, installedVersion string) string {
 		mentionShortcut = "Cmd+Option+K"
 	}
 
-	ideColor := lipgloss.Color(colors.Accent)
+	ideColor := lipgloss.Color(colors.Primary)
 	suggestionColor := lipgloss.Color(colors.Info)
 	addColor := lipgloss.Color(colors.DiffAdded)
 	removeColor := lipgloss.Color(colors.DiffRemoved)
@@ -117,7 +117,7 @@ func StatusIndicator(connected bool, sel *Selection) string {
 	}
 
 	colors := theme.Current().Colors()
-	ideColor := lipgloss.Color(colors.Accent)
+	ideColor := lipgloss.Color(colors.Primary)
 	style := lipgloss.NewStyle().Foreground(ideColor)
 
 	// Prefer selection text over file path

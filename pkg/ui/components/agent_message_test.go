@@ -364,13 +364,13 @@ func TestAgentMessageRendererThemeIntegration(t *testing.T) {
 
 	// Verify colors from theme are used
 	userColor := amr.GetAgentColor("user")
-	if userColor != cs.Primary {
-		t.Errorf("User color should match theme primary, got %s vs %s", userColor, cs.Primary)
+	if userColor != cs.Secondary {
+		t.Errorf("User color should match theme secondary, got %s vs %s", userColor, cs.Secondary)
 	}
 
 	assistantColor := amr.GetAgentColor("assistant")
-	if assistantColor != cs.Accent {
-		t.Errorf("Assistant color should match theme accent, got %s vs %s", assistantColor, cs.Accent)
+	if assistantColor != cs.Primary {
+		t.Errorf("Assistant color should match theme primary, got %s vs %s", assistantColor, cs.Primary)
 	}
 }
 

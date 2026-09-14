@@ -1,7 +1,8 @@
 // Package misc provides small rendering components used across the TUI.
 //
 // Source: components/EffortCallout.tsx, StatusNotices.tsx, SessionBackgroundHint.tsx,
-//         Stats.tsx, EffortIndicator.tsx, ConfigurableShortcutHint.tsx, etc.
+//
+//	Stats.tsx, EffortIndicator.tsx, ConfigurableShortcutHint.tsx, etc.
 //
 // These are the "20 small components" — avatars, badges, effort indicators,
 // status notices, session hints, and stat displays that don't warrant their
@@ -66,7 +67,7 @@ func RenderEffortBadge(level EffortLevel) string {
 func RenderSessionBackgroundHint(sessionName string) string {
 	colors := theme.Current().Colors()
 	dimStyle := lipgloss.NewStyle().Faint(true)
-	nameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent)).Bold(true)
+	nameStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary)).Bold(true)
 
 	return dimStyle.Render("Session ") + nameStyle.Render(sessionName) +
 		dimStyle.Render(" is running in the background")
@@ -90,7 +91,7 @@ type TurnStats struct {
 func RenderTurnStats(stats TurnStats) string {
 	colors := theme.Current().Colors()
 	dimStyle := lipgloss.NewStyle().Faint(true)
-	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 
 	var parts []string
 
@@ -188,7 +189,7 @@ func RenderRoleBadge(role string) string {
 	case "human", "user":
 		color = colors.Info
 	case "assistant":
-		color = colors.Accent
+		color = colors.Primary
 	case "system":
 		color = colors.Warning
 	case "tool":
@@ -235,7 +236,7 @@ func resolveColor(name string, colors theme.ColorScheme) string {
 	case "info":
 		return colors.Info
 	case "accent":
-		return colors.Accent
+		return colors.Primary
 	default:
 		return name // treat as raw color value
 	}

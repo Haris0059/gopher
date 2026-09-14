@@ -1128,7 +1128,7 @@ func (a *AppModel) formatStreamingDisplay() string {
 		return ""
 	}
 	width := a.width - 2
-	prefixStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.Current().Colors().Accent))
+	prefixStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.Current().Colors().Primary))
 	return prefixStyle.Render("⏺") + " " + components.WrapText(raw, width)
 }
 

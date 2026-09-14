@@ -23,12 +23,12 @@ const ResponseConnector = "⎿ "
 
 // AssistantBlockOptions controls how an assistant content block renders.
 type AssistantBlockOptions struct {
-	Verbose        bool
-	ShowDot        bool // show the ● role indicator
-	Width          int
-	IsInProgress   bool
-	IsStreaming    bool
-	ShowTimestamp  bool
+	Verbose       bool
+	ShowDot       bool // show the ● role indicator
+	Width         int
+	IsInProgress  bool
+	IsStreaming   bool
+	ShowTimestamp bool
 	ToolCallCount int // number of concurrent tool calls
 }
 
@@ -72,7 +72,7 @@ func renderAssistantText(block message.ContentBlock, opts AssistantBlockOptions)
 	// Normal text — render with markdown-style formatting
 	var b strings.Builder
 	if opts.ShowDot {
-		dotStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+		dotStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 		b.WriteString(dotStyle.Render("● "))
 	}
 	b.WriteString(text)
@@ -89,7 +89,7 @@ func renderAssistantToolUse(block message.ContentBlock, opts AssistantBlockOptio
 	var b strings.Builder
 
 	if opts.ShowDot {
-		dotStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+		dotStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 		b.WriteString(dotStyle.Render("● "))
 	}
 
@@ -205,7 +205,7 @@ func RenderAssistantMessage(msg message.Message, opts AssistantBlockOptions) str
 	}
 	result := strings.Join(parts, "\n")
 	if opts.IsStreaming {
-		accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.Current().Colors().Accent))
+		accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.Current().Colors().Primary))
 		result += accentStyle.Render("▌")
 	}
 	return result

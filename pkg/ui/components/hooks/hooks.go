@@ -1,7 +1,8 @@
 // Package hooks provides the hooks configuration browser UI.
 //
 // Source: components/hooks/HooksConfigMenu.tsx, SelectHookMode.tsx,
-//         SelectMatcherMode.tsx, ViewHookMode.tsx
+//
+//	SelectMatcherMode.tsx, ViewHookMode.tsx
 //
 // A read-only browser for configured hooks. Users drill down:
 // event list → matcher list → hook list → hook detail.
@@ -34,17 +35,17 @@ const (
 
 // Model is the hooks config browser bubbletea model.
 type Model struct {
-	level     viewLevel
-	cursor    int
-	event     pkghooks.HookEvent   // selected event
-	matcher   string               // selected matcher
-	hook      *pkghooks.IndividualHookConfig // selected hook for detail view
+	level   viewLevel
+	cursor  int
+	event   pkghooks.HookEvent             // selected event
+	matcher string                         // selected matcher
+	hook    *pkghooks.IndividualHookConfig // selected hook for detail view
 
-	events    []pkghooks.HookEvent
-	matchers  []string
-	hookList  []pkghooks.IndividualHookConfig
-	grouped   map[pkghooks.HookEvent]map[string][]pkghooks.IndividualHookConfig
-	metadata  map[pkghooks.HookEvent]pkghooks.HookEventMetadata
+	events   []pkghooks.HookEvent
+	matchers []string
+	hookList []pkghooks.IndividualHookConfig
+	grouped  map[pkghooks.HookEvent]map[string][]pkghooks.IndividualHookConfig
+	metadata map[pkghooks.HookEvent]pkghooks.HookEventMetadata
 }
 
 // New creates a hooks config browser from the given hooks list.
@@ -175,7 +176,7 @@ func (m Model) back() (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	keyStyle := lipgloss.NewStyle().Bold(true)
 

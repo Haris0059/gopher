@@ -106,7 +106,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	currentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 
@@ -181,7 +181,7 @@ func (m Model) renderPreview() string {
 		desc = string(opt.Name)
 	}
 
-	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 	return fmt.Sprintf("  %s %s\n", accentStyle.Render("✻"), dimStyle.Render(desc))
 }
 

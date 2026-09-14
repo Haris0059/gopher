@@ -1,7 +1,8 @@
 // Package bridge — ui.go implements the bridge UI rendering: status bar,
 // footer text, dialog fragments, and glyph/color constants.
 // Source: src/bridge/bridgeUI.ts, src/bridge/bridgeStatusUtil.ts,
-//         src/constants/figures.ts
+//
+//	src/constants/figures.ts
 package bridge
 
 import (
@@ -10,6 +11,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 	"github.com/Haris0059/gopher/pkg/ui/figures"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // ---------------------------------------------------------------------------
@@ -35,13 +37,13 @@ const MiddleDot = "\u00b7" // ·
 
 var (
 	// styleYellow is used for connecting/reconnecting/ANT-ONLY labels.
-	styleYellow = lipgloss.NewStyle().Foreground(lipgloss.Color("3")) // ANSI yellow
+	styleYellow = lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Warning))
 	// styleRed is used for failed/error states.
-	styleRed = lipgloss.NewStyle().Foreground(lipgloss.Color("1")) // ANSI red
+	styleRed = lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Error))
 	// styleGreen is used for ready/connected/completed/sandbox-enabled.
-	styleGreen = lipgloss.NewStyle().Foreground(lipgloss.Color("2")) // ANSI green
+	styleGreen = lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Success))
 	// styleCyan is used for the attached/titled indicator and state text.
-	styleCyan = lipgloss.NewStyle().Foreground(lipgloss.Color("6")) // ANSI cyan
+	styleCyan = lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Primary))
 	// styleDim is used for metadata, separators, timestamps, and footer text.
 	styleDim = lipgloss.NewStyle().Faint(true)
 	// styleDimItalic is used for QR-toggle and spawn-mode hints.

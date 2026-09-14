@@ -1,7 +1,8 @@
 // Package interactive provides small interactive UI widgets.
 //
 // Source: components/LanguagePicker.tsx, ExportDialog.tsx, ExitFlow.tsx,
-//         WorktreeExitDialog.tsx, BridgeDialog.tsx, etc.
+//
+//	WorktreeExitDialog.tsx, BridgeDialog.tsx, etc.
 //
 // These are the "23 interactive components" — small dialogs and pickers
 // that handle user input for specific operations.
@@ -145,7 +146,7 @@ func (m ExportDialogModel) Update(msg tea.Msg) (ExportDialogModel, tea.Cmd) {
 func (m ExportDialogModel) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder
@@ -233,7 +234,7 @@ func (m WorktreeExitModel) Update(msg tea.Msg) (WorktreeExitModel, tea.Cmd) {
 func (m WorktreeExitModel) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Warning))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder
@@ -324,7 +325,7 @@ func (m ConfirmModel) Update(msg tea.Msg) (ConfirmModel, tea.Cmd) {
 func (m ConfirmModel) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder

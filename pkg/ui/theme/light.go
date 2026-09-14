@@ -38,18 +38,15 @@ func (l *lightTheme) Colors() ColorScheme {
 		BorderFocused: Blue400,
 		BorderSubtle:  Gray100,
 
-		// Primary action
-		Primary:      Blue400,
-		PrimaryHover: Blue300,
-		PrimaryMuted: Blue50,
+		// Primary action — brand aqua
+		Primary:      Cyan700,
+		PrimaryMuted: Cyan50,
 
-		// Accent
-		Accent:      Cyan700,
-		AccentMuted: Cyan50,
-
+		// Secondary — brand purple, selected/focused list rows.
 		// Source: utils/theme.ts lightTheme — suggestion: rgb(87,105,247),
 		// professionalBlue: rgb(106,155,204).
-		Suggestion:       "#5769f7",
+		Secondary:        "#5769f7",
+		SecondaryMuted:   Indigo400,
 		ProfessionalBlue: "#6a9bcc",
 
 		// Semantic
@@ -110,7 +107,7 @@ func (l *lightTheme) TextSecondary() lipgloss.Style {
 func (l *lightTheme) TextAccent() lipgloss.Style {
 	c := l.Colors()
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(c.Accent)).
+		Foreground(lipgloss.Color(c.Primary)).
 		Bold(true)
 }
 

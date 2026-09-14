@@ -20,7 +20,7 @@ import (
 
 // RenderableMessage wraps a message with display metadata.
 type RenderableMessage struct {
-	Type      string          // "user", "assistant", "system", "tool_result", "collapsed"
+	Type      string // "user", "assistant", "system", "tool_result", "collapsed"
 	Message   message.Message
 	Timestamp time.Time
 	// UI state
@@ -31,10 +31,10 @@ type RenderableMessage struct {
 
 // RenderOptions controls message rendering behavior.
 type RenderOptions struct {
-	Width        int
-	Verbose      bool
+	Width          int
+	Verbose        bool
 	ShowTimestamps bool
-	IsLoading    bool // model is currently generating
+	IsLoading      bool // model is currently generating
 }
 
 // RenderConversation renders a full conversation as a string.
@@ -106,7 +106,7 @@ func renderUserMessage(rm RenderableMessage, opts RenderOptions, colors theme.Co
 }
 
 func renderAssistantMessage(rm RenderableMessage, opts RenderOptions, colors theme.ColorScheme) string {
-	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
+	accentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	thinkStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.TextMuted)).Italic(true)
 

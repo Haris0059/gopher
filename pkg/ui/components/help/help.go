@@ -238,7 +238,7 @@ func (m Model) View() string {
 // (Tabs color="professionalBlue" + inverseText).
 func (m Model) renderHeader(t theme.Theme) string {
 	cs := t.Colors()
-	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Accent))
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Primary))
 	activeStyle := lipgloss.NewStyle().Bold(true).
 		Background(lipgloss.Color(cs.ProfessionalBlue)).
 		Foreground(lipgloss.Color(cs.TextInverse))
@@ -305,10 +305,10 @@ func (m Model) viewCommandList(t theme.Theme, list []CommandInfo, title, emptyMe
 	}
 
 	cs := t.Colors()
-	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(theme.White))
-	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Suggestion))
+	nameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.TextPrimary))
+	focusedNameStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(cs.Secondary))
 	descStyle := lipgloss.NewStyle().Faint(true)
-	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Suggestion))
+	cursorStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Secondary))
 	arrowStyle := lipgloss.NewStyle().Faint(true)
 
 	vc := m.visibleCount()

@@ -6,6 +6,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/MessageSelector.tsx
@@ -28,10 +30,10 @@ const (
 
 // MessageEntry is a selectable entry in the message list.
 type MessageEntry struct {
-	ID       string
-	Preview  string // first ~60 chars of the message
-	TurnNum  int
-	IsUser   bool
+	ID      string
+	Preview string // first ~60 chars of the message
+	TurnNum int
+	IsUser  bool
 }
 
 // MessageSelectorDoneMsg signals the user completed the rewind selection.
@@ -50,9 +52,9 @@ type MessageSelectorModel struct {
 	scroll   int // top of visible window
 
 	// Phase 2: choose restore action
-	phase      int // 0 = pick message, 1 = pick action
-	chosenMsg  string
-	actionIdx  int
+	phase     int // 0 = pick message, 1 = pick action
+	chosenMsg string
+	actionIdx int
 }
 
 // NewMessageSelector creates a rewind picker from user messages.
@@ -125,7 +127,7 @@ func (m MessageSelectorModel) Update(msg tea.Msg) (MessageSelectorModel, tea.Cmd
 
 func (m MessageSelectorModel) View() string {
 	titleStyle := lipgloss.NewStyle().Bold(true)
-	selStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("12"))
+	selStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Secondary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var sb strings.Builder

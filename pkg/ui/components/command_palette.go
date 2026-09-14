@@ -20,31 +20,31 @@ type PaletteCommand struct {
 
 // CommandPalette is a searchable command picker (Cmd+K)
 type CommandPalette struct {
-	commands      []PaletteCommand      // All available commands
-	filteredIdx   []int          // Indices of commands matching search
-	selectedIdx   int            // Currently selected in filtered list
-	searchText    string         // Current search text
-	visible       bool           // Whether palette is shown
-	width         int            // Palette width
-	height        int            // Palette height
-	scrollOffset  int            // Scroll position
-	th            theme.Theme    // Theme for styling
-	onClose       func()         // Callback when closed
-	onExecute     func(cmdID string) // Callback after execution
+	commands     []PaletteCommand   // All available commands
+	filteredIdx  []int              // Indices of commands matching search
+	selectedIdx  int                // Currently selected in filtered list
+	searchText   string             // Current search text
+	visible      bool               // Whether palette is shown
+	width        int                // Palette width
+	height       int                // Palette height
+	scrollOffset int                // Scroll position
+	th           theme.Theme        // Theme for styling
+	onClose      func()             // Callback when closed
+	onExecute    func(cmdID string) // Callback after execution
 }
 
 // NewCommandPalette creates a new command palette
 func NewCommandPalette(th theme.Theme) *CommandPalette {
 	cp := &CommandPalette{
-		commands:    make([]PaletteCommand, 0),
-		filteredIdx: make([]int, 0),
-		selectedIdx: 0,
-		searchText:  "",
-		visible:     false,
-		width:       60,
-		height:      20,
+		commands:     make([]PaletteCommand, 0),
+		filteredIdx:  make([]int, 0),
+		selectedIdx:  0,
+		searchText:   "",
+		visible:      false,
+		width:        60,
+		height:       20,
 		scrollOffset: 0,
-		th:          th,
+		th:           th,
 	}
 	return cp
 }
@@ -188,7 +188,7 @@ func (cp *CommandPalette) View() tea.View {
 
 	// Search bar
 	searchStyle := lipgloss.NewStyle().
-		Width(cp.width - 4).
+		Width(cp.width-4).
 		Padding(0, 1).
 		Foreground(lipgloss.Color(cs.TextPrimary)).
 		Background(lipgloss.Color(cs.Surface)).
@@ -212,12 +212,12 @@ func (cp *CommandPalette) View() tea.View {
 		isSelected := i == cp.selectedIdx
 
 		itemStyle := lipgloss.NewStyle().
-			Width(cp.width - 4).
+			Width(cp.width-4).
 			Padding(0, 1)
 
 		if isSelected {
 			itemStyle = itemStyle.
-				Background(lipgloss.Color(cs.Accent)).
+				Background(lipgloss.Color(cs.Primary)).
 				Foreground(lipgloss.Color(cs.Surface))
 		} else {
 			itemStyle = itemStyle.

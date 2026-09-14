@@ -21,11 +21,11 @@ import (
 type Step string
 
 const (
-	StepChecking     Step = "checking"
-	StepInstalling   Step = "installing"
-	StepMenu         Step = "menu"
-	StepPlaying      Step = "playing"
-	StepError        Step = "error"
+	StepChecking   Step = "checking"
+	StepInstalling Step = "installing"
+	StepMenu       Step = "menu"
+	StepPlaying    Step = "playing"
+	StepError      Step = "error"
 )
 
 // MenuAction is what the user wants to do.
@@ -166,9 +166,9 @@ func (m Model) menuOptions() []menuOption {
 
 func (m Model) View() string {
 	colors := theme.Current().Colors()
-	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	subtitleStyle := lipgloss.NewStyle().Faint(true)
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	errStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Error))
 

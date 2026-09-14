@@ -155,8 +155,8 @@ func (m Model) View() string {
 
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	questionStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	questionStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder

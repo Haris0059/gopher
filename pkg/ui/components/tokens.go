@@ -89,7 +89,7 @@ func (tud *TokenUsageDisplay) View() tea.View {
 		cost := tud.CalculateCost()
 		if cost > 0 {
 			costStyle := lipgloss.NewStyle().
-				Foreground(lipgloss.Color(cs.Accent))
+				Foreground(lipgloss.Color(cs.Primary))
 			parts = append(parts, costStyle.Render(fmt.Sprintf("$%.4f", cost)))
 		}
 	}

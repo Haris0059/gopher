@@ -90,7 +90,7 @@ func (ti *ThinkingIndicator) View() tea.View {
 	bar := strings.Repeat("█", filled) + strings.Repeat("░", barWidth-filled)
 
 	barStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
+		Foreground(lipgloss.Color(cs.Primary))
 
 	label := labelStyle.Render("💭 Thinking: ")
 	tokens := valueStyle.Render(fmt.Sprintf("%s / %s", formatTokens(ti.usedTokens), formatTokens(ti.budgetTokens)))

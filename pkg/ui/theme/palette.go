@@ -50,13 +50,7 @@ const (
 // ---------------------------------------------------------------------------
 
 const (
-	Indigo700 = "#303f9f"
-	Indigo600 = "#3949ab"
-	Indigo500 = "#3f51b5"
 	Indigo400 = "#5c6bc0"
-	Indigo300 = "#7986cb"
-	Indigo200 = "#9fa8da"
-	Indigo100 = "#c5cae9"
 )
 
 // ---------------------------------------------------------------------------
@@ -107,12 +101,12 @@ const (
 	// Error — failures, destructive actions, critical alerts
 	Amber500 = "#ff8f00" // Warning / caution
 	Red700   = "#c62828"
-	Red600 = "#d32f2f"
-	Red500 = "#e53935"
-	Red400 = "#ff5555" // Primary error in dark mode
-	Red300 = "#ef5350"
-	Red200 = "#ef9a9a"
-	Red100 = "#ffcdd2"
+	Red600   = "#d32f2f"
+	Red500   = "#e53935"
+	Red400   = "#ff5555" // Primary error in dark mode
+	Red300   = "#ef5350"
+	Red200   = "#ef9a9a"
+	Red100   = "#ffcdd2"
 
 	// Info — informational messages, links, hints
 	Info700 = "#1565c0"
@@ -149,37 +143,4 @@ var AgentColorMap = map[string]string{
 	"orange": AgentOrange,
 	"pink":   AgentPink,
 	"cyan":   AgentCyan,
-}
-
-// ---------------------------------------------------------------------------
-// Accent blue — buttons, links, primary actions
-// ---------------------------------------------------------------------------
-
-const (
-	AccentBlue    = "#0087ff" // Primary action color
-	AccentBlueDim = "#005faf" // Pressed / active state
-)
-
-// T437: Colorize maps semantic color names to palette values.
-// Source: utils/colorize.ts — maps names like "error", "warning", "success"
-// to hex colors. Used by components that reference colors by semantic name.
-var SemanticColors = map[string]string{
-	"error":      Red500,
-	"warning":    Amber500,
-	"success":    Green500,
-	"info":       Blue400,
-	"accent":     AccentBlue,
-	"muted":      Gray500,
-	"dim":        Gray600,
-	"text":       Gray100,
-	"background": Blue900,
-}
-
-// Colorize returns the hex color for a semantic color name.
-// Returns fallback if the name isn't recognized.
-func Colorize(name, fallback string) string {
-	if c, ok := SemanticColors[name]; ok {
-		return c
-	}
-	return fallback
 }

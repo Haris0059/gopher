@@ -1,7 +1,8 @@
 // Package teleport provides UI components for remote session setup (teleport).
 //
 // Source: components/TeleportProgress.tsx, TeleportError.tsx, TeleportStash.tsx,
-//         TeleportRepoMismatchDialog.tsx, RemoteEnvironmentDialog.tsx
+//
+//	TeleportRepoMismatchDialog.tsx, RemoteEnvironmentDialog.tsx
 //
 // Teleport is the process of resuming a remote session locally — fetching logs,
 // checking out the branch, and restoring the conversation. These components show
@@ -68,14 +69,14 @@ func (m *ProgressModel) SetStep(step ProgressStep) { m.CurrentStep = step }
 // View renders the progress display.
 func (m ProgressModel) View() string {
 	colors := theme.Current().Colors()
-	accentStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	accentStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	successStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 
 	spinner := spinnerFrames[m.frame%len(spinnerFrames)]
 
 	var b strings.Builder
-	b.WriteString(accentStyle.Render(spinner+" Teleporting session…"))
+	b.WriteString(accentStyle.Render(spinner + " Teleporting session…"))
 	b.WriteString("\n")
 
 	if m.SessionID != "" {
@@ -99,7 +100,7 @@ func (m ProgressModel) View() string {
 			color = colors.Success
 		} else if i == currentIdx {
 			icon = spinnerFrames[m.frame%len(spinnerFrames)]
-			color = colors.Accent
+			color = colors.Primary
 		} else {
 			icon = "○"
 			color = colors.TextMuted
@@ -233,7 +234,7 @@ func (m RepoMismatchModel) View() string {
 	colors := theme.Current().Colors()
 	warnStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Warning))
 	dimStyle := lipgloss.NewStyle().Faint(true)
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 
 	var b strings.Builder
 	b.WriteString(warnStyle.Render("⚠ Repository Mismatch"))

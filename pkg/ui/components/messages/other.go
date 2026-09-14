@@ -1,6 +1,7 @@
 // Package messages provides message rendering types shared across message subtypes.
 // Source: components/messages/ — CompactBoundaryMessage, AttachmentMessage,
-//         RateLimitMessage, ShutdownMessage, HookProgressMessage
+//
+//	RateLimitMessage, ShutdownMessage, HookProgressMessage
 package messages
 
 import (
@@ -8,23 +9,25 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // MessageType classifies messages for rendering.
 type MessageType string
 
 const (
-	TypeUser          MessageType = "user"
-	TypeAssistant     MessageType = "assistant"
-	TypeSystem        MessageType = "system"
-	TypeTool          MessageType = "tool"
-	TypeError         MessageType = "error"
-	TypeCompact       MessageType = "compact_boundary"
-	TypeAttachment    MessageType = "attachment"
-	TypeRateLimit     MessageType = "rate_limit"
-	TypeShutdown      MessageType = "shutdown"
-	TypeHookProgress  MessageType = "hook_progress"
-	TypePlanApproval  MessageType = "plan_approval"
+	TypeUser         MessageType = "user"
+	TypeAssistant    MessageType = "assistant"
+	TypeSystem       MessageType = "system"
+	TypeTool         MessageType = "tool"
+	TypeError        MessageType = "error"
+	TypeCompact      MessageType = "compact_boundary"
+	TypeAttachment   MessageType = "attachment"
+	TypeRateLimit    MessageType = "rate_limit"
+	TypeShutdown     MessageType = "shutdown"
+	TypeHookProgress MessageType = "hook_progress"
+	TypePlanApproval MessageType = "plan_approval"
 )
 
 // RenderCompactBoundary renders the compaction boundary marker.
@@ -48,7 +51,7 @@ func RenderAttachment(filename, mediaType string, size int) string {
 // RenderRateLimit renders a rate limit warning.
 // Source: components/messages/RateLimitMessage.tsx
 func RenderRateLimit(retryAfterSecs int) string {
-	warnStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("11"))
+	warnStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Warning))
 	msg := "Rate limit reached."
 	if retryAfterSecs > 0 {
 		msg += fmt.Sprintf(" Retrying in %ds...", retryAfterSecs)

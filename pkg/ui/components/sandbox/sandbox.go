@@ -1,7 +1,8 @@
 // Package sandbox provides the sandbox settings UI component.
 //
 // Source: components/sandbox/SandboxSettings.tsx, SandboxConfigTab.tsx,
-//         SandboxDependenciesTab.tsx, SandboxOverridesTab.tsx
+//
+//	SandboxDependenciesTab.tsx, SandboxOverridesTab.tsx
 //
 // In TS this is a tabbed dialog with Select for mode picker + config/deps/overrides tabs.
 // In Go it's a bubbletea model with mode selection and config display.
@@ -75,11 +76,11 @@ type DoneMsg struct{}
 
 // Model is the sandbox settings bubbletea model.
 type Model struct {
-	config   Config
-	cursor   int // 0=auto-allow, 1=regular, 2=disabled
-	tab      int // 0=mode, 1=config, 2=deps
-	width    int
-	modes    []SandboxMode
+	config Config
+	cursor int // 0=auto-allow, 1=regular, 2=disabled
+	tab    int // 0=mode, 1=config, 2=deps
+	width  int
+	modes  []SandboxMode
 }
 
 // New creates a sandbox settings model from the current config.
@@ -136,7 +137,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	currentStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 	tabActiveStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.TabActive))

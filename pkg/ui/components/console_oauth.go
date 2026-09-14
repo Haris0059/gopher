@@ -6,6 +6,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/ConsoleOAuthFlow.tsx
@@ -17,13 +19,13 @@ import (
 type OAuthState int
 
 const (
-	OAuthIdle           OAuthState = iota // Initial — select login method
-	OAuthPlatformSetup                    // Show platform setup info
-	OAuthReadyToStart                     // About to open browser
-	OAuthWaitingForLogin                  // Browser opened, waiting
-	OAuthCreatingAPIKey                   // Got token, creating key
-	OAuthSuccess                          // Login complete
-	OAuthError                            // Something failed
+	OAuthIdle            OAuthState = iota // Initial — select login method
+	OAuthPlatformSetup                     // Show platform setup info
+	OAuthReadyToStart                      // About to open browser
+	OAuthWaitingForLogin                   // Browser opened, waiting
+	OAuthCreatingAPIKey                    // Got token, creating key
+	OAuthSuccess                           // Login complete
+	OAuthError                             // Something failed
 )
 
 // OAuthFlowDoneMsg signals the OAuth flow is complete.
@@ -112,8 +114,9 @@ func (m OAuthFlowModel) handleEnter() (OAuthFlowModel, tea.Cmd) {
 func (m OAuthFlowModel) View() string {
 	titleStyle := lipgloss.NewStyle().Bold(true)
 	dimStyle := lipgloss.NewStyle().Faint(true)
-	errStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("9"))
-	successStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("10"))
+	cs := theme.C()
+	errStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Error))
+	successStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Success))
 
 	var sb strings.Builder
 

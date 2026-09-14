@@ -7,6 +7,15 @@ package theme
 // ColorScheme holds every color role that components may reference.
 // All values are lipgloss-compatible color strings (hex "#rrggbb" or
 // ANSI "123").
+//
+// Brand usage contract:
+//   - Primary (#6ad4e1, brand aqua) is the default brand voice: logo, mascot,
+//     welcome banner, focused borders, spinner, cursor, prompt char, tool
+//     names, active tab, dialog titles.
+//   - Secondary (#b1b9f9, brand purple) marks the selected/focused row in the
+//     "/" command autocomplete, the "@" file autocomplete, and the /help
+//     command list. Nothing else.
+//   - TextPrimary is pure white body text.
 type ColorScheme struct {
 	// --- Surfaces -----------------------------------------------------------
 
@@ -39,26 +48,22 @@ type ColorScheme struct {
 	// BorderSubtle is for subtle internal dividers.
 	BorderSubtle string
 
-	// --- Primary action (blue) ----------------------------------------------
+	// --- Primary action (brand aqua) -----------------------------------------
 
-	// Primary is the main action color (buttons, links).
+	// Primary is the brand color: logo, mascot, borders, spinner, cursor,
+	// prompt char, tool names, active tab, dialog titles.
 	Primary string
-	// PrimaryHover is the hover state of the primary color.
-	PrimaryHover string
 	// PrimaryMuted is a low-contrast version for backgrounds/badges.
 	PrimaryMuted string
 
-	// --- Accent (cyan) — selected, active, highlight ------------------------
+	// --- Secondary (brand purple) — selected/focused list rows --------------
 
-	// Accent is the bright accent for selected/active elements.
-	Accent string
-	// AccentMuted is a low-contrast accent for subtle highlights.
-	AccentMuted string
-
-	// Suggestion is the text color for a focused/highlighted list item
-	// (e.g. the cursor row in a selectable list).
-	// Source: utils/theme.ts — `suggestion`.
-	Suggestion string
+	// Secondary is the text color for a focused/highlighted list item (e.g.
+	// the selected row in the "/" and "@" autocompletes, and the /help
+	// command list). Source: utils/theme.ts — `suggestion`.
+	Secondary string
+	// SecondaryMuted is a low-contrast secondary for subtle highlights.
+	SecondaryMuted string
 	// ProfessionalBlue is the fixed accent used by the HelpV2 tab bar and
 	// pane border — the same hex in every non-ANSI reference theme.
 	// Source: utils/theme.ts — `professionalBlue`.
@@ -123,16 +128,4 @@ type ColorScheme struct {
 	TabActive string
 	// TabInactive is the inactive tab color.
 	TabInactive string
-}
-
-// FocusColors holds the color set for a component in various focus states.
-type FocusColors struct {
-	// Normal is the color when the component has no focus.
-	Normal string
-	// Focused is the color when the component is focused.
-	Focused string
-	// Active is the color when the component is being interacted with.
-	Active string
-	// Disabled is the color when the component is disabled.
-	Disabled string
 }

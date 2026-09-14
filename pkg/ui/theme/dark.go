@@ -28,7 +28,7 @@ func (d *darkTheme) Colors() ColorScheme {
 		SurfaceOverlay:  Gray700,
 
 		// Text
-		TextPrimary:   Gray100,
+		TextPrimary:   White,
 		TextSecondary: Gray400,
 		TextMuted:     Gray500,
 		TextInverse:   Blue900,
@@ -38,18 +38,15 @@ func (d *darkTheme) Colors() ColorScheme {
 		BorderFocused: Cyan300,
 		BorderSubtle:  Gray500,
 
-		// Primary action
-		Primary:      AccentBlue,
-		PrimaryHover: Blue300,
-		PrimaryMuted: Blue500,
+		// Primary action — brand aqua
+		Primary:      Cyan300,
+		PrimaryMuted: Cyan700,
 
-		// Accent
-		Accent:      Cyan300,
-		AccentMuted: Cyan700,
-
+		// Secondary — brand purple, selected/focused list rows.
 		// Source: utils/theme.ts darkTheme — suggestion: rgb(177,185,249),
 		// professionalBlue: rgb(106,155,204).
-		Suggestion:       "#b1b9f9",
+		Secondary:        "#b1b9f9",
+		SecondaryMuted:   Indigo400,
 		ProfessionalBlue: "#6a9bcc",
 
 		// Semantic
@@ -110,7 +107,7 @@ func (d *darkTheme) TextSecondary() lipgloss.Style {
 func (d *darkTheme) TextAccent() lipgloss.Style {
 	c := d.Colors()
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(c.Accent)).
+		Foreground(lipgloss.Color(c.Primary)).
 		Bold(true)
 }
 

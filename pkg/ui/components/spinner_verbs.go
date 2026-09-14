@@ -194,7 +194,7 @@ func (ts *ThinkingSpinner) View() string {
 	cs := ts.theme.Colors()
 
 	glyphStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
+		Foreground(lipgloss.Color(cs.Primary))
 	verbStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(cs.TextPrimary))
 	suffixStyle := lipgloss.NewStyle().

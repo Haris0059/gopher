@@ -40,10 +40,10 @@ type MemoryItem struct {
 
 // Model is the bubbletea model for the memory file selector.
 type Model struct {
-	items    []MemoryItem
-	cursor   int
-	width    int
-	cwd      string
+	items  []MemoryItem
+	cursor int
+	width  int
+	cwd    string
 }
 
 // New creates a new memory file selector from discovered files.
@@ -95,7 +95,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	typeStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Info))
 

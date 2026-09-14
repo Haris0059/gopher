@@ -61,17 +61,17 @@ type ViewTeammateMsg struct {
 type viewLevel int
 
 const (
-	levelList   viewLevel = iota
+	levelList viewLevel = iota
 	levelDetail
 )
 
 // Model is the teams dialog bubbletea model.
 type Model struct {
-	level      viewLevel
-	teammates  []Teammate
-	teamName   string
-	cursor     int
-	selected   *Teammate // for detail view
+	level     viewLevel
+	teammates []Teammate
+	teamName  string
+	cursor    int
+	selected  *Teammate // for detail view
 }
 
 // New creates a teams dialog with the given teammates.
@@ -122,7 +122,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	switch m.level {

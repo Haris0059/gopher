@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: ink/searchHighlight.ts, ink/hooks/use-search-highlight.ts
@@ -16,7 +18,7 @@ import (
 var DefaultHighlightStyle = lipgloss.NewStyle().Reverse(true)
 
 // CurrentMatchStyle is the style for the "current" match (yellow background).
-var CurrentMatchStyle = lipgloss.NewStyle().Background(lipgloss.Color("3")).Foreground(lipgloss.Color("0"))
+var CurrentMatchStyle = lipgloss.NewStyle().Background(lipgloss.Color(theme.C().Warning)).Foreground(lipgloss.Color(theme.C().TextInverse))
 
 // HighlightMatches wraps all case-insensitive occurrences of query in text
 // with the given lipgloss style. Returns the original text if query is empty.

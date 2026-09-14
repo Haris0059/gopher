@@ -1,7 +1,8 @@
 // Package tasks provides the task management UI components.
 //
 // Source: components/tasks/BackgroundTasksDialog.tsx, taskStatusUtils.tsx,
-//         BackgroundTask.tsx, BackgroundTaskStatus.tsx
+//
+//	BackgroundTask.tsx, BackgroundTaskStatus.tsx
 //
 // Shows background tasks (agents, shell tasks, dreams) with status, drill-down
 // to detail, and task control (stop/view).
@@ -37,24 +38,24 @@ func (s TaskStatus) IsTerminal() bool {
 type TaskType string
 
 const (
-	TaskTypeShell     TaskType = "shell"
-	TaskTypeAgent     TaskType = "agent"
-	TaskTypeTeammate  TaskType = "teammate"
-	TaskTypeDream     TaskType = "dream"
-	TaskTypeRemote    TaskType = "remote"
+	TaskTypeShell    TaskType = "shell"
+	TaskTypeAgent    TaskType = "agent"
+	TaskTypeTeammate TaskType = "teammate"
+	TaskTypeDream    TaskType = "dream"
+	TaskTypeRemote   TaskType = "remote"
 )
 
 // Task describes a background task for display.
 type Task struct {
-	ID          string
-	Type        TaskType
-	Label       string
-	Status      TaskStatus
-	Activity    string // current activity description
-	StartedAt   time.Time
-	IsIdle      bool
-	HasError    bool
-	Color       string // agent color
+	ID        string
+	Type      TaskType
+	Label     string
+	Status    TaskStatus
+	Activity  string // current activity description
+	StartedAt time.Time
+	IsIdle    bool
+	HasError  bool
+	Color     string // agent color
 }
 
 // StatusIcon returns the display icon for a task's state.
@@ -192,7 +193,7 @@ func (m Model) View() string {
 func (m Model) viewList() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	running := 0

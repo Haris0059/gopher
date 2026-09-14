@@ -5,6 +5,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/Onboarding.tsx
@@ -17,7 +19,7 @@ import (
 type OnboardingStep int
 
 const (
-	StepWelcome  OnboardingStep = iota
+	StepWelcome OnboardingStep = iota
 	StepTheme
 	StepSecurity
 	StepDone
@@ -102,7 +104,7 @@ func (m OnboardingModel) Step() OnboardingStep { return m.step }
 func (m OnboardingModel) IsDone() bool { return m.step == StepDone }
 
 func (m OnboardingModel) viewWelcome() string {
-	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("12"))
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(theme.C().Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var sb strings.Builder

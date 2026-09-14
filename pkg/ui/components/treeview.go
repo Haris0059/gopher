@@ -22,12 +22,12 @@ type TreeNode struct {
 // TreeView displays a hierarchical tree structure with expand/collapse support
 type TreeView struct {
 	root         *TreeNode
-	selectedID   string        // ID of selected node
-	scrollOffset int           // Scroll position
-	width        int           // View width
-	height       int           // View height
-	focused      bool          // Whether tree has focus
-	th           theme.Theme   // Theme for styling
+	selectedID   string               // ID of selected node
+	scrollOffset int                  // Scroll position
+	width        int                  // View width
+	height       int                  // View height
+	focused      bool                 // Whether tree has focus
+	th           theme.Theme          // Theme for styling
 	nodeIndex    map[string]*TreeNode // Quick lookup by ID
 }
 
@@ -41,13 +41,13 @@ func NewTreeView(th theme.Theme) *TreeView {
 			Children: make([]*TreeNode, 0),
 			Depth:    0,
 		},
-		selectedID: "",
+		selectedID:   "",
 		scrollOffset: 0,
-		width:      40,
-		height:     20,
-		focused:    false,
-		th:         th,
-		nodeIndex:  make(map[string]*TreeNode),
+		width:        40,
+		height:       20,
+		focused:      false,
+		th:           th,
+		nodeIndex:    make(map[string]*TreeNode),
 	}
 }
 
@@ -243,7 +243,7 @@ func (tv *TreeView) View() tea.View {
 
 		if isSelected {
 			style = style.
-				Background(lipgloss.Color(cs.Accent)).
+				Background(lipgloss.Color(cs.Primary)).
 				Foreground(lipgloss.Color(cs.Surface))
 		}
 

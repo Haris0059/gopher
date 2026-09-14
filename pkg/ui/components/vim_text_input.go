@@ -3,6 +3,8 @@ package components
 import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/VimTextInput.tsx + hooks/useVimInput.ts
@@ -131,7 +133,7 @@ func (m VimTextInputModel) View() string {
 	if m.mode == VimNormal {
 		modeIndicator = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("11")).
+			Foreground(lipgloss.Color(theme.C().Warning)).
 			Render("[NORMAL] ")
 	}
 	return modeIndicator + m.TextInputModel.View()

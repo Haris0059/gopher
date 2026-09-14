@@ -107,7 +107,7 @@ func (m Model) View() string {
 func (m Model) viewList() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	enabledStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 	disabledStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.TextMuted))

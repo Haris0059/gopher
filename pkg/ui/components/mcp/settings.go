@@ -196,7 +196,7 @@ func (m SettingsModel) View() string {
 func (m SettingsModel) viewServerList() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 	scopeStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Info))
 

@@ -36,28 +36,28 @@ const (
 
 // Model is the prompt input bubbletea model.
 type Model struct {
-	text          string
-	cursorPos     int
-	mode          InputMode
-	placeholder   string
-	width         int
-	focused       bool
-	historyIndex  int
-	history       []string
-	suggestions   []string
-	suggestionIdx int
+	text            string
+	cursorPos       int
+	mode            InputMode
+	placeholder     string
+	width           int
+	focused         bool
+	historyIndex    int
+	history         []string
+	suggestions     []string
+	suggestionIdx   int
 	showSuggestions bool
-	multiline     bool
-	permissionMode string // "default", "plan", "auto", etc.
+	multiline       bool
+	permissionMode  string // "default", "plan", "auto", etc.
 }
 
 // New creates a new prompt input.
 func New(placeholder string) Model {
 	return Model{
-		mode:        ModeInsert,
-		placeholder: placeholder,
-		focused:     true,
-		width:       80,
+		mode:         ModeInsert,
+		placeholder:  placeholder,
+		focused:      true,
+		width:        80,
 		historyIndex: -1,
 	}
 }
@@ -296,7 +296,7 @@ func (m *Model) SetSuggestions(suggestions []string) {
 
 func (m Model) View() string {
 	colors := theme.Current().Colors()
-	promptStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Accent)).Bold(true)
+	promptStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Primary)).Bold(true)
 	inputStyle := lipgloss.NewStyle()
 	placeholderStyle := lipgloss.NewStyle().Faint(true)
 	modeStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Warning))
@@ -305,7 +305,7 @@ func (m Model) View() string {
 
 	// Mode indicator
 	if m.permissionMode != "" && m.permissionMode != "default" {
-		b.WriteString(modeStyle.Render("["+m.permissionMode+"] "))
+		b.WriteString(modeStyle.Render("[" + m.permissionMode + "] "))
 	}
 
 	// Prompt symbol

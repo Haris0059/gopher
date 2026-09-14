@@ -11,11 +11,11 @@ import (
 
 // SessionInfo holds metadata about a saved session.
 type SessionInfo struct {
-	ID        string
-	Name      string
-	Model     string
+	ID           string
+	Name         string
+	Model        string
 	MessageCount int
-	CreatedAt string
+	CreatedAt    string
 }
 
 // SessionSelectedMsg is sent when a session is selected.
@@ -25,14 +25,14 @@ type SessionSelectedMsg struct {
 
 // SessionPicker provides fuzzy search and selection of prior sessions.
 type SessionPicker struct {
-	sessions    []SessionInfo
-	filtered    []SessionInfo
-	searchText  string
-	selected    int
-	theme       theme.Theme
-	width       int
-	height      int
-	focused     bool
+	sessions   []SessionInfo
+	filtered   []SessionInfo
+	searchText string
+	selected   int
+	theme      theme.Theme
+	width      int
+	height     int
+	focused    bool
 }
 
 // NewSessionPicker creates a new session picker.
@@ -103,7 +103,7 @@ func (sp *SessionPicker) View() tea.View {
 
 	// Search bar
 	searchStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cs.Accent))
+		Foreground(lipgloss.Color(cs.Primary))
 	searchDisplay := sp.searchText
 	if searchDisplay == "" {
 		searchDisplay = "type to search..."

@@ -47,18 +47,15 @@ func (h *highContrastTheme) Colors() ColorScheme {
 		BorderFocused: Cyan300,
 		BorderSubtle:  Gray700,
 
-		// Primary action — bright, high-saturation blue
-		Primary:      "#00afff",
-		PrimaryHover: "#5fd7ff",
-		PrimaryMuted: Blue600,
+		// Primary action — brightest cyan (brand aqua)
+		Primary:      Cyan300,
+		PrimaryMuted: Cyan600,
 
-		// Accent — brightest cyan
-		Accent:      Cyan300,
-		AccentMuted: Cyan600,
-
+		// Secondary — selected/focused list rows.
 		// No high-contrast reference value exists (ANSI themes use
 		// 'ansi:blueBright'); chosen to stay bright/distinct on black.
-		Suggestion:       "#5f87ff",
+		Secondary:        "#5f87ff",
+		SecondaryMuted:   Indigo400,
 		ProfessionalBlue: "#87afff",
 
 		// Semantic — high-saturation, distinguishable under color blindness
@@ -119,7 +116,7 @@ func (h *highContrastTheme) TextSecondary() lipgloss.Style {
 func (h *highContrastTheme) TextAccent() lipgloss.Style {
 	c := h.Colors()
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(c.Accent)).
+		Foreground(lipgloss.Color(c.Primary)).
 		Bold(true).
 		Underline(true) // Underline in addition to color for color-blind users
 }

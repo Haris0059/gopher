@@ -55,7 +55,7 @@ type LaunchResultMsg struct {
 
 // PlanReadyMsg indicates the remote plan is ready.
 type PlanReadyMsg struct {
-	Plan     string
+	Plan      string
 	SessionID string
 }
 
@@ -164,9 +164,9 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 func (m Model) View() string {
 	colors := theme.Current().Colors()
-	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	successStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Success))
 	errStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Error))
 	warnStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Warning))

@@ -14,7 +14,7 @@ const WelcomeScreenWidth = 58
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.037"
+const Version = "0.3.038"
 
 // gopherIcon is the compact block-character mark shown at startup, in the
 // style of Claude Code's v2 splash. Same shape, recolored to the Gopher
@@ -71,7 +71,7 @@ func (ws *WelcomeScreen) View() tea.View {
 // and Header so the top of the screen never changes look, before or after
 // the welcome screen is dismissed.
 func renderGopherSplash(cs theme.ColorScheme, width int, version, model, cwd string) string {
-	iconStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Accent)).Bold(true)
+	iconStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.Primary)).Bold(true)
 	titleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextPrimary)).Bold(true)
 	subtleStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(cs.TextSecondary))
 

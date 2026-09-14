@@ -1,7 +1,8 @@
 // Package mcp provides MCP server UI components (tool browser, dialogs).
 //
 // Source: components/mcp/MCPToolListView.tsx, MCPToolDetailView.tsx,
-//         MCPReconnect.tsx, CapabilitiesSection.tsx
+//
+//	MCPReconnect.tsx, CapabilitiesSection.tsx
 //
 // These are the dialogs shown when browsing MCP server tools via /mcp.
 // Tool list → tool detail drill-down, reconnect confirmation, and
@@ -41,12 +42,12 @@ type ServerInfo struct {
 
 // ToolInfo describes an MCP tool for display.
 type ToolInfo struct {
-	Name         string
-	DisplayName  string
-	Description  string
-	IsReadOnly   bool
+	Name          string
+	DisplayName   string
+	Description   string
+	IsReadOnly    bool
 	IsDestructive bool
-	InputSchema  json.RawMessage
+	InputSchema   json.RawMessage
 }
 
 // ToolSelectedMsg is sent when the user selects a tool to view details.
@@ -110,7 +111,7 @@ func (m ToolListModel) Update(msg tea.Msg) (ToolListModel, tea.Cmd) {
 func (m ToolListModel) View() string {
 	colors := theme.Current().Colors()
 	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder
@@ -262,7 +263,7 @@ func (m ReconnectModel) Update(msg tea.Msg) (ReconnectModel, tea.Cmd) {
 func (m ReconnectModel) View() string {
 	colors := theme.Current().Colors()
 	warnStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(colors.Warning))
-	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Accent))
+	selectedStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color(colors.Primary))
 	dimStyle := lipgloss.NewStyle().Faint(true)
 
 	var b strings.Builder

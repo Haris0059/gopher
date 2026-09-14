@@ -6,6 +6,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/Haris0059/gopher/pkg/output_styles"
+	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
 // Source: components/OutputStylePicker.tsx
@@ -90,7 +91,7 @@ func (m OutputStylePickerModel) Update(msg tea.Msg) (OutputStylePickerModel, tea
 func (m OutputStylePickerModel) View() string {
 	titleStyle := lipgloss.NewStyle().Bold(true)
 	descStyle := lipgloss.NewStyle().Faint(true)
-	selectedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("12"))
+	selectedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(theme.C().Secondary))
 
 	var sb strings.Builder
 	sb.WriteString(titleStyle.Render("Choose an output style"))

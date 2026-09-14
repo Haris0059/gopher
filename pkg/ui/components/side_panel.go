@@ -22,14 +22,14 @@ const (
 
 // SidePanel displays a collapsible side panel with multiple views (sessions, tasks, files)
 type SidePanel struct {
-	visible      bool                    // Whether panel is shown
-	mode         SidePanelMode           // Current view mode
-	width        int                     // Panel width
-	height       int                     // Panel height
-	scrollOffset int                     // Scroll position
-	selectedIdx  int                     // Currently selected item
-	focused      bool                    // Whether panel has focus
-	th           theme.Theme             // Theme for styling
+	visible      bool          // Whether panel is shown
+	mode         SidePanelMode // Current view mode
+	width        int           // Panel width
+	height       int           // Panel height
+	scrollOffset int           // Scroll position
+	selectedIdx  int           // Currently selected item
+	focused      bool          // Whether panel has focus
+	th           theme.Theme   // Theme for styling
 	sessions     []session.SessionMetadata
 	tasks        []string // Task names
 	files        []string // File paths
@@ -191,7 +191,7 @@ func (sp *SidePanel) View() tea.View {
 
 		if isSelected {
 			style = style.
-				Background(lipgloss.Color(cs.Accent)).
+				Background(lipgloss.Color(cs.Primary)).
 				Foreground(lipgloss.Color(cs.Surface))
 		}
 
