@@ -18,6 +18,7 @@ import (
 	"github.com/Haris0059/gopher/pkg/ui/commands"
 	"github.com/Haris0059/gopher/pkg/ui/components"
 	"github.com/Haris0059/gopher/pkg/ui/core"
+	"github.com/Haris0059/gopher/pkg/ui/screens"
 	"github.com/Haris0059/gopher/pkg/ui/theme"
 )
 
@@ -277,18 +278,20 @@ func TestVisualParity_QueryEventFlow(t *testing.T) {
 	}
 }
 
-// TestParity_CtrlCFourStateMachine validates the complete Ctrl+C state machine:
-// text→clear, empty→hint, hint→quit, streaming→cancel.
+// TestParity_CtrlCFourStateMachine validates the unified Ctrl+C ladder:
+// text→clear+arm, hint→quit, empty→hint, hint→quit, streaming→cancel+arm.
 //
 // Unique behaviors (not covered by CtrlCQuitsWhenIdle which only tests double-press):
-// 1. Ctrl+C with text → clears input, does NOT quit, resets ctrlCExit pending state
+// 1. Ctrl+C with text → clears input AND arms ctrlCExit (shows the hint)
 // 2. After clear, input.HasText() is false
-// 3. Ctrl+C on empty → sets ctrlCExit pending (hint shown), no quit
-// 4. Second Ctrl+C on empty → quits (QuitMsg returned)
-// 5. Non-Ctrl+C key after hint → resets ctrlCExit pending state back to false
+// 3. A second Ctrl+C right after the clear quits (does not need a third press)
+// 4. Ctrl+C on empty → sets ctrlCExit pending (hint shown), no quit
+// 5. Second Ctrl+C on empty → quits (QuitMsg returned)
+// 6. Non-Ctrl+C key after hint → resets ctrlCExit pending state back to false
 //
-// Cross-ref: app.go:352-375 — Ctrl+C handler with 4 paths
-// Cross-ref: REPL.tsx stashedPrompt — Claude stashes then clears on Ctrl+C
+// Cross-ref: app.go handleCtrlC/dismissForCtrlC — first press dismisses AND arms
+// Cross-ref: hooks/useTextInput.ts:108-120 — useDoublePress's onFirstPress
+// clears the buffer while setPending still shows the exit hint.
 func TestParity_CtrlCFourStateMachine(t *testing.T) {
 	config := session.DefaultConfig()
 	sess := session.New(config, "/tmp")
@@ -307,27 +310,38 @@ func TestParity_CtrlCFourStateMachine(t *testing.T) {
 		t.Fatal("Setup: input should have text")
 	}
 
-	// 1. Ctrl+C with text → clears input, no quit
+	// 1. Ctrl+C with text → clears input, arms exit (does not quit yet)
 	_, cmd1 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
 	if cmd1 != nil {
 		msg := cmd1()
 		if _, isQuit := msg.(tea.QuitMsg); isQuit {
-			t.Fatal("Ctrl+C with text should clear, not quit")
+			t.Fatal("First Ctrl+C with text should clear and arm, not quit")
 		}
 	}
 	// 2. Input should now be empty
 	if app.input.HasText() {
 		t.Error("Input should be empty after Ctrl+C clear")
 	}
-	// ctrlCExit should not be pending (clearing resets it)
-	if app.ctrlCExit.Pending() {
-		t.Error("ctrlCExit should not be pending after clearing text")
+	// ctrlCExit should be pending: clearing text also arms the exit window
+	// (matches TS: onFirstPress clears while setPending still shows the hint).
+	if !app.ctrlCExit.Pending() {
+		t.Error("ctrlCExit should be pending after clearing text")
 	}
 
-	// 3. Now input is empty — first Ctrl+C shows hint
+	// 3. A second Ctrl+C right after clearing text quits — no third press needed.
 	_, cmd2 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
-	if cmd2 != nil {
-		msg := cmd2()
+	if cmd2 == nil {
+		t.Fatal("Second Ctrl+C after clear-and-arm should quit")
+	}
+	msg2 := cmd2()
+	if _, isQuit := msg2.(tea.QuitMsg); !isQuit {
+		t.Errorf("Expected QuitMsg on second Ctrl+C after clear, got %T", msg2)
+	}
+
+	// 4. Now input is empty and ctrlCExit is fresh — first Ctrl+C shows hint
+	_, cmd3 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+	if cmd3 != nil {
+		msg := cmd3()
 		if _, isQuit := msg.(tea.QuitMsg); isQuit {
 			t.Fatal("First Ctrl+C on empty should show hint, not quit")
 		}
@@ -336,16 +350,17 @@ func TestParity_CtrlCFourStateMachine(t *testing.T) {
 		t.Error("ctrlCExit should be pending after first Ctrl+C on empty")
 	}
 
-	// 5. Non-Ctrl+C key resets the pending state
+	// 6. Non-Ctrl+C key resets the pending state
 	app.Update(tea.KeyPressMsg{Code: 'x', Text: "x"})
 	if app.ctrlCExit.Pending() {
 		t.Error("ctrlCExit should reset on non-Ctrl+C key")
 	}
 
-	// Clear the 'x' we just typed
-	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // clears 'x'
+	// Clear the 'x' we just typed (this also re-arms; wait it out below).
+	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // clears 'x', arms
+	app.ctrlCExit.Reset()                                    // simulate the 800ms timeout elapsing
 
-	// 4. Double Ctrl+C on empty → quit
+	// 5. Double Ctrl+C on empty → quit
 	app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})            // first: hint
 	_, cmd4 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl}) // second: quit
 	if cmd4 == nil {
@@ -354,6 +369,147 @@ func TestParity_CtrlCFourStateMachine(t *testing.T) {
 	msg4 := cmd4()
 	if _, isQuit := msg4.(tea.QuitMsg); !isQuit {
 		t.Errorf("Expected QuitMsg on double Ctrl+C, got %T", msg4)
+	}
+}
+
+// TestParity_CtrlCDismissesFullTakeoverScreens validates that Ctrl+C is no
+// longer swallowed by /help, /doctor, or the resume picker: the first press
+// closes the screen and arms the exit window, the second quits — matching
+// what Esc already did. Before this fix, help.Model.Update (and the doctor/
+// resume sub-models) received every message and had no Ctrl+C case, so the
+// key was silently dropped and the exit shortcut was dead while any of these
+// screens was open.
+func TestParity_CtrlCDismissesFullTakeoverScreens(t *testing.T) {
+	t.Run("help", func(t *testing.T) {
+		config := session.DefaultConfig()
+		sess := session.New(config, "/tmp")
+		app := NewAppModel(sess, nil)
+		app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+		app.Update(commands.ShowHelpMsg{})
+		if !app.showHelp || app.helpModel == nil {
+			t.Fatal("Setup: help overlay should be open")
+		}
+
+		_, cmd1 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if app.showHelp || app.helpModel != nil {
+			t.Error("First Ctrl+C should close the help overlay")
+		}
+		if !app.ctrlCExit.Pending() {
+			t.Error("First Ctrl+C should arm the exit window after closing help")
+		}
+		if cmd1 != nil {
+			if _, isQuit := cmd1().(tea.QuitMsg); isQuit {
+				t.Error("First Ctrl+C should not quit yet")
+			}
+		}
+
+		_, cmd2 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if cmd2 == nil {
+			t.Fatal("Second Ctrl+C after closing help should quit")
+		}
+		if _, isQuit := cmd2().(tea.QuitMsg); !isQuit {
+			t.Error("Second Ctrl+C after closing help should produce QuitMsg")
+		}
+	})
+
+	t.Run("help esc still dismisses without arming exit", func(t *testing.T) {
+		config := session.DefaultConfig()
+		sess := session.New(config, "/tmp")
+		app := NewAppModel(sess, nil)
+		app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+		app.Update(commands.ShowHelpMsg{})
+
+		_, cmd := app.Update(tea.KeyPressMsg{Code: tea.KeyEscape})
+		if cmd != nil {
+			app.Update(cmd())
+		}
+		if app.showHelp || app.helpModel != nil {
+			t.Error("Esc should close the help overlay")
+		}
+		if app.ctrlCExit.Pending() {
+			t.Error("Esc should not arm the Ctrl+C exit window")
+		}
+	})
+
+	t.Run("doctor", func(t *testing.T) {
+		config := session.DefaultConfig()
+		sess := session.New(config, "/tmp")
+		app := NewAppModel(sess, nil)
+		app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+		app.showDoctor = true
+		app.doctorModel = screens.NewDoctorModel(screens.DoctorConfig{})
+
+		app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if app.showDoctor || app.doctorModel != nil {
+			t.Error("First Ctrl+C should close the doctor screen")
+		}
+		_, cmd := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if cmd == nil {
+			t.Fatal("Second Ctrl+C after closing doctor should quit")
+		}
+		if _, isQuit := cmd().(tea.QuitMsg); !isQuit {
+			t.Error("Second Ctrl+C after closing doctor should produce QuitMsg")
+		}
+	})
+
+	t.Run("resume", func(t *testing.T) {
+		config := session.DefaultConfig()
+		sess := session.New(config, "/tmp")
+		app := NewAppModel(sess, nil)
+		app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+		app.showResume = true
+		app.resumeModel = screens.NewResumeModel(nil)
+
+		app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if app.showResume || app.resumeModel != nil {
+			t.Error("First Ctrl+C should close the resume picker")
+		}
+		_, cmd := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+		if cmd == nil {
+			t.Fatal("Second Ctrl+C after closing resume should quit")
+		}
+		if _, isQuit := cmd().(tea.QuitMsg); !isQuit {
+			t.Error("Second Ctrl+C after closing resume should produce QuitMsg")
+		}
+	})
+}
+
+// TestParity_CtrlCCancelsStreamingAndArmsExit validates that Ctrl+C during a
+// running query cancels it AND arms the exit window in the same press, so a
+// fast second Ctrl+C quits instead of requiring a third press.
+//
+// Source: hooks/useCancelRequest.ts:200-220 — useTextInput's ctrl+c does not
+// stop propagation, so the same press both clears/cancels and reaches the
+// cancel handler.
+func TestParity_CtrlCCancelsStreamingAndArmsExit(t *testing.T) {
+	config := session.DefaultConfig()
+	sess := session.New(config, "/tmp")
+	app := NewAppModel(sess, nil)
+	app.Update(tea.WindowSizeMsg{Width: 80, Height: 24})
+
+	canceled := false
+	app.mode = ModeStreaming
+	app.cancelQuery = func() { canceled = true }
+
+	_, cmd1 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+	if !canceled {
+		t.Error("First Ctrl+C during streaming should cancel the query")
+	}
+	if !app.ctrlCExit.Pending() {
+		t.Error("First Ctrl+C during streaming should arm the exit window")
+	}
+	if cmd1 != nil {
+		if _, isQuit := cmd1().(tea.QuitMsg); isQuit {
+			t.Error("First Ctrl+C during streaming should not quit yet")
+		}
+	}
+
+	_, cmd2 := app.Update(tea.KeyPressMsg{Code: 'c', Mod: tea.ModCtrl})
+	if cmd2 == nil {
+		t.Fatal("Second Ctrl+C after canceling a stream should quit")
+	}
+	if _, isQuit := cmd2().(tea.QuitMsg); !isQuit {
+		t.Error("Second Ctrl+C after canceling a stream should produce QuitMsg")
 	}
 }
 

@@ -424,6 +424,14 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// T414: Forward messages to the double-press detector for timeout processing.
 	a.ctrlCExit.Update(msg)
 
+	// Ctrl+C is never delegated to a full-takeover screen: those sub-models
+	// don't handle it, so the key would be dropped and the exit shortcut
+	// would be dead while /help, /doctor or the resume picker is open.
+	if k, ok := msg.(tea.KeyPressMsg); ok && isCtrlC(k) &&
+		(a.showHelp || a.showDoctor || a.showResume) {
+		return a.handleCtrlC()
+	}
+
 	// When doctor screen is active, delegate all messages to it.
 	if a.showDoctor && a.doctorModel != nil {
 		switch msg := msg.(type) {
@@ -867,9 +875,14 @@ func (a *AppModel) handleResize(msg tea.WindowSizeMsg) (*AppModel, tea.Cmd) {
 	return a, nil
 }
 
+// isCtrlC reports whether msg is the Ctrl+C chord.
+func isCtrlC(msg tea.KeyPressMsg) bool {
+	return msg.Code == 'c' && msg.Mod == tea.ModCtrl
+}
+
 func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	// T411: Typeahead buffering — swallow keystrokes while streaming/tool-running.
-	isCancel := (msg.Code == 'c' && msg.Mod == tea.ModCtrl) || msg.Code == tea.KeyEscape
+	isCancel := isCtrlC(msg) || msg.Code == tea.KeyEscape
 	if !isCancel {
 		if !a.displayHooks.PushKey(msg) {
 			return a, nil
@@ -877,9 +890,9 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	}
 
 	// Reset Ctrl+C pending on any non-Ctrl+C key (T414: delegate to lifecycle.DoublePress).
-	if !(msg.Code == 'c' && msg.Mod == tea.ModCtrl) && a.ctrlCExit.Pending() {
+	if !isCtrlC(msg) && a.ctrlCExit.Pending() {
 		a.ctrlCExit.Reset()
-		a.statusLine.Update(components.ModeChangeMsg{Mode: components.ModeIdle})
+		a.setStatusMode(components.ModeIdle)
 	}
 
 	// Dismiss welcome screen on any printable key
@@ -888,30 +901,13 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	}
 
 	switch {
-	// Ctrl+C behavior (matching Gopher):
-	// 1. During streaming → cancel the query
-	// 2. With text in input → clear input (stash behavior)
-	// 3. Empty input, first press → show "Press Ctrl-C again to exit" hint
-	// 4. Empty input, second press → quit
-	// Source: data/claude/area-06-status/status-ctrlc-first snapshot
-	case msg.Code == 'c' && msg.Mod == tea.ModCtrl:
-		if a.mode != ModeIdle && a.cancelQuery != nil {
-			a.cancelQuery()
-			a.ctrlCExit.Reset()
-			return a, nil
-		}
-		if a.input.HasText() {
-			a.input.Clear()
-			a.ctrlCExit.Reset()
-			return a, nil
-		}
-		// Empty input: double-press to quit (T414: lifecycle.DoublePress with 800ms timeout)
-		fired, cmd := a.ctrlCExit.Press()
-		if fired {
-			return a, tea.Quit
-		}
-		a.statusLine.Update(components.CtrlCHintMsg{})
-		return a, cmd
+	// Ctrl+C: single ladder. The second press inside the 800ms window always
+	// quits; the first press performs one Esc-like dismissal AND arms the
+	// window, so "Ctrl+C, Ctrl+C" exits from any state.
+	// Source: hooks/useTextInput.ts:108-120 — useDoublePress's onFirstPress
+	// clears the buffer while setPending still shows the exit hint.
+	case isCtrlC(msg):
+		return a.handleCtrlC()
 
 	// Scrollback: PgUp/PgDn always scroll the conversation transcript,
 	// independent of focus. The input pane keeps focus permanently now that
@@ -987,6 +983,65 @@ func (a *AppModel) handleKey(msg tea.KeyPressMsg) (*AppModel, tea.Cmd) {
 	a.refreshSlashAutocomplete()
 	a.refreshFileAutocomplete()
 	return a, cmd
+}
+
+// handleCtrlC runs the single Ctrl+C ladder: the second press inside the
+// 800ms window always quits; the first press performs one Esc-like
+// dismissal AND arms the window, so "Ctrl+C, Ctrl+C" exits from any state.
+//
+// Source: hooks/useTextInput.ts:108-120 — useDoublePress's onFirstPress
+// clears the buffer while setPending still shows the exit hint.
+func (a *AppModel) handleCtrlC() (*AppModel, tea.Cmd) {
+	fired, cmd := a.ctrlCExit.Press()
+	if fired {
+		return a, tea.Quit
+	}
+	a.dismissForCtrlC()
+	a.statusLine.Update(components.CtrlCHintMsg{})
+	return a, cmd
+}
+
+// dismissForCtrlC performs the first-press side effect. Full-takeover
+// screens (help/doctor/resume) are a single exclusive target, matching Esc;
+// below them, cancelling a running turn and clearing the prompt are
+// independent — the TS reference fires both on one press because
+// useTextInput's ctrl+c does not stop propagation (src/hooks/useCancelRequest.ts:200-220).
+func (a *AppModel) dismissForCtrlC() {
+	switch {
+	case a.showHelp && a.helpModel != nil:
+		a.showHelp, a.helpModel = false, nil
+		return
+	case a.showDoctor && a.doctorModel != nil:
+		a.showDoctor, a.doctorModel = false, nil
+		return
+	case a.showResume && a.resumeModel != nil:
+		a.showResume, a.resumeModel = false, nil
+		return
+	}
+
+	if a.fileSuggestActive {
+		a.dismissFileSuggestions()
+	} else if a.focus.ModalActive() {
+		a.focus.PopModal()
+	}
+
+	if a.mode != ModeIdle && a.cancelQuery != nil {
+		a.cancelQuery()
+	}
+	if a.input.HasText() {
+		a.input.Clear()
+		a.refreshSlashAutocomplete() // drops the `/` dropdown with the buffer
+	}
+}
+
+// setStatusMode pushes a mode change, re-asserting the exit hint when the
+// Ctrl+C window is still armed (ModeChangeMsg otherwise clears the hint —
+// see statusline.go's ModeChangeMsg case).
+func (a *AppModel) setStatusMode(mode components.StatusMode) {
+	a.statusLine.Update(components.ModeChangeMsg{Mode: mode})
+	if a.ctrlCExit.Pending() {
+		a.statusLine.Update(components.CtrlCHintMsg{})
+	}
 }
 
 // refreshSlashAutocomplete activates/deactivates and refilters the slash
@@ -1247,7 +1302,7 @@ func (a *AppModel) handleTurnComplete(msg TurnCompleteMsg) (*AppModel, tea.Cmd) 
 	a.conversation.ClearStreamingText()
 	a.activeToolCalls = make(map[string]string)
 
-	a.statusLine.Update(components.ModeChangeMsg{Mode: components.ModeIdle})
+	a.setStatusMode(components.ModeIdle)
 
 	// Persist session after each turn.
 	// Source: REPL.tsx — session is saved after each assistant turn.
@@ -1299,7 +1354,7 @@ func (a *AppModel) handleQueryDone(msg queryDoneMsg) (*AppModel, tea.Cmd) {
 
 	// Ensure mode is idle after query completes
 	a.mode = ModeIdle
-	a.statusLine.Update(components.ModeChangeMsg{Mode: components.ModeIdle})
+	a.setStatusMode(components.ModeIdle)
 
 	return a, nil
 }
