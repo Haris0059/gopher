@@ -3,6 +3,7 @@ package ui
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -499,6 +500,13 @@ func (a *AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		return a.handleKey(msg)
 
+	case tea.MouseWheelMsg:
+		if a.conversation.IsEmpty() {
+			return a, nil
+		}
+		_, cmd := a.conversation.Update(msg)
+		return a, cmd
+
 	case components.SubmitMsg:
 		return a.handleSubmit(msg)
 
@@ -766,6 +774,14 @@ func (a *AppModel) View() tea.View {
 	// preserved when the TUI exits.
 	// Source: ink/ink.tsx — TS Ink uses alternate screen
 	v.AltScreen = true
+	// Capture mouse wheel events so they scroll the conversation transcript
+	// instead of falling back to terminal-emulated arrow keys (which the alt
+	// screen would otherwise route into prompt history). Opt out to keep
+	// native click-drag text selection.
+	// Source: fullscreen.ts isMouseTrackingEnabled — CLAUDE_CODE_DISABLE_MOUSE
+	if os.Getenv("GOPHER_DISABLE_MOUSE") == "" {
+		v.MouseMode = tea.MouseModeCellMotion
+	}
 	return v
 }
 

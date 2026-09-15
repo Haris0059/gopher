@@ -67,6 +67,9 @@ func (cp *ConversationPane) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		return cp.handleKey(msg)
 
+	case tea.MouseWheelMsg:
+		return cp.handleWheel(msg)
+
 	case tea.WindowSizeMsg:
 		cp.SetSize(msg.Width, msg.Height)
 		return cp, nil
@@ -86,23 +89,7 @@ func (cp *ConversationPane) View() tea.View {
 		return tea.NewView("")
 	}
 
-	// Collect all rendered lines, with exactly one blank line separating
-	// each message (and the in-progress streaming reply) from the next.
-	var allLines []string
-	for i, r := range cp.rendered {
-		if i > 0 {
-			allLines = append(allLines, "")
-		}
-		allLines = append(allLines, strings.Split(r, "\n")...)
-	}
-
-	// Add streaming text if present
-	if cp.streamingText != "" {
-		if len(cp.rendered) > 0 {
-			allLines = append(allLines, "")
-		}
-		allLines = append(allLines, strings.Split(cp.streamingText, "\n")...)
-	}
+	allLines := cp.allLines()
 
 	// Apply viewport: show last `height` lines (with scroll offset)
 	totalLines := len(allLines)
@@ -127,6 +114,27 @@ func (cp *ConversationPane) View() tea.View {
 	}
 
 	return tea.NewView(strings.Join(visible, "\n"))
+}
+
+// allLines collects all rendered lines, with exactly one blank line
+// separating each message (and the in-progress streaming reply) from the
+// next.
+func (cp *ConversationPane) allLines() []string {
+	var allLines []string
+	for i, r := range cp.rendered {
+		if i > 0 {
+			allLines = append(allLines, "")
+		}
+		allLines = append(allLines, strings.Split(r, "\n")...)
+	}
+
+	if cp.streamingText != "" {
+		if len(cp.rendered) > 0 {
+			allLines = append(allLines, "")
+		}
+		allLines = append(allLines, strings.Split(cp.streamingText, "\n")...)
+	}
+	return allLines
 }
 
 // SetSize sets the dimensions of the conversation pane.
@@ -191,32 +199,49 @@ func (cp *ConversationPane) IsEmpty() bool {
 func (cp *ConversationPane) handleKey(msg tea.KeyPressMsg) (*ConversationPane, tea.Cmd) {
 	switch msg.Code {
 	case tea.KeyUp:
-		cp.scrollUp()
+		cp.scrollBy(1)
 	case tea.KeyDown:
-		cp.scrollDown()
+		cp.scrollBy(-1)
 	case tea.KeyPgUp:
-		cp.scrollOffset += cp.height
+		cp.scrollBy(cp.height)
 	case tea.KeyPgDown:
-		cp.scrollOffset -= cp.height
-		if cp.scrollOffset < 0 {
-			cp.scrollOffset = 0
-		}
+		cp.scrollBy(-cp.height)
 	}
 	return cp, nil
 }
 
-func (cp *ConversationPane) scrollUp() {
-	cp.scrollOffset++
-	cp.autoScroll = false
+const wheelScrollLines = 3
+
+func (cp *ConversationPane) handleWheel(msg tea.MouseWheelMsg) (*ConversationPane, tea.Cmd) {
+	switch msg.Button {
+	case tea.MouseWheelUp:
+		cp.scrollBy(wheelScrollLines)
+	case tea.MouseWheelDown:
+		cp.scrollBy(-wheelScrollLines)
+	}
+	return cp, nil
 }
 
-func (cp *ConversationPane) scrollDown() {
-	if cp.scrollOffset > 0 {
-		cp.scrollOffset--
+// scrollBy moves the viewport by delta lines (positive = up, toward older
+// messages), clamping to [0, maxScrollOffset] and toggling autoScroll when
+// the viewport returns to the bottom.
+func (cp *ConversationPane) scrollBy(delta int) {
+	cp.scrollOffset += delta
+	if max := cp.maxScrollOffset(); cp.scrollOffset > max {
+		cp.scrollOffset = max
 	}
-	if cp.scrollOffset == 0 {
-		cp.autoScroll = true
+	if cp.scrollOffset < 0 {
+		cp.scrollOffset = 0
 	}
+	cp.autoScroll = cp.scrollOffset == 0
+}
+
+func (cp *ConversationPane) maxScrollOffset() int {
+	max := len(cp.allLines()) - cp.height
+	if max < 0 {
+		return 0
+	}
+	return max
 }
 
 func (cp *ConversationPane) rerenderAll() {
