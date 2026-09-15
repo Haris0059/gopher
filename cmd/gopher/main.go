@@ -46,7 +46,7 @@ import (
 
 // Version is the current gopher version.
 // Patch segment is the count of Haris0059's commits on this project.
-const Version = "0.3.050"
+const Version = "0.3.051"
 
 // Model alias mappings
 var modelAliases = map[string]string{
@@ -1440,6 +1440,13 @@ func main() {
 	}
 	registry := tools.NewRegistry()
 	planState := tools.RegisterDefaults(registry)
+	// SyntheticOutput is SDK/headless-only — Source: SyntheticOutputTool.ts:22-26
+	// (IsSyntheticOutputToolEnabled). Calling it in the interactive TUI has no
+	// meaning (there's no caller-provided schema to satisfy), so a model that
+	// picks it up for an ordinary chat turn is just noise.
+	if !tools.IsSyntheticOutputToolEnabled(isNonInteractive) {
+		registry.Unregister((&tools.SyntheticOutputTool{}).Name())
+	}
 	tools.RegisterAgentTool(registry, prov, query.AsQueryFunc())
 
 	// Load skills (prompt-based commands)
