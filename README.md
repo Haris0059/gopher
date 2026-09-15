@@ -131,7 +131,10 @@ go build -o gopher ./cmd/gopher
 ./gopher -p "explain this codebase"
 
 # Point at a local model instead of Anthropic (e.g. Ollama)
-./gopher --provider openai --api-url http://localhost:11434 --model qwen2.5-coder:7b
+./gopher --provider openai --api-url http://localhost:11434 --model qwen3:1.7b
+# Ollama serves a 4096-token context by default regardless of what the model
+# supports — for agentic use (tool calls, file contents) set:
+#   OLLAMA_CONTEXT_LENGTH=32768
 
 # Cross-compile for Linux ARM64
 GOOS=linux GOARCH=arm64 go build -o gopher-linux-arm64 ./cmd/gopher

@@ -10,6 +10,27 @@ import (
 	"github.com/Haris0059/gopher/pkg/tools"
 )
 
+func TestPowerShellToolIsEnabled(t *testing.T) {
+	tool := &tools.PowerShellTool{}
+	t.Setenv("USER_TYPE", "")
+	t.Setenv("CLAUDE_CODE_USE_POWERSHELL_TOOL", "")
+
+	if runtime.GOOS != "windows" {
+		if tool.IsEnabled() {
+			t.Error("PowerShellTool should be disabled on non-Windows platforms")
+		}
+		return
+	}
+	// On Windows, disabled by default without an opt-in env var.
+	if tool.IsEnabled() {
+		t.Error("PowerShellTool should be disabled by default without CLAUDE_CODE_USE_POWERSHELL_TOOL")
+	}
+	t.Setenv("CLAUDE_CODE_USE_POWERSHELL_TOOL", "1")
+	if !tool.IsEnabled() {
+		t.Error("PowerShellTool should be enabled when CLAUDE_CODE_USE_POWERSHELL_TOOL=1 on Windows")
+	}
+}
+
 func TestPowerShellTool(t *testing.T) {
 	tool := &tools.PowerShellTool{}
 

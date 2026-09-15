@@ -113,8 +113,15 @@ func (p *OpenAICompatProvider) Stream(ctx context.Context, req ModelRequest) (<-
 		Temperature: req.Temperature,
 	}
 
-	// Convert tool definitions.
+	// Convert tool definitions. Deferred tools are skipped: unlike Anthropic,
+	// this API has no server-side deferral, so sending them all would blow
+	// past a local model's context window. ToolSearch reveals them on
+	// demand, and the orchestrator resolves calls by name against the full
+	// registry regardless of what was sent here.
 	for _, t := range req.Tools {
+		if t.DeferLoading {
+			continue
+		}
 		body.Tools = append(body.Tools, openAITool{
 			Type: "function",
 			Function: openAIFunction{

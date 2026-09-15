@@ -26,6 +26,20 @@ func (t *ToolSearchTool) Name() string        { return "ToolSearch" }
 func (t *ToolSearchTool) Description() string { return "Search available tools by keyword" }
 func (t *ToolSearchTool) IsReadOnly() bool    { return true }
 
+// Prompt explains that ToolSearch reveals tools omitted from the initial
+// tool list (deferred to keep the request small) and that a revealed tool
+// can be called directly afterwards — it does not need to be "loaded" first.
+func (t *ToolSearchTool) Prompt() string {
+	return `Search available tools by keyword. Many tools are deferred (omitted from your initial tool list) to keep requests small; this searches across all of them, deferred or not.
+
+Usage:
+- Use "select:ToolName" (comma-separated for multiple) to fetch a tool by its exact name
+- Use "+keyword rest" to require "keyword" in the tool name, ranked by the remaining query terms
+- Otherwise, the query is matched against tool names and descriptions
+
+Once a result names a tool, call it directly by name in your next tool call — it does not need to be searched for again.`
+}
+
 func (t *ToolSearchTool) InputSchema() json.RawMessage {
 	return json.RawMessage(`{
 		"type": "object",
@@ -184,11 +198,29 @@ func parseToolNameParts(name string) string {
 	return strings.ToLower(strings.ReplaceAll(sb.String(), "_", " "))
 }
 
+// formatToolResults renders each matched tool's full definition — name,
+// description (or prompt, if longer) and input schema — so the caller can
+// use the tool immediately without a second round trip. allTools resolves
+// names to their Tool implementations.
 func formatToolResults(names []string, query string, allTools []Tool) string {
+	byName := make(map[string]Tool, len(allTools))
+	for _, tool := range allTools {
+		byName[tool.Name()] = tool
+	}
+
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("Found %d tool(s) matching %q:\n\n", len(names), query))
 	for _, name := range names {
-		sb.WriteString(fmt.Sprintf("- %s\n", name))
+		tool, ok := byName[name]
+		if !ok {
+			sb.WriteString(fmt.Sprintf("- %s\n", name))
+			continue
+		}
+		desc := GetToolPrompt(tool)
+		if desc == "" {
+			desc = tool.Description()
+		}
+		sb.WriteString(fmt.Sprintf("### %s\n%s\nInput schema: %s\n\n", name, desc, tool.InputSchema()))
 	}
 	return sb.String()
 }

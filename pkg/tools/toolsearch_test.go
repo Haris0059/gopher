@@ -140,4 +140,25 @@ func TestToolSearchTool(t *testing.T) {
 			t.Errorf("case-insensitive search should find Bash, got %q", out.Content)
 		}
 	})
+
+	t.Run("result_carries_description_and_schema", func(t *testing.T) {
+		// A match must include enough of the tool's real definition for the
+		// caller to use it directly — a bare name list leaves the model no
+		// better off than before it searched.
+		tc := &tools.ToolContext{CWD: t.TempDir()}
+		input := json.RawMessage(`{"query": "select:Read"}`)
+		out, err := tool.Execute(context.Background(), tc, input)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if out.IsError {
+			t.Fatalf("unexpected tool error: %s", out.Content)
+		}
+		if !strings.Contains(out.Content, "absolute path") {
+			t.Errorf("expected Read's Prompt() text in result, got %q", out.Content)
+		}
+		if !strings.Contains(out.Content, "file_path") {
+			t.Errorf("expected Read's input schema in result, got %q", out.Content)
+		}
+	})
 }

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -54,6 +55,21 @@ func (t *PowerShellTool) Description() string {
 }
 
 func (t *PowerShellTool) IsReadOnly() bool { return false }
+
+// IsEnabled restricts PowerShell to Windows, matching the reference gate.
+// On ant (internal) builds it's on by default; elsewhere it needs an
+// explicit opt-in, since it's a large (~6KB) prompt that otherwise reaches
+// every non-Windows session for no reason.
+// Source: utils/shell/shellToolUtils.ts:17-22 — isPowerShellToolEnabled()
+func (t *PowerShellTool) IsEnabled() bool {
+	if runtime.GOOS != "windows" {
+		return false
+	}
+	if os.Getenv("USER_TYPE") == "ant" {
+		return !isEnvDefinedFalsy(os.Getenv("CLAUDE_CODE_USE_POWERSHELL_TOOL"))
+	}
+	return isEnvTruthy(os.Getenv("CLAUDE_CODE_USE_POWERSHELL_TOOL"))
+}
 
 func (t *PowerShellTool) InputSchema() json.RawMessage {
 	return json.RawMessage(`{
