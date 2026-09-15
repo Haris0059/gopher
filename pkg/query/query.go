@@ -127,6 +127,11 @@ func Query(
 	memoryContent := <-memCh
 	systemPrompt := buildSystemPrompt(sess.Config.SystemPrompt, memoryContent)
 
+	// Expand @-mentioned files in the latest user message into attachment
+	// messages carrying their contents.
+	// Source: utils/attachments.ts:776 (getAttachments)
+	expandAtMentions(sess)
+
 	// T19-T21: Append coordinator system prompt when coordinator mode is active.
 	// Source: coordinatorMode.ts — getCoordinatorSystemPrompt appended to system prompt
 	if coordPrompt := coordinator.GetCoordinatorSystemPrompt(); coordPrompt != "" {

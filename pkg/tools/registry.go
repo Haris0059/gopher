@@ -85,9 +85,13 @@ func (r *ToolRegistry) ToolDefinitions() []provider.ToolDefinition {
 		if !IsToolEnabled(t) {
 			continue
 		}
+		desc := GetToolPrompt(t)
+		if desc == "" {
+			desc = t.Description()
+		}
 		def := provider.ToolDefinition{
 			Name:        t.Name(),
-			Description: t.Description(),
+			Description: desc,
 			InputSchema: t.InputSchema(),
 		}
 		if IsToolDeferred(t) {
